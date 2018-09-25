@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>AP Search Results</title>		
+        <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+        <%- include partials/header.ejs %>
+
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row">
+            <div class="col-12 local-nav">
+              <a class="btn btn-outline-primary btn-large mx-4" href="/ap">New AP Search</a>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h2>AP Search Results</h2>
+                  <h6>Invoice: <%=params.invoicenumber %></h6>
+                  <h6>PO Number: <%=params.ponumber %></h6>
+                  <h6>Supplier: <%=params.supplier %></h6>
+                  <h6>Payment Amount: <%=params.payment %></h6>
+                </div>
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Invoice</th>
+                      <th>PO Number</th>
+                      <th>Pay Date</th>
+                      <th>Supplier</th>
+                      <th>User</th>
+                      <th>Payment</th>
+                      <th>Check Number</th>
+                    </tr>
+                  </thead>
+                  <tbody> 
+                    <% APs.forEach((item,index) =>  { %>
+                      <tr>
+                        <td><%=item.invoice %></td>
+                        <td><a href="/pos/<%=item.ponumber %>"><%=item.ponumber %></a></td>
+                        <td><%=item.paydate.toString().substring(4,16) %></td>
+                        <td><%=item.supplier %></td>
+                        <td><%=item.userid %></td>
+                        <td>$<%=item.payment.toFixed(2) %></td>
+                        <td><%=item.check_no %></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

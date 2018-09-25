@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Line Items</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row">
+            <div class="col-12 local-nav">
+              <a class="btn btn-outline-primary btn-large mx-4" href="/li">New Search for Line Items</a>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Line Items Search Results</h2>
+                  <h6>SKUs: <%=SKUs %></h6>
+                  <h6>States: <%=itemStatus %></h6>
+                </div>
+                
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Order</th>
+                      <th>Date</th>
+                      <th>State</th>
+                      <th>Ordered</th>
+                      <th>BO</th>
+                      <th>Shipped</th>
+                      <th>Extended Price</th>
+                      <th>Ship From</th>
+                      <th>PO</th>
+                    </tr>
+                  </thead>
+                  <tbody> 
+                    <% lineItems.forEach((item,index) =>  { %>
+                      <tr>
+                        <td><%=item.item %></td>
+                        <td><a href="/orders/<%=item.orderno %>"><%=item.orderno %></a></td>
+                        <td><%=item.odr_date.toString().substring(4,16) %></td>
+                        <td><span class="label <%=item.item_state %>"><%=item.item_state %></span></td>
+                        <td><%=item.quanto %></td>
+                        <td><%=item.quantb %></td>
+                        <td><%=item.quants %></td>
+                        <td>$<%=item.it_unlist.toFixed(2) %></td>
+                        <td><%=item.ship_from %></td>
+                        <td><a href="/pos/<%=item.ponumber %>"><%=item.ponumber %></a></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

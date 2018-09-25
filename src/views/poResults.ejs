@@ -1,0 +1,59 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>PO Search Results</title>		
+        <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+        <%- include partials/header.ejs %>
+
+			<div class="container" ng-controller="AppCtrl as ctrl" ng-cloak>
+        <div class="row">
+          <div class="col-12 local-nav">
+            <a class="btn btn-outline-primary btn-large mx-4" href="/pos">New PO Search</a>
+          </div>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>PO Search Results</h2>
+                <h6>SKU: <%=params.sku %></h6>
+                <h6>Supplier: <%=params.supplier %></h6>
+                <h6>PO Total: $<%=params.pototal %></h6>
+              </div>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>PO Number</th>
+                    <th>Order Date</th>
+                    <th>Supplier</th>
+                    <th>Order Total</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <% POs.forEach((item,index) =>  { %>
+                    <tr>
+                      <td><a href="/pos/<%=item.ponumber %>"><%=item.ponumber %></a></td>
+                      <td><%=item.odr_date.toString().substring(4,16) %></td>
+                      <td><%=item.supplier %></td>
+                      <td>$<%=item.ord_total.toFixed(2) %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

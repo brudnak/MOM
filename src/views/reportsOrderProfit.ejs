@@ -1,0 +1,73 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Order Profit</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row local-nav">
+            <div class="col-2">
+              <a class="btn btn-outline-primary btn-large mx-4" href="/reports/order">Make a new report</a>
+            </div>
+            <div class="col-10 text-right">
+              <%- include partials/orderkeys.ejs %>
+            </div> 
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Order Profitability from {{'<%=startDate %>' | dateFromSQL}} to {{'<%=endDate %>' | dateFromSQL}}</h2>
+                </div>
+                
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Order</th>
+                      <th>Order Date</th>
+                      <th>CL Key</th>
+                      <th>Status</th>
+                      <th>Merch Cost</th>
+                      <th>Charged</th>
+                      <th>Gross<br>After Fees</th>
+                      <th>Margin<br>Before Ship.</th>
+                      <th>#POs</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% orders.forEach((order,index) =>  { %>
+                      <tr>
+                        <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
+                        <td><%=order.odr_date %></td>
+                        <td><%=order.cl_key %></td>
+                        <td><span class="label <%=order.order_st2 %>"><%=order.order_st2 %></span></td>
+                        <td>$<%=order.cost %></td>
+                        <td>$<%=order.merchTotal %></td>
+                        <td><span class="<%=order.profit < 3 ? 'text-danger' : order.profit < 10 ? 'text-warning' : ''%>">$<%=order.profit %></td>
+                        <td><%=order.percentProfit %>%</td>
+                        <td><%=order.pocount %></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

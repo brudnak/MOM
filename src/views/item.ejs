@@ -1,0 +1,344 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title><%=sku %></title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp" ng-cloak>
+      <%- include partials/header.ejs %>
+
+			<div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+          <div class="col-12 col-md-8">
+            <h2>
+              <%=sku %> <small class="badge badge-dark" ng-show="<%=itemInfo.upccode %>"><%=itemInfo.upccode %></small>
+            </h2>
+            <h5><%=itemInfo.desc1 %></h5>
+            <h5><%=itemInfo.desc2 %></h5>
+            <div class="item-badges">
+              <% if(itemInfo.serial == 1) { %>
+                <span class="badge badge-success">Has Serial</span>
+              <% } %>
+              <% if(itemInfo.discont == 1) { %>
+                <span class="badge badge-success">Discontinued</span>
+              <% } %>
+              <% if(itemInfo.break_out == 1) { %>
+                <span class="badge badge-success">Breakout</span>
+              <% } %>
+              <% if(itemInfo.nonproduct == 1) { %>
+                <span class="badge badge-success">Service</span>
+              <% } %>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 text-right">
+            <h6 class="text-right"><em>Last updated on <%=itemInfo.lu_on.toString().substring(4, 15) %>, by <%=itemInfo.lu_by %></em></h6>
+            <h2>Price <span class="badge badge-primary">$<%=itemInfo.price1.toFixed(2) %></span></h2>
+            <h4>Unit Cost <span class="badge badge-secondary">$<%=itemInfo.uncost.toFixed(2) %></span></h4>
+            <h5 ng-show="<%=itemInfo.break_out %>">Breakout Cost <span class="badge badge-secondary">$<%=unitCost.toFixed(2) %></span></h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <h6 class="item-notation"><em><%=itemInfo.notation %></em></h6>
+            <div class="card dimensions">
+              <div class="card-header no-border">
+                <div class="row">
+                  <div class="col-4">
+                    <h4>Shipping</h4>
+                  </div>
+                  <div class="col-8 text-right">
+                    <span class="label"><%=itemInfo.blength %> in. &times; <%=itemInfo.bwidth %> in. &times; <%=itemInfo.bheight %> in.</span>
+                    <span class="label"><%=itemInfo.unitweight %> lbs</span>
+                  </div>
+                </div>
+              </div>
+              <span class="alert alert-danger mx-auto my-4" ng-show="<%=itemInfo.shippingError %>"><%=itemInfo.shippingError %></span> 
+              <div class="row shipping-rates" ng-hide="<%=itemInfo.shippingError && itemInfo.shippingError.length %>">
+                <div class="col-12 shipping-rate dimensions">
+                  <div class="row">
+                    <div class="col-6">
+                      FROM: AZ, 85282
+                    </div>
+                    <div class="col-6">
+                      TO: DC, 20500
+                    </div>
+                  </div>
+                </div>
+
+                <% itemInfo.rates.forEach(rate => { %>
+                  <div class="col-6 col-md-2 shipping-rate <%=rate.displayName.substring(0,3) %>-rate">
+                    <h6><%=rate.displayName %></h6>
+                    <h5>$<%=(rate.shipmentCost + rate.otherCost).toFixed(2) %></h5>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header no-border"><h4>Marketplace Pricing</h4></div>
+              <% if(itemInfo.shippingError) { %>
+                    <span class="alert alert-danger mx-auto my-4">Cannot recommend marketplace pricing because there was an error with the item dimensions.</span> 
+              <% } else { %>
+                <div class="row">
+                  <% recommendedPricing.forEach(marketplace => { %>
+                    <div class="col-6 col-md-2 marketplace <%=marketplace.marketplace.replace(' ','-') %>">
+                      <h5><%=marketplace.marketplace %></h5>
+                      <div class="row">
+                        <div class="col-12">
+                          <h6 class="price">$<%=marketplace.pricing.toFixed(2) %></h6>
+                          <h6>Minimum Pricing</h6>
+                        </div>
+                        <div class="col-6">
+                          <span>Fees: $<%=marketplace.commission.toFixed(2) %></span>
+                        </div>
+                        <div class="col-6">
+                          <span>Profit: $<%=marketplace.profit.toFixed(2) %></span>
+                        </div>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-6">
+                    <h4>Sales</h4>
+                  </div>
+                  <div class="col-6">
+                    <select class="form-control" ng-model="ctrl.salesSelection" ng-options="range for range in ctrl.days">
+                    </select>
+                  </div>
+                </div>
+              </div>
+                <% for(days in itemSales) { %>
+                  <div class="row m-0" ng-show="ctrl.salesSelection == '<%=days %>'">
+                    <% let totalSales = 0 %>
+                    <% itemSales[days].forEach(marketplace => { %>
+                      <div class="marketplace-sales col-2">
+                        <h4><%=marketplace.cl_key %></h4>
+                        <h2><%=marketplace.sales %></h2>
+                      </div>
+                      <% totalSales += marketplace.sales %>
+                    <% }) %>
+                    <div class="marketplace-sales total-sales col-2">
+                      <h4>Total</h4>
+                      <h2><%=totalSales %></h2>
+                    </div>
+                  </div>
+                <% } %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="card">
+              <div class="card-header"><h6>Stock <span class="float-right">Low Alert <span class="badge badge-secondary"><%=itemInfo.low %></span></span></h6></div>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <td class="px-3">In House</td>
+                    <td class="text-right px-3"><%=itemInfo.units - itemInfo.fbaunits %></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">FBA</td>
+                    <td class="text-right px-3"><%=itemInfo.fbaunits %></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">BO</td>
+                    <td class="text-right px-3"><%=itemInfo.bounits %></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">CM</td>
+                    <td class="text-right px-3"><%=itemInfo.commited %></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">On Order</td>
+                    <td class="text-right px-3"><%=itemInfo.onorder %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="card">
+              <div class="card-header"><h6>Bins</h6></div>
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th class="px-3">Bin</th>
+                    <th>Warehouse</th>
+                    <th>Units</th>
+                    <th>CM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% itemBins.forEach((bin) => { %>
+                    <tr>
+                      <td class="px-3"><%=bin.bindesc %></td>
+                      <td><%=bin.warehouse %></td>
+                      <td><%=bin.units %></td>
+                      <td><%=bin.commited %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <% if(itemBreakout[0]) { %>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Breakout Items for <%=sku %></h4>
+                </div>
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Quantity</th>
+                      <th>Unit Cost</th>
+                      <th>Additional Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% itemBreakout.forEach((piece) => { %>
+                      <tr>
+                        <td><a href="/items/<%=piece.inv %>"><%=piece.inv %></a></td>
+                        <td><%=piece.q %></td>
+                        <td>$<%=piece.uncost.toFixed(2) %></td>
+                        <td>$<%=piece.price.toFixed(2) %></td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <% } %>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Suppliers</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Supplier</th>
+                    <th>Buy QTY</th>
+                    <th>Desc</th>
+                    <th>Unit Price</th>
+                    <th>Lead AVG</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% itemPrices.forEach((price) => { %>
+                    <tr>
+                      <td><%=price.supplier %> <%=price.dropship=='1' ? ' Dropship' : '' %></td>
+                      <td><%=price.quantity %></td>
+                      <td><%=price.buydesc %></td>
+                      <td>$<%=price.unit_price.toFixed(2) %></td>
+                      <td><%=price.lead_avg %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Item Audits</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Before Value</th>
+                    <th>After Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% itemAudits.forEach((audit,index) => { %>
+                    <tr>
+                    <td><%=audit.auditdate.toString().substring(4, 16) %></td>
+                    <td><%=audit.userid %></td>
+                    <td><%=audit.auditon %></td>
+                    <td><%=audit.beforevalue %></td>
+                    <td><%=audit.aftervalue %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Stock Transactions</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th width="12%">Date</th>
+                    <th width="10%">Action</th>
+                    <th width="10%">QTY</th>
+                    <th width="10%">Unit Cost</th>
+                    <th width="10%">User</th>
+                    <th>Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% itemTrans.forEach((trans) => { %>
+                    <tr>
+                      <td><%=trans.trans_date.toString().substring(4, 16) %></td>
+                      <td><%=trans.transtype=='A ' ? 'Adjustment' : trans.transtype=='D ' ? 'Delivery' : trans.transtype=='R ' ? 'Reinvoice' : trans.transtype %></td>
+                      <td><%=trans.quantity %></td>
+                      <td>$<%=trans.unit_cost.toFixed(2) %></td>
+                      <td><%=trans.userid %></td>
+                      <td><%=trans.notation %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+				</div>
+			</div>
+    </div>
+
+    <%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+    <script src="/js/app.js"></script>
+
+    <script>
+      var app = angular.module('MyApp', ['ngMaterial', 'ngMessages']);
+      app.controller('AppCtrl', function() {
+        this.salesSelection = '360 day';
+        this.days = ['30 day','60 day','90 day','180 day','270 day','360 day'];
+      });
+		</script>
+    
+	</body>
+</html>

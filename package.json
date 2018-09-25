@@ -1,0 +1,36 @@
+{
+  "name": "mom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "btoa": "^1.2.1",
+    "ejs": "^2.6.1",
+    "eslint": "^5.3.0",
+    "events": "^3.0.0",
+    "express": "^4.16.3",
+    "msnodesqlv8": "^0.6.7",
+    "mssql": "^4.1.0",
+    "node-fetch": "^2.2.0",
+    "nodemailer": "^4.6.8",
+    "nodemon": "^1.18.3",
+    "path": "^0.12.7",
+    "promise-ratelimit": "0.0.3",
+    "pug": "^2.0.3",
+    "request": "^2.88.0",
+    "socket.io": "^2.1.1"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": 2500
+  }
+}

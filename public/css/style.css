@@ -1,0 +1,107 @@
+html {background: #fafafa;}
+body, body>div {background: #fafafa; color: #555;}
+h1,h2,h3,h4,h5,h6 {font-weight: normal; text-transform: uppercase; margin: 10px 0px;}
+
+header {margin-bottom: 50px;}
+header nav.navbar {background: #e74c3c; color: #fff; padding: 15px 20px;}
+.navbar-dark .navbar-nav .nav-link {color: #fff;}
+
+.local-nav {border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;}
+
+.btn {margin: 3px 1px;}
+
+/* CARDS */
+.card {border: 1px solid #ddd; border-radius: 0px; margin-bottom: 30px; background: #fff;}
+    .card-header {background: #fff; border-bottom: 2px solid #e74c3c;}
+    .card-header.no-border {border: none;}
+    .card-header select {margin-top: 5px;}
+
+/* FORMS */
+.form-row {border-bottom: 1px solid #ddd; margin-bottom: 25px; padding-bottom: 15px;}
+.form-row:last-child {border-bottom: none; margin-bottom: 0px;}
+.checkbox label {display: inline-block; padding: 5px 15px; margin: .5%; width: 19%; background: #eee; border: 1px solid #ddd; color: #aaa; border-radius: 3px; cursor: pointer; transition: .2s}
+.checkbox label.checked {background: #ddd; border-color: #ccc; color: #333;}
+
+.memo {padding: 15px; margin: 10px 0px;}
+    .memo + .memo {border-top: 1px solid #eee;}
+
+/* TABLES */
+table .no-top td {border-top: none; padding-top: 0px;}
+a.order-link {border: 1px solid #bbb; color: #777; font-size: 13px; padding: 1px 4px; border-radius: 3px;}
+
+/* CALENDAR */
+.md-default-theme .md-calendar-day-header, .md-calendar-day-header {background: #e74c3c; color: #fff;}
+.md-calendar-scroll-mask {border: 1px solid #ddd;}
+
+/* ITEMS */
+.item-notation {text-align: center; margin: 20px 40px; padding: 10px 0px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;}
+.item-badges .badge {text-transform: uppercase; font-weight: normal; font-size: 16px;}
+.sv-cost {color: #ccc; font-style: italic;}
+
+/* SHIPPING RATES */
+.shipping-rates {margin: 0px; margin: -1px;}
+    .shipping-rate {color: #fff; text-align: center; padding: 0px;}
+        .shipping-rate.dimensions {background: #555; font-size: 14px; padding: 8px; color: #fff; font-weight: bold;}
+        .shipping-rate.UPS-rate {background: #FCB900}
+        .shipping-rate.USP-rate {background: #333366}
+    .shipping-rate h5 {background: rgba(0,0,0,0.1); margin-bottom: 0px; padding: 10px 0px;}
+
+/* MARKETPLACE PRICING */
+.marketplace {text-align: center; color: #fff; padding: 30px 10px 0px; overflow: hidden; margin-bottom: -3px; margin-top: 0px; text-shadow: 1px 1px 0px rgba(0,0,0,0.2)}
+    .marketplace.Amazon-FBM {background: #fed330;}
+    .marketplace.Amazon-Prime {background: #f7b731;}
+    .marketplace.Amazon-FBA {background: #fa8231;}
+    .marketplace.Vendor-Central {background: #fc5c65;}
+    .marketplace.Walmart {background: #1B9CFC;}
+    .marketplace.Ebay {background: #86B817;}
+.marketplace h3 {margin-bottom: 30px;}
+.marketplace .price {font-size: 2em;}
+.marketplace .col-12 {background: rgba(0,0,0,0.2); padding: 10px 0px;}
+.marketplace .col-6 {background: rgba(0,0,0,0.1); padding: 3px 0px; font-size: 14px; }
+
+/* MARKETPLACE SALES */
+.marketplace-sales {text-align: center; color: #ccc; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; min-height: 200px;}
+    .marketplace-sales h4 {margin-top: 60px;}
+    .marketplace-sales h2 {color: #999;}
+.total-sales {background: #444; color: #fff;}
+
+/* LABELS */
+ul.order-keys {list-style: none; margin: 0px; padding: 0px;}
+    ul.order-keys li {display: inline-block; margin: 2px;}
+.label {display: inline-block; border-radius: 3px; padding: 2px 4px; min-width: 30px; text-align: center; color: #fff; font-weight: bold; background: #ccc;}
+.QO {background: #a29bfe;}
+.SH {background: #00b894;}
+.CN {background: #636e72;}
+.EP {background: #95afc0;} /*temp hold*/
+.PI {background: #0984e3;}
+.OR {background: #ff7675;} /*on review*/
+.BO {background: #e84393;}
+.PE {background: #d63031;} /*permanent hold*/
+.UO {background: #fd9644;} /*uncompleted hold*/
+.IN {background: #0984e3;} /*ready to pack*/
+.PS {background: #badc58;} /*packed ready to ship*/
+.BI {background: #b2bec3;} /*ready to invoice*/
+.CM {background: #74b9ff;}
+.ND {background: #f9ca24;}
+.SV {background: #b2bec3;}
+
+/* PROFIT BAR */
+.profit-bar {position: relative; background: #6F1E51; color: #fff; font-weight: bold; font-size: 22px; margin-top: 35px;}
+.profit-bar>* {display: inline-block; text-align: center; vertical-align: top; position: relative;}
+.profit-bar>div span, .profit-bar span.profit {position: absolute; bottom: 120%; right: 5px; background: #333; padding: 1px 3px; border-radius: 5px; font-size: 18px; background-color: inherit;}
+    .profit-bar>div span:after {position: absolute; width: 0px; height: 0px; left: 4px; bottom: -10px; content: ''; border: 5px solid #333; border-bottom-color: transparent; border-right-color: transparent; border-left-color: transparent;}
+    .profit-bar span.profit {bottom: 0px; right: 0px; font-size: 20px;}
+.shipping-cost {background: #ED4C67;}
+.merch-cost {background: #B53471;}
+.commission {background: #833471;}
+.profit {background: #6F1E51;}
+.profit-bar .shipping-cost span:after {border-top-color: #ED4C67;}
+.profit-bar .merch-cost span:after {border-top-color: #B53471;}
+.profit-bar .commission span:after {border-top-color: #833471;}
+
+/* ALERT */
+#alerts {position: absolute; top: 0px; right: 0px;}
+#alerts .alert {display: none; position: absolute; top: 35px; right: 35px; width: 600px; z-index: 999;}
+
+
+footer {background: #fafafa; color: #777; padding: 70px; }

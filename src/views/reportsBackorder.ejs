@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Backorder Report</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak="" class="card">
+					<div class="card-header">
+						<h2>Backorder Report</h2>
+					</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>SKU</th>
+								<th>On Backorder</th>
+								<th>On Order</th>
+								<th>Need to Order</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% items.forEach((item, index) => { %>
+								<tr>
+									<td><a href="backorder/<%=item.item %>"><%=item.item %></a></td>
+									<td><%=item.BO %></td>
+									<td><%=item.onorder %></td>
+									<td><%=item.BO - item.onorder > 0 ? item.BO - item.onorder : 0 %></td>
+								</tr>
+							<% }) %> 
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script>
+		var app = angular.module('MyApp', ['ngMaterial', 'ngMessages']);
+		app.controller('AppCtrl', function() {
+			this.bottomDollar = 2;
+			this.bottomPercent = 10;
+		  this.startDate = new Date();
+		  this.endDate = new Date();
+		  this.startDate.setDate(this.startDate.getDate() - 1);
+		  this.clKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE'];
+		  this.selectedKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE'];
+
+		  this.toggleSelection = key => {
+			  const i = this.selectedKeys.indexOf(key);
+			  if(i > -1) {
+				  this.selectedKeys.splice(i, 1);
+			  } else {
+				  this.selectedKeys.push(key);
+			  }
+		  }
+		});
+		</script>
+	</body>
+</html>

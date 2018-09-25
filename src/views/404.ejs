@@ -1,0 +1,32 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>404</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+      <div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+            <div class="card-header"><h2>Error 404</h2></div>
+            <div class="card-body">
+              <h6><%=type %> <%=number %> not found. It may have been deleted from the system.</h6>
+            </div>
+          </div>
+        </div>
+      </div> 
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

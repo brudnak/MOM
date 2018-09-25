@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>PO Profit</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row">
+            <div class="col-12 local-nav">
+              <a class="btn btn-outline-primary btn-large mx-4" href="/reports/po">Make a new report</a>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Dropship Profitability from {{'<%=startDate %>' | dateFromSQL}} to {{'<%=endDate %>' | dateFromSQL}}</h2>
+                </div>
+                
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>State</th>
+                      <th>Order Number</th>
+                      <th>PO Number</th>
+                      <th>Supplier</th>
+                      <th>SKU</th>
+                      <th>Total Extended</th>
+                      <th>Total Cost</th>
+                      <th>Profit</th>
+                      <th>Margin</th>
+                    </tr>
+                  </thead>
+                  <tbody> 
+                    <% POs.forEach((PO,index) =>  { %>
+                      <tr>
+                        <td><span class="label <%=PO.item_state %>"><%=PO.item_state %></span></td>
+                        <td><a href="/orders/<%=PO.orderno %>"><%=PO.orderno %></a></td>
+                        <td><a href="/pos/<%=PO.ponumber %>"><%=PO.ponumber %></a></td>
+                        <td><%=PO.ship_from %></td>
+                        <td><%=PO.item %></td>
+                        <td>$<%=PO['Total Extended'] %></td>
+                        <td>$<%=PO['Total Cost'] %></td>
+                        <td><span class="<%=PO.Profit < 5 ? 'text-danger' : PO.Profit < 8 ? 'text-warning' : '' %>">$<%=PO.Profit %></span></td>
+                        <td><span class="<%=PO['%'] < 5 ? 'text-danger' : PO['%'] < 7 ? 'text-warning' : '' %>"><%=PO['%'] %>%</span></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

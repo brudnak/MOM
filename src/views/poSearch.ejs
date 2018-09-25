@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Order Lookup</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+		<div ng-app="MyApp">
+			<%- include partials/header.ejs %>
+			
+      <div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+							<div class="card-header"><h2>Go to Purchase Order</h2></div>
+							<div class="card-body">
+								<input type="text" class="form-control" placeholder="Purchase Order Number" ng-model="ponumber" autofocus>
+								<hr />
+								<a class="btn btn-block btn-primary" ng-class="{'btn-secondary': !ponumber}" ng-href="/pos/{{ponumber}}">Go to PO</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-12">
+            <div class="card">
+							<div class="card-header"><h2>Search Purchase Order</h2></div>
+							<div class="card-body">
+								<form action=''>
+									<div class="form-row">
+										<div class="form-group col-6">
+											<label>Supplier Code</label>
+											<select ng-model="ctrl.supplier" class="form-control">
+												<% suppliers.forEach((item) => { %>
+													<option value="<%=item.code%>"><%=`${item.code}, ${item.name}` %></option>
+												<% }); %>
+											</select>
+										</div>
+										<div class="form-group col-6">
+											<label>PO Total</label>
+											<input type="text" class="form-control" placeholder="PO total" ng-model="ctrl.pototal">
+										</div>
+										<div class="form-group col-6">
+											<label>SKU</label>
+											<input type="text" class="form-control" placeholder="SKU" ng-model="ctrl.sku">
+										</div>
+									</div>
+									<div>
+										<a id="submit" class="btn btn-block btn-primary" ng-class="" ng-href="/pos/search?supplier={{ctrl.supplier}}&pototal={{ctrl.pototal}}&sku={{ctrl.sku}}">Search POs</a>
+									</div>
+								</form>
+							</div>
+						</div>
+          </div>
+        </div>
+      </div> 
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Items Search Results</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row">
+            <div class="col-12 local-nav">
+              <a class="btn btn-outline-primary btn-large mx-4" href="/items">New Search for Items</a>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Items Search Results</h2>
+                </div>
+                
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Desc</th>
+                      <th>Units</th>
+                      <th>Unit Cost</th>
+                      <th>Sales Price</th>
+                    </tr>
+                  </thead>
+                  <tbody> 
+                    <% items.forEach((item,index) =>  { %>
+                      <tr>
+                        <td><a href="/items/<%=item.number %>"><%=item.number %></a></td>
+                        <td><%=item.desc1 + ' ' + item.desc2 %></td>
+                        <td><%=item.units %></td>
+                        <td>$<%=item.uncost.toFixed(2) %></td>
+                        <td>$<%=item.price1.toFixed(2) %></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

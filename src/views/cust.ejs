@@ -1,0 +1,101 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Cust <%=custnum %></title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+<body>
+  <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+		<div ng-controller="AppCtrl as ctrl" class="container">
+			<div class="row">
+          <div class="col-12">
+            <h2>
+              <%=`${custInfo.firstname} ${custInfo.lastname}` %><span class="badge badge-dark"><%=custnum %></span> 
+            </h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header"><h6>Customer Info</h6></div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header">
+                <h6>Address</h6>
+              </div>
+              <div class="card-body">
+                <%=custInfo.company %>
+                <br>
+                <%=`${custInfo.firstname} ${custInfo.lastname}` %>
+                <br>
+                <%=custInfo.title %>
+                <br>
+                <%=custInfo.addr %>
+                <br>
+                <%=custInfo.addr2 %>
+                <br>
+                <%=`${custInfo.city}, ${custInfo.state} ${custInfo.zipcode}` %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Orders for <%=`${custInfo.firstname} ${custInfo.lastname}` %></h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Order Date</th>
+                    <th>Ship Date</th>
+                    <th>CL Key</th>
+                    <th>Order Type</th>
+                    <th>Order Status</th>
+                    <th>Paid</th>
+                    <th>Total</th>
+                    <th>Next Pay</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% let totalCost = 0; let totalList = 0; %>
+                  <% custOrders.forEach((order,index) => { %>
+                    <tr>
+                      <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
+                      <td><%=order.odr_date.toString().substring(4, 15) %></td>
+                      <td><%=order.ship_date ? order.ship_date.toString().substring(4, 15) : '' %></td>
+                      <td><%=order.cl_key %></td>
+                      <td><%=order.ordertype %></td>
+                      <td><span class="label <%=order.order_st2 %>"><%=order.order_st2 %></span></td>
+                      <td>$<%=order.checkamoun.toFixed(2) %></td>
+                      <td>$<%=order.ord_total.toFixed(2) %></td>
+                      <td>$<%=order.next_pay.toFixed(2) %></td>
+                    </tr>
+                  <% }); %> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+			</div>
+    </div>
+  </div>
+
+  <%- include partials/footer.ejs %>
+    
+  <%- include partials/javascripts.ejs %>
+
+  <script src="/js/app.js"></script>
+    
+</body>
+</html>

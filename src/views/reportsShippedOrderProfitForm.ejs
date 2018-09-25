@@ -1,0 +1,111 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Order Profit</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak="" class="datepickerdemoCalendar card">
+					<div class="card-header">
+						<h2>Shipped Order Profit</h2>
+						<p>This form calculates a more accurate estimate of profitability of <b>shipped orders</b> by including any shipping costs provided through ShipStation. This form does not include FBA orders.</p>
+						<p>Please note that I cannot account for costs of packages shipped outside of ShipStation, or for packages shipped through ShipStation, but which did not use the Amazon order ID for Amazon orders or the MOM order number for all other orders as the order number in ShipStation.</p>
+					</div>
+					<div class="card-body">
+						<form>
+							<div class="form-row">
+								<div class="form-group col-4">
+									<h5>START DATE: {{ctrl.startDate | date:shortDate}}</h5>
+									<md-calendar ng-model="ctrl.startDate"></md-calendar>
+								</div>
+								<div class="form-group col-8">
+									<h5>END DATE: {{ctrl.endDate | date:shortDate}}</h5>
+									<md-calendar ng-model="ctrl.endDate"></md-calendar>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-6">
+									<label>Bottom Dollar</label>
+									<input type="text" class="form-control" ng-model="ctrl.bottomDollar">
+								</div>
+								<div class="form-group col-6">
+									<label>Bottom Percent</label>
+									<input type="text" class="form-control" ng-model="ctrl.bottomPercent">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-12 checkbox">
+									<h3>CL Keys</h3>
+									<label ng-repeat="key in ctrl.clKeys" ng-class="{checked: ctrl.selectedKeys.indexOf(key) > -1}">
+										<input type="checkbox" name="selectedKeys[]" value="{{key}}" ng-checked="ctrl.selectedKeys.indexOf(key) > -1" ng-click="ctrl.toggleSelection(key)">
+										{{key}}
+									</label>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-6">
+									<label>Salesperson</label>
+									<select ng-model="ctrl.salesperson" class="form-control">
+										<% users.forEach((item) => { %>
+										<option value="<%=item.code%>"><%=`${item.code}, ${item.name}` %></option>
+										<% }); %>
+									</select>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-12">
+									<input type="checkbox" ng-model="ctrl.email">
+									<label>Email Report</label>&nbsp;
+									<br />
+									<div ng-show="ctrl.email">
+										<label>Email Recipients</label>&nbsp;
+										<input type="text" class="form-control" ng-model="ctrl.recipients">
+									</div>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="col-12">  
+									<a class="btn btn-block btn-primary" ng-href="/reports/shippedOrder/report?startDate={{ctrl.startDate | date:'yyMMdd'}}&endDate={{ctrl.endDate | date:'yyMMdd'}}&keys={{ctrl.selectedKeys}}&bottomDollar={{ctrl.bottomDollar}}&bottomPercent={{ctrl.bottomPercent}}&salesperson={{ctrl.salesperson}}&recipients={{ctrl.email ? ctrl.recipients: ''}}">Submit</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script>
+		var app = angular.module('MyApp', ['ngMaterial', 'ngMessages']);
+		app.controller('AppCtrl', function() {
+		 	this.startDate = new Date();
+		  	this.endDate = new Date();
+		  	this.startDate.setDate(this.startDate.getDate() - 6);
+		  	this.clKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE'];
+		  	this.selectedKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE'];
+			this.email = false;
+			this.recipients = 'brandon@cpr-savers.com, csm@cpr-savers.com';
+			this.bottomDollar = 2;
+			this.bottomPercent = 5;
+
+		  	this.toggleSelection = key => {
+			  const i = this.selectedKeys.indexOf(key);
+			  if(i > -1) {
+				  this.selectedKeys.splice(i, 1);
+			  } else {
+				  this.selectedKeys.push(key);
+			  }
+		  	}
+		});
+		</script>
+	</body>
+</html>

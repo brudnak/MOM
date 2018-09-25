@@ -1,0 +1,327 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Order <%=orderno %></title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div ng-controller="AppCtrl as ctrl" class="container">
+				<div class="row">
+          <div class="col-8">
+            <h2>Order <%=orderno %></h5>
+            <h5><%=orderInfo.odr_date.toString().substring(4,16) %></h5>
+          </div>
+          <div class="col-4 text-right">
+            <h3>
+              <% if(orderInfo.alt_order.trim().length > 6) { %>
+                <a target="_blank" href="https://sellercentral.amazon.com/hz/orders/details?_encoding=UTF8&orderId=<%=orderInfo.alt_order %>"><%=orderInfo.alt_order %></a>
+              <% } else { %>
+                <%=orderInfo.alt_order %>
+              <% } %>
+            </h3>
+            <h4 class="badge badge-secondary"><%=orderInfo.cl_key %></h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Line Items</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th width="10%">PO</th>
+                    <th width="15%">SKU</th>
+                    <th width="10%">Status</th>
+                    <th width="10%">Ordered</th>
+                    <th width="5%">SH</th>
+                    <th width="5%">BO</th>
+                    <th width="15%" class="text-right">Unit Cost</th>
+                    <th width="15%" class="text-right">Unit Extended</th>
+                    <th width="15%" class="text-right">Profit Margin</th>
+                  </tr>
+                </thead>
+                <tbody>                 
+                  <% itemsInfo.forEach((item,index) => { %>
+                    <tr>
+                      <td><a href="/pos/<%=item.ponumber %>"><%=item.ponumber || '' %></a></td>
+                      <td><a href="/items/<%=item.item %>"><%=item.item %></a></td>
+                      <td><span class="label <%=item.item_state %>"><%=item.item_state %></span></td>
+                      <td><%=item.quanto %></td>
+                      <td><%=item.quants %></td>
+                      <td><%=item.quantb %></td>
+                      <td class="text-right <%=item.item_state=='SV' && 'sv-cost'%>">$<%=item.it_uncost.toFixed(2) %></td>
+                      <td class="text-right">$<%=item.it_unlist.toFixed(2) %></td>
+                      <td class="text-right"><%= item.it_uncost==0 || item.it_unlist==0 ? '--' : Math.round(((item.it_unlist.toFixed(2) - item.it_uncost.toFixed(2)) / item.it_unlist.toFixed(2)) * 10000)/100 %>%</td>
+                    </tr>
+                  <% }); %> 
+                  <tr>
+                    <td colspan="5"></td>
+                    <td></td>
+                    <td class="text-right"><b>$<%=totalCost.toFixed(2) %></b></td>
+                    <td class="text-right"><b>$<%=totalList.toFixed(2) %></b></td>
+                    <td class="text-right"><b><%= Math.round(((totalList - totalCost) / totalList) * 10000)/100 %>%</b></td>
+                  </tr>
+                  <tr>
+                    <td colspan="6"></td>
+                    <td class="text-right">Tax</td>
+                    <td class="text-right">$<%=orderInfo.tax.toFixed(2) %></td>
+                    <td></td>
+                  </tr>
+                  <tr class="no-top">
+                    <td colspan="6"></td>
+                    <td class="text-right">Shipping</td>
+                    <td class="text-right">$<%=orderInfo.shipping.toFixed(2) %></td>
+                    <td></td>
+                  </tr>
+                  <tr class="no-top">
+                    <td colspan="6"></td>
+                    <td class="text-right">Total</td>
+                    <td class="text-right">$<%=orderInfo.ord_total.toFixed(2) %></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Profitability</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th width="25%">Merchandise Cost</th>
+                    <th width="35%">Shipping Cost</th>
+                    <th width="20%">Commission</th>
+                    <th width="20%">Profit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="label merch-cost">$<%=totalCost.toFixed(2) %></span></td>
+                    <td><span class="label shipping-cost"><%=orderInfo.shipErr ? orderInfo.shipErr : orderProfit.totalShipping==0 ? orderInfo.boxes[0] ? 'Order shipped third party' : orderInfo.order_st2 == 'SH' ? 'Order was not shipped through SS' : 'Order has not been shipped' : '$'+orderProfit.totalShipping.toFixed(2) %></span></td>
+                    <td><span class="label commission">$<%=orderProfit.commission.toFixed(2) %></span></td>
+                    <td><span class="label profit">$<%=(orderInfo.ord_total - orderInfo.tax - orderProfit.totalShipping - orderProfit.commission - totalCost).toFixed(2) %></span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="profit-bar">
+                <div class="merch-cost" style="width: <%=orderProfit.merchPercent %>%" ng-show="<%=orderProfit.merchPercent %>">&nbsp;<span><%=orderProfit.merchPercent %>%</span></div><div class="shipping-cost" style="width: <%=orderProfit.shippingPercent %>%" ng-show="<%=orderProfit.shippingPercent %>">&nbsp;<span><%=orderProfit.shippingPercent %>%</span></div><div class="commission" style="width: <%=orderProfit.commissionPercent %>%" ng-show="<%=orderProfit.commissionPercent %>">&nbsp;<span><%=orderProfit.commissionPercent %>%</span></div><span class="profit"><%=orderProfit.profitPercent %>%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header"><h6>Boxes</h6></div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Ship Date</th>
+                    <th>Tracking Number</th>
+                    <th>Service</th>
+                    <th>Weight</th>
+                    <th>Dimensions</th>
+                    <th>Shipment Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% orderInfo.boxes.forEach(box => { %>
+                    <tr>
+                      <td><%=box.shipDate %></td>
+                      <td><a target="_blank" href="<%=box.carrierCode=='stamps_com' ? `https://tools.usps.com/go/TrackConfirmAction?tLabels=${box.trackingNumber}` : box.carrierCode=='ups' ? `https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=${box.trackingNumber}` : `` %>"><%=box.trackingNumber %></a></td>
+                      <td><%=box.serviceCode %></td>
+                      <td><%=box.weight.units=='ounces' ? `${(box.weight.value/16).toFixed(2)} lb` : `${box.weight.value} lb` %></td>
+                      <td><%=box.dimensions ? `${box.dimensions.length} x ${box.dimensions.width} x ${box.dimensions.height} ${box.dimensions.units}` : '' %>
+                      <td>$<%=box.shipmentCost.toFixed(2) %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header"><h6>Order Info</h6></div>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <td class="px-3">Order Status</td>
+                    <td><span class="orderInfo.order_st2"><%=orderInfo.order_st2 %></span></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">Sales ID</td>
+                    <td><%=orderInfo.sales_id %></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">CL Key</td>
+                    <td><%=orderInfo.cl_key %></td>
+                  </tr>
+                  <tr>
+                    <td class="px-3">Order Type</td>
+                    <td><%=orderInfo.ordertype %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header"><h6>Payment Info</h6></div>
+              <table class="table table-sm">
+                <tr>
+                  <td class="px-3">Tax (<%=orderInfo.staxrate %>%)</td>
+                  <td>$<%=orderInfo.tax.toFixed(2) %></td>
+                </tr>
+                <tr>
+                  <td class="px-3">Shipping</td>
+                  <td>$<%=orderInfo.shipping.toFixed(2) %></td>
+                </tr>
+                <tr>
+                  <td class="px-3">Order Total</td>
+                  <td>$<%=orderInfo.ord_total.toFixed(2) %></td>
+                </tr>
+                <tr>
+                  <td class="px-3">Paid</td>
+                  <td>$<%=orderInfo.paid.toFixed(2) %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header">
+                <h6>Bill to <span class="float-right"><a href="/cust/<%=orderInfo.billcustnum %>"><%=orderInfo.billcustnum %></a></span></h6>
+              </div>
+              <div class="card-body">
+                <%=orderInfo.billcustnum %>
+                <%=orderInfo.billcompany %>
+                <br>
+                <%=`${orderInfo.billfirstname} ${orderInfo.billlastname}` %>
+                <br>
+                <%=orderInfo.billaddr %>
+                <br>
+                <%=orderInfo.billaddr2 %>
+                <br>
+                <%=`${orderInfo.billcity}, ${orderInfo.billstate} ${orderInfo.billzipcode}` %>
+              </div>
+            </div>
+					</div>
+          <div class="col-6" ng-show="<%=orderInfo.custnum %>">
+            <div class="card">
+              <div class="card-header">
+                <h6>Ship to <span class="float-right"><a href="/cust/<%=orderInfo.custnum %>"><%=orderInfo.custnum %></a></span></h6>
+              </div>
+              <div class="card-body">
+                <%=orderInfo.custnum || '' %>
+                <%=orderInfo.company || '' %>
+                <br>
+                <%=`${orderInfo.firstname || ''} ${orderInfo.lastname || ''}` %>
+                <br>
+                <%=orderInfo.addr || '' %>
+                <br>
+                <%=orderInfo.addr2 || '' %>
+                <br>
+                <%=`${orderInfo.city || ''}, ${orderInfo.state || ''} ${orderInfo.zipcode || ''}` %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Order Notes</h4>
+              </div>
+              <% orderMemos.forEach((memo,index) => { %>
+                <div class="memo">
+                <%-memo.notes.toString().replace(/\r\n\r\n\r\n______________________________\r\n/g,'</div><div class="memo">').replace(/\r\n/g, '<br>') %>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Order Audits</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Before Value</th>
+                    <th>After Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% orderAudits.forEach((audit,index) => { %>
+                    <tr>
+                    <td><%=audit.auditdate.toString().substring(4, 16) %></td>
+                    <td><%=audit.userid %></td>
+                    <td><%=audit.auditon %></td>
+                    <td><%=audit.beforevalue %></td>
+                    <td><%=audit.aftervalue %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Order Attachments</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>File</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% orderAttachments.forEach((attachment,index) => { %>
+                    <tr>
+                    <td><%=attachment.entrydate.toString().substring(4, 16) %></td>
+                    <td><%=attachment.userid %></td>
+                    <td><%=attachment.filepath.trim() %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+				</div>
+			</div>
+    </div>
+
+    <%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+    <script src="/js/app.js"></script>
+    
+	</body>
+</html>

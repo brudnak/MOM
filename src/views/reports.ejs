@@ -1,0 +1,28 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>PO Profit</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      
+    <%- include partials/header.ejs %>
+			<div ng-controller="AppCtrl as ctrl" class="container">
+				<div class="row">
+          <div class="col-12">
+            <h2>Reports</h2>
+          </div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

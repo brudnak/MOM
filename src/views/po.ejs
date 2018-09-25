@@ -1,0 +1,117 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Purchase Order <%=po.ponumber %></title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div ng-controller="AppCtrl as ctrl" class="container">
+				<div class="row">
+          <div class="col-12 col-md-8">
+            <h2>Purchase Order <%=po.ponumber %></h2>
+            <h4><%=po.supplier %></h4>
+            <h5><%=po.odr_date.toString().substring(4,16) %></h5>
+          </div>
+          <div class="col-12 col-md-4 text-right">
+            <% if(po.orderno != 0) { %>
+              <h4><a href="/orders/<%= po.orderno %>">Order <%= po.orderno %></a></h4>
+              <h5><%=po.reference %></a></h5>
+            <% } %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Line Items</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>SKU</th>
+                    <th>QTY</th>
+                    <th>Delivered</th>
+                    <th>Unit Cost</th>
+                    <th>Ext. Price</th>
+                    <th>Profit Margin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% poItems.forEach((item, index) => { %>
+                    <tr>
+                      <td><a href="/items/<%=item.number %>"><%=item.number %></a></td>
+                      <td><%=item.quantity %></td>
+                      <td><%=item.delivered %></td>
+                      <td>$<%=item.unit_cost.toFixed(2) %></td>
+                      <td>$<%=item.it_unlist ? item.it_unlist.toFixed(2) : '--' %></td>
+                      <td><%=item.it_unlist ?  Math.round(((item.it_unlist - item.unit_cost) / item.unit_cost) * 10000)/100 : '--' %>%</td>
+                    </tr>
+                  <% }); %>
+                  <tr>
+                    <td class="text-right" colspan="4"><b>Subtotal</b></td>
+                    <td colspan="2">$<%=po.mer_total.toFixed(2) %></td>
+                  </tr>
+                  <tr class="no-top">
+                    <td class="text-right" colspan="4"><b>Tax</b></td>
+                    <td colspan="2">$<%=po.tax.toFixed(2) %></td>
+                  </tr>
+                  <tr class="no-top">
+                    <td class="text-right" colspan="4"><b>Shipping</b></td>
+                    <td colspan="2">$<%=po.shipping.toFixed(2) %></td>
+                  </tr>
+                  <tr class="no-top">
+                    <td class="text-right" colspan="4"><b>Total</b></td>
+                    <td colspan="2">$<%=po.ord_total.toFixed(2) %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>AP Payments</h4>
+              </div>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Paydate</th>
+                    <th>User</th>
+                    <th>Payment</th>
+                    <th>Check Number</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% poAps.forEach((item, index) => { %>
+                    <tr>
+                      <td><%=item.invoice %></td>
+                      <td><%=item.paydate.toString().substring(4,16) %></td>
+                      <td><%=item.userid %></td>
+                      <td>$<%=item.payment.toFixed(2) %></td>
+                      <td><%=item.check_no %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+					</div>
+        </div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

@@ -1,0 +1,76 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Customer Lookup</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+      <div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header"><h2>Go to Customer</h2></div>
+              <div class="card-body">
+                <input type="text" class="form-control" placeholder="Customer Number" ng-model="custnum" autofocus>
+                <hr />
+                <a class="btn btn-block btn-primary" ng-class="{'btn-secondary': !custnum}" ng-href="/cust/{{custnum}}">Go to Customer</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card" id="custSearch">
+              <div class="card-header">
+                <h2>Customer Search</h2>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="form-row">
+                    <div class="form-group col-6">
+                      <label>First Name</label>
+                      <input type="text" class="form-control" placeholder="First Name" ng-model="ctrl.firstname">
+                    </div>
+                    <div class="form-group col-6">
+                      <label>Last Name</label>
+                      <input type="text" class="form-control" placeholder="Last Name" ng-model="ctrl.lastname">
+                    </div>
+                    <div class="form-group col-6">
+                      <label>Company Name</label>
+                      <input type="text" class="form-control" placeholder="Company Name" ng-model="ctrl.company">
+                    </div>
+                    <div class="form-group col-6">
+                      <label>Email Address</label>
+                      <input type="text" class="form-control" placeholder="Email Address" ng-model="ctrl.email">
+                    </div>
+                    <div class="form-group col-6">
+                      <label>Zip Code</label>
+                      <input type="text" class="form-control" placeholder="Zip Code" ng-model="ctrl.zipcode">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-12">
+                      <a id="submit" class="btn btn-block btn-primary" ng-class="" ng-href="/cust/search?firstname={{ctrl.firstname}}&lastname={{ctrl.lastname}}&company={{ctrl.company}}&email={{ctrl.email}}&zipcode={{ctrl.zipcode}}">Search Customers</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+    <script src="/js/app.js"></script>
+
+	</body>
+</html>

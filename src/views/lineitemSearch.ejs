@@ -1,0 +1,74 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Line Item Search</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak="" class="datepickerdemoCalendar card">
+					<div class="card-header">
+						<h2>Line Item Search</h2>
+					</div>
+					<div class="card-body">
+						<form>
+							<div class="form-row">
+								<div class="form-group col-12 checkbox">
+									<h5>Item State</h5>
+									<label ng-repeat="state in ctrl.states" ng-class="{checked: ctrl.selectedStates.indexOf(state) > -1}">
+										<input type="checkbox" name="selectedStates[]" value="{{state}}" ng-checked="ctrl.selectedStates.indexOf(state) > -1" ng-click="ctrl.toggleSelection('selectedStates', state)">
+										{{state}}
+									</label>
+								</div>
+								<div class="form-group col-12">
+									<h5>SKUs</h5>
+									<p>SKUs must be comma-separated.</p>
+									<input type="text" class="form-control" placeholder="SKUs" ng-model="ctrl.SKUinput" ng-change="ctrl.updateArr('SKUs','SKUinput')">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="col-12">  
+									<a class="btn btn-block btn-primary" ng-href="/li/{{ctrl.selectedStates}}/{{ctrl.SKUs}}">Submit</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script>
+		var app = angular.module('MyApp', ['ngMaterial', 'ngMessages']);
+		app.controller('AppCtrl', function() {
+		  this.startDate = new Date();
+		  this.endDate = new Date();
+		  this.startDate.setDate(this.startDate.getDate() - 1);
+		  this.states = ['BO','CM','HS','ND','OD','PB','PI','PS','QO','RT','SH','SV'];
+      this.selectedStates = ['BO','CM'];
+      this.SKUs = [];
+
+		  this.toggleSelection = (table, key) => {
+			  const i = this[table].indexOf(key);
+			  if(i > -1) {
+				  this[table].splice(i, 1);
+			  } else {
+				  this[table].push(key);
+			  }
+      }
+      
+      this.updateArr = (arr, text) => {
+        this[arr] = this[text].toUpperCase().split(/,\s?/g);
+      }
+		});
+		</script>
+	</body>
+</html>

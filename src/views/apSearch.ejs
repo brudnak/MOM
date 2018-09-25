@@ -1,0 +1,56 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Line Item Profit</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+			<div class="container" ng-controller="AppCtrl as ctrl" ng-cloak="">
+				<div class="card">
+					<div class="card-header">
+						<h2>AP Search</h2>
+					</div>
+          <div class="card-body">
+            <form>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Invoice Number (like)</label>
+                  <input type="text" class="form-control" ng-model="ctrl.invoicenumber">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>PO Number (exact)</label>
+                  <input type="text" class="form-control" ng-model="ctrl.ponumber">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Supplier Code</label>
+                  <select ng-model="ctrl.supplier" class="form-control">
+                    <% suppliers.forEach((item) => { %>
+                      <option value="<%=item.code%>"><%=`${item.code}, ${item.name}` %></option>
+                    <% }); %>
+                  </select>
+                    
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Payment Amount (exact)</label>
+                  <input type="text" class="form-control" ng-model="ctrl.payment">
+                </div>
+              </div>
+              <div>  
+                <a class="btn btn-block btn-primary" ng-href="/ap/search?invoicenumber={{ctrl.invoicenumber}}&ponumber={{ctrl.ponumber}}&supplier={{ctrl.supplier}}&payment={{ctrl.payment}}">Submit</a>
+              </div>
+            </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+	</body>
+</html>

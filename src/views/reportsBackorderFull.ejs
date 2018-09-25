@@ -1,0 +1,62 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Backorder Report</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container" ng-controller="backorderReportCtrl as ctrl" ng-cloak="">
+				<div class="card">
+					<div class="card-header">
+						<h2>Backorder Report - <span date-now="MM/dd/yyyy"></span></h2>
+                    </div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th width="65%">SKU</th>
+								<th width="5%">In WH</th>
+								<th width="5%">On CM</th>
+								<th width="5%">On BO</th>
+								<th width="5%">On PO</th>
+								<th width="5%">Need</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% items.forEach((item, index) => { %>
+								<tr>
+                                    <td>
+                                        <a href="/items/<%=item.item %>"><%=item.item %></a>
+                                        <% if(item.nonproduct) { %>
+                                            <span class="badge badge-primary"><%=item.item_state=='HS' ? 'Disc.' : 'SV' %></span>
+                                        <% } %>
+										&nbsp;
+                                        <% if(ordersByItem[item.item]) { %>
+                                            <% ordersByItem[item.item].forEach((order) => { %>
+                                                <a class="order-link" href="/orders/<%=order %>"><%=order %></a>
+                                            <% }); %>
+                                        <% } %>
+									</td>
+									<td><%=item.inhouse %></td>
+									<td><%=item.commited %></td>
+									<td><%=item.BO %></td>
+									<td><%=item.onorder %></td>
+									<td><%=item.nonproduct && item.item_state !== 'HS' ? '--' : item.BO - item.onorder > 0 ? item.BO - item.onorder : 0 %></td>
+                                </tr>
+							<% }) %> 
+						</tbody>
+                    </table>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+        <%- include partials/javascripts.ejs %>
+		  
+	</body>
+</html>

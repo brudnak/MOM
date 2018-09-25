@@ -1,0 +1,71 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Order Search Results</title>		
+        <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+        <%- include partials/header.ejs %>
+
+			<div class="container" ng-controller="AppCtrl as ctrl" ng-cloak>
+        <div class="row local-nav">
+            <div class="col-2">
+              <a class="btn btn-outline-primary btn-large mx-4" href="/orders#orderSearch">New Order Search</a>
+            </div>
+            <div class="col-10 text-right">
+              <%- include partials/orderkeys.ejs %>
+            </div> 
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Order Search Results</h2>
+              </div>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Order Date</th>
+                    <th>Alt</th>
+                    <th>Status</th>
+                    <th>Salesperson</th>
+                    <th>Order Type</th>
+                    <th>CL Key</th>
+                    <th>Order Total</th>
+                    <th>Next Pay</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <% orders.forEach((item,index) =>  { %>
+                    <tr>
+                      <td><a href="/orders/<%=item.orderno %>"><%=item.orderno %></a></td>
+                      <td><%=item.odr_date.toString().substring(4,16) %></td>
+                      <td><%=item.alt_order %></td>
+                      <td><span class="label <%=item.order_st2 %>"><%=item.order_st2 %></span></td>
+                      <td><%=item.sales_id %></td>
+                      <td><%=item.ordertype %></td>
+                      <td><%=item.cl_key %></td>
+                      <td>$<%=item.ord_total.toFixed(2) %></td>
+                      <td>$<%=item.next_pay.toFixed(2) %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>
