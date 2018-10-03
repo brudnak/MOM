@@ -18,7 +18,7 @@
 							<div class="card-body">
 								<input type="text" class="form-control" placeholder="Purchase Order Number" ng-model="ponumber" autofocus>
 								<hr />
-								<a class="btn btn-block btn-primary" ng-class="{'btn-secondary': !ponumber}" ng-href="/pos/{{ponumber}}">Go to PO</a>
+								<a class="btn btn-primary" ng-class="{'btn-secondary': !ponumber}" ng-href="/pos/{{ponumber}}">Go to PO</a>
 							</div>
 						</div>
 					</div>
@@ -48,8 +48,10 @@
 											<input type="text" class="form-control" placeholder="SKU" ng-model="ctrl.sku">
 										</div>
 									</div>
-									<div>
-										<a id="submit" class="btn btn-block btn-primary" ng-class="" ng-href="/pos/search?supplier={{ctrl.supplier}}&pototal={{ctrl.pototal}}&sku={{ctrl.sku}}">Search POs</a>
+									<div class="form-row">
+										<div class="col-12">
+											<a id="submit" class="btn btn-block btn-primary" ng-class="" ng-href="/pos/search?supplier={{ctrl.supplier}}&pototal={{ctrl.pototal}}&sku={{ctrl.sku}}">Search POs</a>
+										</div>
 									</div>
 								</form>
 							</div>

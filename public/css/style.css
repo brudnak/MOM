@@ -4,21 +4,22 @@ h1,h2,h3,h4,h5,h6 {font-weight: normal; text-transform: uppercase; margin: 10px 
 
 header {margin-bottom: 50px;}
 header nav.navbar {background: #e74c3c; color: #fff; padding: 15px 20px;}
-.navbar-dark .navbar-nav .nav-link {color: #fff;}
+.navbar-dark .navbar-nav .nav-link {color: #fff; padding: 5px 20px;}
 
 .local-nav {border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;}
 
 .btn {margin: 3px 1px;}
 
 /* CARDS */
-.card {border: 1px solid #ddd; border-radius: 0px; margin-bottom: 30px; background: #fff;}
-    .card-header {background: #fff; border-bottom: 2px solid #e74c3c;}
+.card {border: 1px solid #ddd; border-radius: 0px; margin-bottom: 30px; background: #fff; box-shadow: 0px 1px 4px rgba(0,0,0,0.1);}
+    .card-header {background: transparent; border-bottom: 2px solid #e74c3c;}
     .card-header.no-border {border: none;}
     .card-header select {margin-top: 5px;}
 
 /* FORMS */
 .form-row {border-bottom: 1px solid #ddd; margin-bottom: 25px; padding-bottom: 15px;}
-.form-row:last-child {border-bottom: none; margin-bottom: 0px;}
+.form-row:last-child {border-bottom: none; margin: 0px -25px -40px;}
+    .form-row:last-child a {padding: 20px; text-transform: uppercase; font-weight: bold; border-radius: 0px;}
 .checkbox label {display: inline-block; padding: 5px 15px; margin: .5%; width: 19%; background: #eee; border: 1px solid #ddd; color: #aaa; border-radius: 3px; cursor: pointer; transition: .2s}
 .checkbox label.checked {background: #ddd; border-color: #ccc; color: #333;}
 

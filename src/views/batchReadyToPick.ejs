@@ -1,0 +1,54 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Stage 1</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Stage 1 &mdash; Ready to Pick</h4>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Order Date</th>
+                      <th>Salesperson</th>
+                      <th>Order</th>
+                      <th>CL Key</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% orders.forEach(order => { %>
+                      <tr>
+                        <td><%=order.odr_date.toString().substring(4,15) %></td>
+                        <td><%=order.sales_id %></td>
+                        <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
+                        <td><%=order.cl_key %></td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

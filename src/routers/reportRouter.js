@@ -1,7 +1,7 @@
 const express = require('express');
 const reportRouter = express.Router();
 const reportController = require('../controllers/reportController');
-const { displayProfitPOs, displayProfitLineItems, displayProfitOrders, displayBackorder, displayBackorderSKU, displayShippedProfitOrders } = reportController();
+const { displayProfitPOs, displayProfitLineItems, displayProfitOrders, displayBackorder, displayBackorderSKU, displayShippedProfitOrders, displayRTSProfitOrders } = reportController();
 
 reportRouter.route('/')
     .get((req, res) => {
@@ -35,6 +35,13 @@ reportRouter.route('/shippedOrder')
     })
 reportRouter.route('/shippedOrder/report') 
     .get(displayShippedProfitOrders);
+
+reportRouter.route('/RTSOrder')
+    .get((req, res) => {
+        res.render('reportsRTSOrderProfitForm');
+    })
+reportRouter.route('/RTSOrder/report') 
+    .get(displayRTSProfitOrders);
 
 reportRouter.route('/backorder')
     .get(displayBackorder);

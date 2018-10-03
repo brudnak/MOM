@@ -14,7 +14,7 @@
 				<div ng-controller="AppCtrl as ctrl" ng-cloak>
           <div class="row local-nav">
             <div class="col-2">
-              <a class="btn btn-outline-primary btn-large mx-4" href="/reports/shippedOrder">Make a new report</a>
+              <a class="btn btn-outline-primary btn-large mx-4" href="/reports/RTSOrder">Make a new report</a>
             </div>
             <div class="col-10 text-right">
               <%- include partials/orderkeys.ejs %>
@@ -24,7 +24,7 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  <h2>Shipped Order Profitability from {{'<%=parameters.startDate %>' | dateFromSQL}} to {{'<%=parameters.endDate %>' | dateFromSQL}}</h2>
+                  <h2>Ready to Ship Profitability from {{'<%=parameters.startDate %>' | dateFromSQL}} to {{'<%=parameters.endDate %>' | dateFromSQL}}</h2>
                   <h3><%=orders.length %> Results</h3>
                 </div>
                 
@@ -60,18 +60,6 @@
                 </table>
               </div>
 						</div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-body">
-                  <p>Total Orders: <%=orders.length %></p>
-                  <p>Total Gross: $<%=stats.totalGross.toFixed(2) %></p>
-                  <p>Total Net: $<%=stats.totalNet.toFixed(2) %></p>
-                  <p>Total Loss: $<%=stats.totalLoss.toFixed(2) %></p>
-                </div>
-              </div>
-            </div>
           </div>
 				</div>
 			</div>

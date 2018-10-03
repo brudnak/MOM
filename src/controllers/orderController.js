@@ -23,6 +23,8 @@ function orderController() {
                     resolve([]);
                 };
 
+                console.log(body);
+
                 resolve(body.shipments);
             })
         })
@@ -157,7 +159,7 @@ function orderController() {
                 // Calculate total merchandise cost and list
                 let totalCost = 0; let totalList = 0;
                 itemsInfo.forEach(item => {
-                    if(item.item_state != 'SV') {
+                    if(item.item_state != 'SV' && item.item_state != 'RT') {
                         totalCost += item.it_uncost.toFixed(2)*item.quanto;
                     }  
                     totalList += item.it_unlist.toFixed(2)*item.quanto; 
@@ -167,7 +169,7 @@ function orderController() {
                 let shipCost = 0;
                 if(orderInfo.boxes) {
                     orderInfo.boxes.forEach(shipment => {
-                        shipCost += shipment.shipmentCost;
+                        shipCost += shipment.shipmentCost + shipment.insuranceCost;
                     });
                 }
 
@@ -187,7 +189,7 @@ function orderController() {
                   } else if(orderInfo.cl_key.trim()=='AMAZON' || orderInfo.cl_key.trim()=='AMZPRIME') {
                     commission = Math.max(1, totalMinusTax*.15);
                   } else if(orderInfo.cl_key.trim()=='AMZVC') {
-                    commission = Math.max(1, totalMinusTax*.02);
+                    commission = Math.max(1, totalMinusTax*.1);
                   }
                 }
 

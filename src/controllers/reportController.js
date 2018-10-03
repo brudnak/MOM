@@ -31,9 +31,9 @@ function reportController() {
                     
                     body.shipments.forEach(shipment => {
                         if(orderShippingCosts[shipment.orderNumber]) {
-                            orderShippingCosts[shipment.orderNumber] += shipment.shipmentCost;
+                            orderShippingCosts[shipment.orderNumber] += shipment.shipmentCost + shipment.insuranceCost;
                         } else {
-                            orderShippingCosts[shipment.orderNumber] = shipment.shipmentCost;
+                            orderShippingCosts[shipment.orderNumber] = shipment.shipmentCost + shipment.insuranceCost;
                         }
                     });
 
@@ -198,7 +198,7 @@ function reportController() {
             CAST(( ord_total - tax - cost - ( CASE
                 WHEN cl_key IN ('AMAZON','AMZPRIME','WAL') THEN (ord_total-tax)*.15
                 WHEN cl_key = 'EBAY' OR cl_key = 'EBAYCPR' THEN (ord_total-tax)*.10
-                WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.02
+                WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.1
                 ELSE 0 END
             )) AS DECIMAL(16,2)) AS 'profit',
             CAST(ROUND(( ( ord_total - tax - cost ) / (ord_total-tax) ) * 100,2) AS DECIMAL(16,2)) AS 'percentProfit'
@@ -215,7 +215,7 @@ function reportController() {
             AND (CAST(( (ord_total-tax) - cost - ( CASE
                 WHEN cl_key IN ('AMAZON','AMZPRIME','WAL') THEN (ord_total-tax)*.15
                 WHEN cl_key = 'EBAY' OR cl_key = 'EBAYCPR' THEN (ord_total-tax)*.10
-                WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.02
+                WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.1
                 ELSE 0 END
             )) AS DECIMAL(16,2)) < ${bottomDollar} OR CAST(ROUND(( ( (ord_total-tax) - cost ) / (ord_total-tax) ) * 100,2) AS DECIMAL(16,2)) < ${bottomPercent})
             AND ord_total <> 0
@@ -272,8 +272,8 @@ function reportController() {
             console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, ord_total-tax AS 'totalAfterTax', cost
-                FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost',SUM(it_unlist*quanto) as 'price'
-                    FROM items WHERE item_state <> 'SV'
+                FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
+                    FROM items WHERE item_state <> 'SV' AND item_state <> 'RT'
                     GROUP BY orderno ) agg
                 INNER JOIN cms ON cms.orderno = agg.orderno
                 LEFT JOIN ( SELECT orderno, COUNT(*) as 'pocount' FROM purchase GROUP BY orderno ) p ON cms.orderno = p.orderno
@@ -297,20 +297,24 @@ function reportController() {
         const { startDate, endDate, recipients, salesperson, bottomDollar, bottomPercent } = req.query;
         const keys = eval(req.query.keys);
         Promise.all([getShippedProfitOrders(startDate, endDate, keys, salesperson), getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
-            let totalGross = 0;
-            let totalNet = 0
+            let stats = {
+                totalGross: 0,
+                totalNet: 0,
+                totalLoss: 0,
+            };
 
             orders.forEach(order => {
                 order.odr_date = order.odr_date.toString().substring(4,16);
                 order.cost = order.cost.toFixed(2);
                 order.totalAfterTax = order.totalAfterTax.toFixed(2);
                 order.shipping = (shippingCosts[order.alt_order.trim().length==19 ? order.alt_order.trim() : order.orderno] || 0).toFixed(2);
-                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.2 : 0).toFixed(2);
+                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.1 : 0).toFixed(2);
                 order.net = (order.totalAfterTax - order.cost - order.shipping - order.fees).toFixed(2);
                 order.margin = ((order.net / order.totalAfterTax)*100).toFixed(2);
 
-                totalGross = totalGross + eval(order.totalAfterTax);
-                totalNet = totalNet + eval(order.net);
+                stats.totalGross = stats.totalGross + eval(order.totalAfterTax);
+                stats.totalNet = stats.totalNet + eval(order.net);
+                stats.totalLoss = stats.totalLoss + (order.net < 0 ? eval(order.net) : 0);
             })
 
             //orders = orders.filter(order => { eval(order.net) < bottomDollar || eval(order.margin) < bottomPercent });
@@ -333,8 +337,72 @@ function reportController() {
                         endDate,
                         keys: req.query.keys
                     },
-                    totalGross,
-                    totalNet
+                    stats
+                }
+            )
+        }).catch(err => {
+            res.send(err);
+        })
+    }
+
+    function getRTSProfitOrders(startDate, endDate, clKeys = []) {
+        return new Promise((resolve, reject) => {
+            console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
+            const request = new sql.Request();
+            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, ord_total-tax AS 'totalAfterTax', cost
+                FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
+                    FROM items WHERE item_state <> 'SV' AND item_state <> 'RT'
+                    GROUP BY orderno ) agg
+                INNER JOIN cms ON cms.orderno = agg.orderno
+                LEFT JOIN ( SELECT orderno, COUNT(*) as 'pocount' FROM purchase GROUP BY orderno ) p ON cms.orderno = p.orderno
+                WHERE cms.order_st2 = 'PS' AND pocount IS NULL AND cms.ordertype <> 'FBA' AND cms.cl_key <> 'AMZPRIME'
+                AND cms.odr_date BETWEEN '${startDate}' AND '${endDate}'
+                ${clKeys[0] == undefined ? '' : `AND cl_key IN (${clKeys.map((key) => `'${key}'`).join(', ')})`}
+                AND ord_total <> 0
+                ORDER BY odr_date DESC`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(recordset.recordset);
+            }); 
+        });
+    }
+
+    function displayRTSProfitOrders(req, res) {
+        const { startDate, endDate, recipients } = req.query;
+        const keys = eval(req.query.keys);
+        Promise.all([getRTSProfitOrders(startDate, endDate, keys), getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
+
+            orders.forEach(order => {
+                order.odr_date = order.odr_date.toString().substring(4,16);
+                order.cost = order.cost.toFixed(2);
+                order.totalAfterTax = order.totalAfterTax.toFixed(2);
+                order.shipping = (shippingCosts[order.alt_order.trim().length==19 ? order.alt_order.trim() : order.orderno] || 0).toFixed(2);
+                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.1 : 0).toFixed(2);
+                order.net = (order.totalAfterTax - order.cost - order.shipping - order.fees).toFixed(2);
+                order.margin = ((order.net / order.totalAfterTax)*100).toFixed(2);
+            })
+
+            var link = (req.protocol + '://' + req.get('host') + req.originalUrl).replace('recipients','');
+            
+            if(recipients && recipients !== '') {
+                sendMail(orders, recipients, 'Ready-to-Ship Profitability Report', {startDate, endDate, keys, link}).then(response => {
+                    global.io.emit('emailSuccess', { recipients });
+                }).catch(err => {
+                    global.io.emit('emailFailure', { recipients });  
+                });
+            }
+
+            res.render(
+                'reportsRTSOrderProfit',
+                {
+                    orders,
+                    parameters: { startDate,
+                        endDate,
+                        keys: req.query.keys
+                    }
                 }
             )
         }).catch(err => {
@@ -470,7 +538,8 @@ function reportController() {
         displayProfitOrders,
         displayBackorder,
         displayBackorderSKU,
-        displayShippedProfitOrders
+        displayShippedProfitOrders,
+        displayRTSProfitOrders
     };
 }
 

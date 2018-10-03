@@ -19,9 +19,9 @@ function itemController() {
                         "serviceCode": null,  
                         "packageCode": null,  
                         "fromPostalCode": "85282",  
-                        "toState": "DC",  
+                        "toState": "ME",  
                         "toCountry": "US",  
-                        "toPostalCode": "20500",  
+                        "toPostalCode": "03904",  
                         "toCity": "Washington",  
                         "weight": {      
                             "value": ${weight},    
@@ -265,33 +265,46 @@ function itemController() {
                         } else if(marketplace.marketplace=='Walmart') {
                             commission = .15;
                         } else if(marketplace.marketplace=='Vendor Central') {
-                            commission = .02;
+                            commission = .1;
                         } else if(marketplace.marketplace=='Amazon FBA') {
                             commission = .15;
 
-                            const dims = [itemInfo.blength, itemInfo.bwidth, itemInfo.bheight].sort();
+                            const dims = [itemInfo.blength, itemInfo.bwidth, itemInfo.bheight].sort((a,b) => a-b);
                             const length = dims[2];
                             const width = dims[1];
                             const height = dims[0];
                             const unitweight = itemInfo.unitweight
+                            const cubicFeet = (length * width * height) / 1728;
+                            const now = new Date();
+                            const month = now.getMonth();
 
                             if(unitweight <= .75 && height <= .75 && width <= 12 && length <= 15) {
-                                fee = 2.41
+                                fee = 2.41;
+                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
                             } else if(unitweight <= 1 && height <= 8 && width <= 14 && length <= 18) {
-                                fee = 3.19
+                                fee = 3.19;
+                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
                             } else if(unitweight <= 2 && height <= 8 && width <= 14 && length <= 18) {
-                                fee = 4.71
+                                fee = 4.71;
+                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
                             } else if(unitweight <= 20 && height <= 8 && width <= 14 && length <= 18) {
-                                fee = 4.71 + ((unitweight - 2) * .38)
+                                fee = 4.71 + ((unitweight - 2) * .38);
+                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
                             } else if(unitweight <= 70 && (height*width+length) <= 108 && width <= 30 && length <= 60) {
-                                fee = 8.13 + ((unitweight - 2) * .38)
+                                fee = 8.13 + ((unitweight - 2) * .38);
+                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
                             } else if(unitweight <= 150 && (height*width+length) <= 130 && length <= 108) {
-                                fee = 9.44 + ((unitweight - 2) * .38)
+                                fee = 9.44 + ((unitweight - 2) * .38);
+                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
                             } else if(unitweight <= 150 && (height*width+length) <= 165 && length <= 108) {
-                                fee = 73.18 + ((unitweight - 90) * .79)
+                                fee = 73.18 + ((unitweight - 90) * .79);
+                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
                             } else {
-                                fee = 137.32 + ((unitweight - 90) * .91)
+                                fee = 137.32 + ((unitweight - 90) * .91);
+                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
                             }
+
+                            
                         }
     
                         if(marketplace.marketplace=='Amazon Prime') {

@@ -39,8 +39,10 @@
                   <input type="text" class="form-control" ng-model="ctrl.payment">
                 </div>
               </div>
-              <div>  
-                <a class="btn btn-block btn-primary" ng-href="/ap/search?invoicenumber={{ctrl.invoicenumber}}&ponumber={{ctrl.ponumber}}&supplier={{ctrl.supplier}}&payment={{ctrl.payment}}">Submit</a>
+              <div class="form-row"> 
+                <div class="col-12"> 
+                  <a class="btn btn-block btn-primary" ng-href="/ap/search?invoicenumber={{ctrl.invoicenumber}}&ponumber={{ctrl.ponumber}}&supplier={{ctrl.supplier}}&payment={{ctrl.payment}}">Submit</a>
+                </div>
               </div>
             </form>
 					</div>

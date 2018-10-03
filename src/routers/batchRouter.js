@@ -1,12 +1,10 @@
 const express = require('express');
 const batchRouter = express.Router();
 const batchController = require('../controllers/batchController');
-const { displayStage1, displayStage89 } = batchController();
+const { displayStage1, displayStage89, displayStageAll } = batchController();
 
 batchRouter.route('/')
-    .get((req, res) => {
-        res.render('batchHome');
-    });
+    .get(displayStageAll);
     
 batchRouter.route('/stage1')
     .get(displayStage1);

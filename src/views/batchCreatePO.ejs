@@ -21,6 +21,7 @@
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>Order Date</th>
                       <th>Salesperson</th>
                       <th>Order</th>
                       <th>SKU</th>
@@ -32,6 +33,7 @@
                   <tbody>
                     <% orders.forEach(order => { %>
                       <tr>
+                        <td><%=order.odr_date.toString().substring(4,15) %></td>
                         <td><%=order.sales_id %></td>
                         <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
                         <td><a href="/items/<%=order.item %>"><%=order.item %></a></td>
