@@ -4,7 +4,7 @@ Interface for Multichannel Order Manager for easier, more comprehensive views, s
 # Why this project?
 Our company uses an Order Management System called Multichannel Order Manager (MOM). As an older, outdated system, the program can be difficult to use, slow, and is missing many features that are vital for a business. This interface was delveoped to supplement our system and allow us an easier way to search for the information we need to find, collect the data we need to be aware of, and simplify our numerous processes and workarounds.
 
-As MOM does not have an exposed API, this project utilizes local access to our SQL Server to access data. It also uses the ShipStation API to request our shipping data. The ShipStation API is also used to export our orders into ShipStation in a separate module.
+As MOM does not have an exposed API, this project utilizes local access to our SQL Server to access data. It also uses the ShipStation API to request our shipping data so that we can dependably measure and project profitability, estimate competitive pricing, and also push our pending orders to their dashboard so that our warehouse can quickly input dimensions and print labels without having to worry about the customer's information.
 
 Some of the most important and time-saving features include:
 * The ability to view and open multiple pages at a time, whereas in MOM only one window can be open.
@@ -41,6 +41,8 @@ In MOM, invoices for purchase orders can only be searched by the invoice number.
 In MOM, there are no means for profitability reports that take into consideration marketplace fees (such as Amazon FBA, FBM, Walmart, Ebay, etc.) or actual shipping costs. This project includes several types of reports that are designed to catch sales or shipping mistakes that would otherwise lose us money on an order, or to report individual and aggregate profitiability after taking processing costs into consideration.
 
 The Backorder Report also includes a more comprehensive report on backorder items, including the current in-house stock, the number of units currently on active POs, and the orders on which these items are on backorder.
+
+Each report also includes an email option so that managers can get a simplified copy of the information (with link to the corresponding report).
 
 ## BATCH
 In MOM, orders in certain phases of the order fulfillment process can be viewed from the "batch" feature, where they can then be processed en masse. However, the window in which the specific orders for each phase can be viewed does not allow the user to copy the numbers or click on them to lead them to the order.
