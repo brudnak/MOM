@@ -7,9 +7,9 @@ Our company uses an Order Management System called Multichannel Order Manager (M
 As MOM does not have an exposed API, this project utilizes local access to our SQL Server to access data. It also uses the ShipStation API to request our shipping data. The ShipStation API is also used to export our orders into ShipStation in a separate module.
 
 Some of the most important and time-saving features include:
--The ability to view and open multiple pages at a time, whereas in MOM only one window can be open.
--The ability to search records with more comprehensive parameters, such as date, order type, status, and more.
--The ability to quickly navigate to relevant items, orders, POs, etc. by clicking on a link, and the ability to copy and paste text.
+* The ability to view and open multiple pages at a time, whereas in MOM only one window can be open.
+* The ability to search records with more comprehensive parameters, such as date, order type, status, and more.
+* The ability to quickly navigate to relevant items, orders, POs, etc. by clicking on a link, and the ability to copy and paste text.
 
 ## ORDERS
 In MOM, orders can only be searched by a complete, unique identifier, such as an order number or alternate order number. Using this interface, users can now query multiple orders at a time by date, order type ("CL key"), order status, salesperson, order total, and SKU.
