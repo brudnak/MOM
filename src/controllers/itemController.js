@@ -49,7 +49,7 @@ function itemController() {
 
     function getItem(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving Item Info for ${sku}`)
+            console.log(`Retrieving Item Info for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT desc1, desc2, units, fbaunits, low, uncost, price1, bounits, onorder, commited, break_out, notation, 
             nonproduct, serial, discont, upccode, blength, bwidth, bheight, unitweight, min_price, lu_by, lu_on
@@ -89,7 +89,7 @@ function itemController() {
 
     function getItemBins(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving Item Bins for ${sku}`)
+            console.log(`Retrieving Item Bins for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT warehouse, bindesc, units, commited, rcommit, picked, dropship 
             FROM bin
@@ -107,7 +107,7 @@ function itemController() {
 
     function getItemPrices(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving Item Prices for ${sku}`)
+            console.log(`Retrieving Item Prices for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT supplier, quantity, buydesc, unit_price, dropship, lead_avg
             FROM buyprice
@@ -125,7 +125,7 @@ function itemController() {
 
     function getItemTransactions(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving Item Transactions for ${sku}`)
+            console.log(`Retrieving Item Transactions for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT trans_date, transtype, quantity, unit_cost, userid, notation
             FROM invtrans
@@ -143,7 +143,7 @@ function itemController() {
 
     function getItemAudits(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving Order Audits for item ${sku}`);
+            console.log(`Retrieving Order Audits for item ${sku}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT auditon, userid, auditdate, beforevalue, aftervalue FROM useractivity
             WHERE audittype = 'P' AND auditkey = '${sku}'
@@ -160,7 +160,7 @@ function itemController() {
 
     function getItemSales(sku, days) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving sales for ${sku} for past ${days} days.`)
+            console.log(`Retrieving sales for ${sku} for past ${days} days.`)
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.cl_key, SUM(items.quanto) as sales
             FROM items
@@ -180,7 +180,7 @@ function itemController() {
 
     function getBreakout(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving Breakout Items for ${sku}`);
+            console.log(`Retrieving Breakout Items for ${sku}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT breakout.inv, breakout.q, breakout.price, stock.uncost
             FROM breakout
@@ -239,6 +239,8 @@ function itemController() {
                     'UPS 2ND DAY AIR®': 'UPS 2nd Day',
                     'UPS NEXT DAY AIR SAVER®': 'UPS Next Day Saver'
                 }
+
+                console.log(itemInfo.rates);
 
                 itemInfo.rates = itemInfo.rates.filter(rate => ratesToDisplay[rate.serviceName.toUpperCase()])
                     .map(rate => { return {...rate, displayName: ratesToDisplay[rate.serviceName.toUpperCase()]}});

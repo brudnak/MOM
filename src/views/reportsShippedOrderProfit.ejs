@@ -44,7 +44,7 @@
                   </thead>
                   <tbody>
                     <% orders.forEach((order,index) =>  { %>
-                      <tr>
+                      <tr class="tp-<%=order.tpshiptype%>">
                         <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
                         <td><%=order.odr_date %></td>
                         <td><%=order.cl_key %></td>

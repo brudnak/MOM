@@ -30,10 +30,12 @@ function reportController() {
                     let orderShippingCosts = {}
                     
                     body.shipments.forEach(shipment => {
-                        if(orderShippingCosts[shipment.orderNumber]) {
-                            orderShippingCosts[shipment.orderNumber] += shipment.shipmentCost + shipment.insuranceCost;
-                        } else {
-                            orderShippingCosts[shipment.orderNumber] = shipment.shipmentCost + shipment.insuranceCost;
+                        if(!shipment.voided) {
+                            if(orderShippingCosts[shipment.orderNumber]) {
+                                orderShippingCosts[shipment.orderNumber] += shipment.shipmentCost + shipment.insuranceCost;
+                            } else {
+                                orderShippingCosts[shipment.orderNumber] = shipment.shipmentCost + shipment.insuranceCost;
+                            }
                         }
                     });
 
@@ -271,7 +273,7 @@ function reportController() {
         return new Promise((resolve, reject) => {
             console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, ord_total-tax AS 'totalAfterTax', cost
+            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
                     FROM items WHERE item_state <> 'SV' AND item_state <> 'RT'
                     GROUP BY orderno ) agg
@@ -349,7 +351,7 @@ function reportController() {
         return new Promise((resolve, reject) => {
             console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, ord_total-tax AS 'totalAfterTax', cost
+            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
                     FROM items WHERE item_state <> 'SV' AND item_state <> 'RT'
                     GROUP BY orderno ) agg

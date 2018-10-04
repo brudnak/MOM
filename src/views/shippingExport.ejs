@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Orders Imported</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+      <div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header"><h2>Orders Imported to ShipStation</h2></div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order Number</th>
+                    <th>ShipStation ID</th>
+                    <th>Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% results.forEach(order => { %>
+                    <tr>
+                      <td><a href="/orders/<%=order.orderNumber %>"><%=order.orderNumber %></a></td>
+                      <td><%=order.orderId %></td>
+                      <td><%=order.success ? "Imported successfully" : order.errorMessage %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div> 
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

@@ -14,6 +14,7 @@
 				<div class="row">
           <div class="col-8">
             <h2>Order <%=orderno %></h5>
+            <span class="label bg-danger" ng-show="<%=orderInfo.tpshiptype==2 %>">Third Party Shipping Acct. <%=orderInfo.tpshipacct %></span>
             <h5><%=orderInfo.odr_date.toString().substring(4,16) %></h5>
           </div>
           <div class="col-4 text-right">
@@ -24,7 +25,7 @@
                 <%=orderInfo.alt_order %>
               <% } %>
             </h3>
-            <h4 class="badge badge-secondary"><%=orderInfo.cl_key %></h4>
+            <span class="label label-<%=orderInfo.cl_key %>"><%=orderInfo.cl_key %></span>
           </div>
         </div>
         <div class="row">
@@ -152,6 +153,7 @@
             </div>
           </div>
         </div>
+ 
         <div class="row">
           <div class="col-6">
             <div class="card">

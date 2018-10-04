@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Orders to Ship</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+      <div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Orders Ready to Export to ShipStation</h2>
+                <p>The following are the orders that are ready to be exported to ShipStation. These include all orders that are "ready to pack," except Amazon and Amazon Prime orders, which are already imported automatically.</p>
+                <p><b>All orders with third party accounts linked should also include notes of such in the warehouse instructions.</b></p>
+              </div>
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Order</th>
+                          <th>Customer</th>
+                          <th>City, State</th>
+                          <th>Warehouse Instructions</th>
+                          <th>Third Party Account</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <% orders.forEach(order => { %>
+                          <tr>
+                              <td><a href="/orders/<%=order.orderNumber %>"><%=order.orderNumber %></a></td>
+                              <td><%=order.customerUsername %></td>
+                              <td><%=order.shipTo.city + ", " + order.shipTo.state %></td>
+                              <td><%=order.requestedShippingService %></td>
+                              <td><%=order.advancedOptions.billToAccount %></td>
+                          </tr>
+                      <% }); %>
+                  </tbody>
+              </table>
+              <hr />
+              <a class="btn btn-block btn-primary" href="/shipping/export">Export to ShipStation</a>
+            </div>
+          </div>
+        </div> 
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+        <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

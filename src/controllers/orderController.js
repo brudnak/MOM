@@ -23,9 +23,9 @@ function orderController() {
                     resolve([]);
                 };
 
-                console.log(body);
+                let shipments = body.shipments.filter(shipment => !shipment.voided);
 
-                resolve(body.shipments);
+                resolve(shipments);
             })
         })
     }
@@ -36,11 +36,12 @@ function orderController() {
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno,cl_key,cms.odr_date,tax,shipping+tb_ship as 'shipping',tb_merch,tb_ship,checkamoun as 'paid',ord_total,staxrate,cms.sales_id,order_st2,next_pay,ordertype,ponumber,alt_order,
             billto.custnum AS 'billcustnum',billto.lastname AS 'billlastname',billto.firstname AS 'billfirstname',billto.company AS 'billcompany',billto.addr AS 'billaddr',billto.addr2 AS 'billaddr2',billto.city AS 'billcity',billto.state AS 'billstate',billto.zipcode AS 'billzipcode',
-            shipto.custnum,shipto.lastname,shipto.firstname,shipto.company,shipto.addr,shipto.addr2,shipto.city,shipto.state,shipto.zipcode
+            shipto.custnum,shipto.lastname,shipto.firstname,shipto.company,shipto.addr,shipto.addr2,shipto.city,shipto.state,shipto.zipcode,
+            cms.tpshiptype, cms.tpshipacct
             FROM cms
             LEFT JOIN cust AS billto ON cms.custnum = billto.custnum
             LEFT JOIN cust AS shipto ON cms.shipnum = shipto.custnum
-            WHERE orderno = '${orderID}'`;
+            WHERE cms.orderno = '${orderID}'`;
             
             request.query(sqlQuery, (err, recordset) => {
                 if (err) {
@@ -96,7 +97,7 @@ function orderController() {
         return new Promise((resolve, reject) => {
             console.log(`Retrieving Order Memos for Order ${orderID}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT notes FROM ordmemo WHERE orderno = '${orderID}' ORDER BY ordmemo_id DESC`;
+            const sqlQuery = `SELECT notes,fulfill,desc1,desc2,desc3,desc4,desc5,desc6 FROM ordmemo WHERE orderno = '${orderID}' ORDER BY ordmemo_id DESC`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if (err) {
@@ -154,7 +155,6 @@ function orderController() {
                     }
                 )
             } else {
-                console.log(orderInfo.boxes);
 
                 // Calculate total merchandise cost and list
                 let totalCost = 0; let totalList = 0;
