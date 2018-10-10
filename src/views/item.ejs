@@ -111,10 +111,44 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
+              <div class="card-header no-border"><h4>Marketplace Listings</h4></div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Marketplace</th>
+                    <th>ID</th>
+                    <th>Lowest Price</th>
+                    <th>BuyBox Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% itemInfo.listings.forEach(listing => { %>
+                    <tr>
+                      <td><%=listing.marketplace %></td>
+                      <td><a target="_blank" href="https://www.amazon.com/dp/<%=listing.marketplaceId %>"><%=listing.marketplaceId %></a></td>
+                      <td>
+                        <% if(Array.isArray(listing.lowestPrices)) { %>
+                          <% listing.lowestPrices.forEach(price => { %>
+                          <div><%=`Fulfilled by ${price.fulfillmentChannel}: $${price.LandedPrice.Amount}` %></div>
+                        <% }) %>
+                      <% } %>
+                      
+                      </td>
+                      <td>$<%=listing.buyBoxPrice %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
               <div class="card-header">
                 <div class="row">
                   <div class="col-6">
-                    <h4>Sales</h4>
+                    <h4>Sales for <%=sku %></h4>
                   </div>
                   <div class="col-6">
                     <select class="form-control" ng-model="ctrl.salesSelection" ng-options="range for range in ctrl.days">
@@ -232,7 +266,40 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4>Suppliers</h4>
+                <h4>Open POs for <%=sku %></h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>PO</th>
+                    <th>Date</th>
+                    <th>Quantity Ordered</th>
+                    <th>Quantity Delivered</th>
+                    <th>Unit Price</th>
+                    <th>Reference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% openPOs.forEach((PO) => { %>
+                    <tr>
+                      <td><%=PO.ponumber %></td>
+                      <td><%=PO.odr_date.toString().substring(4,15) %></td>
+                      <td><%=PO.quantity %></td>
+                      <td><%=PO.delivered %></td>
+                      <td>$<%=PO.unit_cost.toFixed(2) %></td>
+                      <td><%-PO.orderno==0 ? PO.reference : `<a href="/orders/${PO.orderno}">${PO.orderno}</a>` %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Suppliers for <%=sku %></h4>
               </div>
               <table class="table">
                 <thead>
@@ -263,7 +330,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4>Item Audits</h4>
+                <h4>Item Audits for <%=sku %></h4>
               </div>
               <table class="table">
                 <thead>
@@ -294,7 +361,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4>Stock Transactions</h4>
+                <h4>Stock Transactions for <%=sku %></h4>
               </div>
               <table class="table">
                 <thead>

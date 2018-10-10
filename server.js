@@ -12,6 +12,7 @@ const apRouter = require('./src/routers/apRouter');
 const itemRouter = require('./src/routers/itemRouter');
 const custRouter = require('./src/routers/custRouter');
 const batchRouter = require('./src/routers/batchRouter');
+const shipRouter = require('./src/routers/shipRouter');
 
 const server = require('http').Server(app);
 global.io = require('socket.io')(server);
@@ -102,6 +103,7 @@ app.use('/ap', apRouter);
 app.use('/items', itemRouter);
 app.use('/cust', custRouter);
 app.use('/batch', batchRouter);
+app.use('/shipping', shipRouter);
 
 // INDEX
 app.get('/', (req, res) => {

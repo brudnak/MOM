@@ -2,6 +2,7 @@ const sql = require('mssql');
 require("msnodesqlv8");
 const shipstation = require('../modules/shipstation');
 const request = require('request');
+const mws = require('../modules/amazonmws')();
 
 function itemController() {
     function getShippingRates(dimensions, carrier) {
@@ -42,8 +43,30 @@ function itemController() {
                     }
     
                     body = JSON.parse(body);
-                    resolve(body);
+
+                    if(Array.isArray(body)) {
+                        resolve(body);
+                    } else { // cannot ship that carrier
+                        resolve([]);
+                    }
             });
+        })
+    }
+
+    function getUpsUspsRates(dimensions) {
+        return new Promise((resolve, reject) => {
+            let rates = [];
+            if(dimensions.height != 0 && dimensions.weight !=0 && dimensions.length != 0 && dimensions.width != 0) {
+                Promise.all([getShippingRates(dimensions, 'ups'), getShippingRates(dimensions, 'stamps_com')])
+                    .then(([upsRates, uspsRates]) => {
+                        rates = [...upsRates, ...uspsRates];
+                        resolve({ rates });
+                    }).catch(err => {
+                        resolve({ rates, err: 'Reached API limit. Please try again in one minute.' });
+                    });
+            } else {
+                resolve({ rates, err: 'Not enough dimensions to pull estimated shipping.' })
+            }
         })
     }
 
@@ -52,7 +75,8 @@ function itemController() {
             console.log(`Retrieving Item Info for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT desc1, desc2, units, fbaunits, low, uncost, price1, bounits, onorder, commited, break_out, notation, 
-            nonproduct, serial, discont, upccode, blength, bwidth, bheight, unitweight, min_price, lu_by, lu_on
+            nonproduct, serial, discont, upccode, blength, bwidth, bheight, unitweight, min_price, lu_by, lu_on,
+            advanced1, advanced2, advanced3, advanced4
             FROM stock
             WHERE number = '${sku}'`;
 
@@ -66,23 +90,88 @@ function itemController() {
                     return reject(err);
                 }
 
-                if(item.bheight != 0 && item.unitweight !=0 && item.blength != 0 && item.bwidth != 0) {
-                    Promise.all([getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength}, 'ups'), getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength}, 'stamps_com')])
-                    .then(([upsRates, uspsRates]) => {
-                        item.rates = [...upsRates, ...uspsRates];
-                        item.upsRates = upsRates;
-                        item.uspsRates = uspsRates;
+                item.rates = [];
+                item.listings = [];
+
+                (async () => {
+                    try {
+
+                        // const amazonListing = await mws.getLowestPriceByASIN(item.advanced1);
+                        // if(amazonListing) {
+                        //     item.listings.push({
+                        //         marketplace: 'Amazon',
+                        //         marketplaceId: item.advanced1,
+                        //         lowestPrices: amazonListing.Summary.LowestPrices, 
+                        //         buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice
+                        //     })
+                        // }
+
+                        // const rates = await getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength});
+                        // if(rates.err) {
+                        //     item.shippingError = rates.err;
+                        // }
+                        // item.rates = rates.rates;
+
+                        Promise.all([mws.getLowestPriceByASIN(item.advanced1), getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength})]).then(([amazonListing, shipRates]) => {
+                            if(shipRates.err) {
+                                item.shippingError = shipRates.err;
+                            }
+                            item.rates = shipRates.rates;
+
+                            if(amazonListing) {
+                                item.listings.push({
+                                    marketplace: 'Amazon',
+                                    marketplaceId: item.advanced1,
+                                    lowestPrices: amazonListing.Summary.LowestPrices.LowestPrice, 
+                                    buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount,
+                                    offers: amazonListing.Summary.TotalOfferCount
+                                });
+                                console.log(amazonListing.Offers.Offer);
+                            }
+
+                            resolve(item);
+                        })
+                    } catch(e) {
+                        console.log(e);
+                        item.shippingError = e;
                         resolve(item);
-                    }).catch(err => {
-                        item.rates = [];
-                        item.shippingError = 'Reached API limit. Please try again in one minute.';
-                        resolve(item);
-                    });
-                } else {
-                    item.rates = [];
-                    item.shippingError = 'Not enough dimensions to pull estimated shipping';
-                    resolve(item);
+                    } 
+                })();
+
+                // if(item.bheight != 0 && item.unitweight !=0 && item.blength != 0 && item.bwidth != 0) {
+                //     Promise.all([getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength}, 'ups'), getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength}, 'stamps_com')])
+                //     .then(([upsRates, uspsRates]) => {
+                //         item.rates = [...upsRates, ...uspsRates];
+                //         resolve(item);
+                //     }).catch(err => {
+                //         item.rates = [];
+                //         item.shippingError = 'Reached API limit. Please try again in one minute.';
+                //         resolve(item);
+                //     });
+                // } else {
+                //     item.rates = [];
+                //     item.shippingError = 'Not enough dimensions to pull estimated shipping';
+                //     resolve(item);
+                // }
+            })
+        })
+    }
+
+    function getOpenPOs(sku) {
+        return new Promise((resolve, reject) => {
+            console.log(`Retreiving open POs for ${sku}`);
+            const request = new sql.Request();
+            const sqlQuery = `SELECT purchase.ponumber,quantity, delivered,unit_cost,orderno,reference,odr_date FROM puritem
+                INNER JOIN purchase ON puritem.ponumber = purchase.ponumber
+                WHERE number = '${sku}'
+                AND quantity - delivered > 0`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
                 }
+
+                resolve(recordset.recordset);
             })
         })
     }
@@ -199,9 +288,9 @@ function itemController() {
     function displayItem(req, res) {
         let { sku } = req.params;
         sku = sku.toUpperCase();
-        
-        Promise.all([getItem(sku), getItemBins(sku), getItemPrices(sku), getItemTransactions(sku), getBreakout(sku), getItemAudits(sku), getItemSales(sku, 30), getItemSales(sku, 60), getItemSales(sku, 90), getItemSales(sku, 160), getItemSales(sku, 270), getItemSales(sku, 360)])
-        .then(([itemInfo, itemBins, itemPrices, itemTrans, itemBreakout, itemAudits, sales30, sales60, sales90, sales180, sales270, sales360]) => {
+
+        Promise.all([getItem(sku), getItemBins(sku), getItemPrices(sku), getItemTransactions(sku), getBreakout(sku), getItemAudits(sku), getOpenPOs(sku), getItemSales(sku, 30), getItemSales(sku, 60), getItemSales(sku, 90), getItemSales(sku, 160), getItemSales(sku, 270), getItemSales(sku, 360)])
+        .then(([itemInfo, itemBins, itemPrices, itemTrans, itemBreakout, itemAudits, openPOs, sales30, sales60, sales90, sales180, sales270, sales360]) => {
             if (!itemInfo) {
                 res.render(
                     '404',
@@ -211,8 +300,8 @@ function itemController() {
                     }
                 )
             } else {
-                var uspsShipping, upsShipping, ups2dayShipping, upsNextDay;
-                uspsShipping = 999;
+                var lowestShipping, ups2dayShipping, upsNextDay;
+                lowestShipping = 999;
                 const recommendedPricing = [{marketplace: 'Amazon FBM'}, {marketplace: 'Amazon Prime'}, {marketplace: 'Amazon FBA'}, {marketplace: 'Vendor Central'}, {marketplace: 'Walmart'}, {marketplace: 'Ebay'}];
                     
                 var unitCost = itemInfo.uncost;
@@ -240,14 +329,11 @@ function itemController() {
                     'UPS NEXT DAY AIR SAVER®': 'UPS Next Day Saver'
                 }
 
-                console.log(itemInfo.rates);
-
                 itemInfo.rates = itemInfo.rates.filter(rate => ratesToDisplay[rate.serviceName.toUpperCase()])
                     .map(rate => { return {...rate, displayName: ratesToDisplay[rate.serviceName.toUpperCase()]}});
                 
                 itemInfo.rates.forEach(rate => {
-                    if(rate.serviceName.substring(0,4)=='USPS') { uspsShipping = Math.min(uspsShipping, rate.shipmentCost + rate.otherCost) }
-                    if(rate.serviceName.toUpperCase()=='UPS® GROUND') { upsShipping = rate.shipmentCost + rate.otherCost }
+                    lowestShipping = Math.min(lowestShipping, rate.shipmentCost + rate.otherCost)
                     if(rate.serviceName.toUpperCase()=='UPS 2ND DAY AIR®') { ups2dayShipping = rate.shipmentCost + rate.otherCost }
                     if(rate.serviceName.toUpperCase()=='UPS NEXT DAY AIR SAVER®') { upsNextDay = rate.shipmentCost + rate.otherCost }
                 })
@@ -305,8 +391,6 @@ function itemController() {
                                 fee = 137.32 + ((unitweight - 90) * .91);
                                 fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
                             }
-
-                            
                         }
     
                         if(marketplace.marketplace=='Amazon Prime') {
@@ -319,7 +403,7 @@ function itemController() {
                         } else if(marketplace.marketplace=='Vendor Central') {
                             shipping = 0;
                         } else {
-                            shipping = uspsShipping && upsShipping ? Math.min(uspsShipping, upsShipping) : uspsShipping ? uspsShipping : upsShipping ? upsShipping : 0;
+                            shipping = lowestShipping;
                         }
     
                         const minimumProfit = ['Amazon FBA'].includes(marketplace.marketplace) ? .5 : 1;
@@ -348,7 +432,8 @@ function itemController() {
                         itemAudits,
                         itemSales,
                         recommendedPricing,
-                        unitCost
+                        unitCost,
+                        openPOs
                     }
                 )
             }
