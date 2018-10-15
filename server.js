@@ -44,6 +44,11 @@ let getData = (req, res, next) => {
 		const request = new sql.Request();
 		const sqlQuery = `SELECT code, name FROM supplier ORDER BY code`;
 		request.query(sqlQuery, (err, recordset) => {
+			if(err) {
+				console.log(err);
+				res.send(err);
+				return;
+			}
 			resolve(recordset.recordset);
 		})
 	})
@@ -52,6 +57,11 @@ let getData = (req, res, next) => {
 		const request = new sql.Request();
 		const sqlQuery = `SELECT code, name FROM momuser ORDER BY code`;
 		request.query(sqlQuery, (err, recordset) => {
+			if(err) {
+				console.log(err);
+				res.send(err);
+				return;
+			}
 			resolve(recordset.recordset);
 		})
 	})
@@ -84,6 +94,9 @@ let getData = (req, res, next) => {
 		})
 
 		next();
+	}).catch(err => {
+		console.log(err);
+		res.send(err);
 	});
 }
 

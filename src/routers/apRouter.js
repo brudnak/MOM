@@ -1,7 +1,7 @@
 const express = require('express');
 const apRouter = express.Router();
 const apController = require('../controllers/apController');
-const { displayAps, displayApsSearch } = apController(); 
+const { displayApsSearch } = apController(); 
 
 apRouter.route('/')
     .get((req, res) => {
