@@ -25,9 +25,9 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>State</th>
-                      <th>Order Number</th>
+                      <th>Order</th>
                       <th>PO Number</th>
+                      <th>Status</th>
                       <th>Supplier</th>
                       <th>SKU</th>
                       <th>Total Extended</th>
@@ -39,9 +39,9 @@
                   <tbody> 
                     <% POs.forEach((PO,index) =>  { %>
                       <tr>
-                        <td><span class="label <%=PO.item_state %>"><%=PO.item_state %></span></td>
                         <td><a href="/orders/<%=PO.orderno %>"><%=PO.orderno %></a></td>
                         <td><a href="/pos/<%=PO.ponumber %>"><%=PO.ponumber %></a></td>
+                        <td><span class="label <%=PO.item_state %>"><%=PO.item_state %></span></td>
                         <td><%=PO.ship_from %></td>
                         <td><%=PO.item %></td>
                         <td>$<%=PO['Total Extended'] %></td>

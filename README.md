@@ -23,7 +23,7 @@ In MOM, items can be searched by complete or incomplete SKU, description, and su
 
 The item page displays many of the same information that can be found in MOM, but also includes a dynamically calculated minimum recommended price for six marketplaces: Amazon FBM, Amazon FBA, Amazon Vendor Central, Amazon Seller Fulfilled Prime, Walmart, and Ebay. These are calculated based on shipping costs that are generated using the ShipStation API.
 
-The item page also includes a query of sales numbers, in total and by order type; a history of inventory changes and transfers; and a history of user changes made to the item.
+The item page also includes API response of lowest prices and buy box prices based on the ASIN(s) provided in the database, a query of our sales numbers, in total and by order type; a history of inventory changes and transfers; and a history of user changes made to the item.
 
 ## CUSTOMERS
 In MOM, customers can only be searched by full and complete last name, phone number, and email address. With this interface, they can now be searched by incomplete first name, last name, company name, email address, or complete zip code.
@@ -48,3 +48,6 @@ Each report also includes an email option so that managers can get a simplified 
 In MOM, orders in certain phases of the order fulfillment process can be viewed from the "batch" feature, where they can then be processed en masse. However, the window in which the specific orders for each phase can be viewed does not allow the user to copy the numbers or click on them to lead them to the order.
 
 This page makes it easy for users to search and inspect each individual order as necessary before processesing them through the batch.
+
+## SHIPPING
+MOM no longer support the creation of shipping label through their program. This problem allows the user to review ready-to-pick orders for import into our ShipStation account and submit them.

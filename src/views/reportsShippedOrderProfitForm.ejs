@@ -30,16 +30,6 @@
 								</div>
 							</div>
 							<div class="form-row">
-								<div class="form-group col-6">
-									<label>Bottom Dollar</label>
-									<input type="text" class="form-control" ng-model="ctrl.bottomDollar">
-								</div>
-								<div class="form-group col-6">
-									<label>Bottom Percent</label>
-									<input type="text" class="form-control" ng-model="ctrl.bottomPercent">
-								</div>
-							</div>
-							<div class="form-row">
 								<div class="form-group col-12 checkbox">
 									<h3>CL Keys</h3>
 									<label ng-repeat="key in ctrl.clKeys" ng-class="{checked: ctrl.selectedKeys.indexOf(key) > -1}">
@@ -71,7 +61,7 @@
 							</div>
 							<div class="form-row">
 								<div class="col-12">  
-									<a class="btn btn-block btn-primary" ng-href="/reports/shippedOrder/report?startDate={{ctrl.startDate | date:'yyMMdd'}}&endDate={{ctrl.endDate | date:'yyMMdd'}}&keys={{ctrl.selectedKeys}}&bottomDollar={{ctrl.bottomDollar}}&bottomPercent={{ctrl.bottomPercent}}&salesperson={{ctrl.salesperson}}&recipients={{ctrl.email ? ctrl.recipients: ''}}">Submit</a>
+									<a class="btn btn-block btn-primary" ng-href="/reports/shippedOrder/report?startDate={{ctrl.startDate | date:'yyMMdd'}}&endDate={{ctrl.endDate | date:'yyMMdd'}}&keys={{ctrl.selectedKeys}}&salesperson={{ctrl.salesperson}}&recipients={{ctrl.email ? ctrl.recipients: ''}}">Submit</a>
 								</div>
 							</div>
 						</form>
@@ -94,8 +84,6 @@
 		  	this.selectedKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE'];
 			this.email = false;
 			this.recipients = 'brandon@cpr-savers.com, csm@cpr-savers.com';
-			this.bottomDollar = 2;
-			this.bottomPercent = 5;
 
 		  	this.toggleSelection = key => {
 			  const i = this.selectedKeys.indexOf(key);

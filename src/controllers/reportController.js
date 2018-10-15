@@ -203,7 +203,12 @@ function reportController() {
                 WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.1
                 ELSE 0 END
             )) AS DECIMAL(16,2)) AS 'profit',
-            CAST(ROUND(( ( ord_total - tax - cost ) / (ord_total-tax) ) * 100,2) AS DECIMAL(16,2)) AS 'percentProfit'
+            CAST(ROUND(( ( ord_total - tax - cost - ( CASE
+                WHEN cl_key IN ('AMAZON','AMZPRIME','WAL') THEN (ord_total-tax)*.15
+                WHEN cl_key = 'EBAY' OR cl_key = 'EBAYCPR' THEN (ord_total-tax)*.10
+                WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.1
+                ELSE 0 END
+            ) ) / (ord_total-tax) ) * 100,2) AS DECIMAL(16,2)) AS 'percentProfit'
             FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost',SUM(it_unlist*quanto) as 'price'
                 FROM items WHERE item_state <> 'SV'
                 GROUP BY orderno ) agg
@@ -275,11 +280,11 @@ function reportController() {
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
-                    FROM items WHERE item_state <> 'SV' AND item_state <> 'RT'
+                    FROM items WHERE item_state <> 'SV'
                     GROUP BY orderno ) agg
                 INNER JOIN cms ON cms.orderno = agg.orderno
                 LEFT JOIN ( SELECT orderno, COUNT(*) as 'pocount' FROM purchase GROUP BY orderno ) p ON cms.orderno = p.orderno
-                WHERE cms.order_st2 = 'SH' AND pocount IS NULL AND cms.ordertype <> 'FBA' AND cms.cl_key <> 'AMZPRIME'
+                WHERE cms.order_st2 = 'SH' AND pocount IS NULL AND cms.ordertype <> 'FBA'
                 AND cms.odr_date BETWEEN '${startDate}' AND '${endDate}'
                 ${clKeys[0] == undefined ? '' : `AND cl_key IN (${clKeys.map((key) => `'${key}'`).join(', ')})`}
                 ${salesperson ? `AND cms.sales_id = '${salesperson}'` : ''}
@@ -353,7 +358,7 @@ function reportController() {
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
-                    FROM items WHERE item_state <> 'SV' AND item_state <> 'RT'
+                    FROM items WHERE item_state <> 'SV'
                     GROUP BY orderno ) agg
                 INNER JOIN cms ON cms.orderno = agg.orderno
                 LEFT JOIN ( SELECT orderno, COUNT(*) as 'pocount' FROM purchase GROUP BY orderno ) p ON cms.orderno = p.orderno

@@ -95,30 +95,13 @@ function itemController() {
 
                 (async () => {
                     try {
-
-                        // const amazonListing = await mws.getLowestPriceByASIN(item.advanced1);
-                        // if(amazonListing) {
-                        //     item.listings.push({
-                        //         marketplace: 'Amazon',
-                        //         marketplaceId: item.advanced1,
-                        //         lowestPrices: amazonListing.Summary.LowestPrices, 
-                        //         buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice
-                        //     })
-                        // }
-
-                        // const rates = await getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength});
-                        // if(rates.err) {
-                        //     item.shippingError = rates.err;
-                        // }
-                        // item.rates = rates.rates;
-
                         Promise.all([mws.getLowestPriceByASIN(item.advanced1), getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength})]).then(([amazonListing, shipRates]) => {
                             if(shipRates.err) {
                                 item.shippingError = shipRates.err;
                             }
                             item.rates = shipRates.rates;
-
-                            if(amazonListing) {
+                            
+                            if(amazonListing && amazonListing.Summary && amazonListing.Summary.TotalOfferCount > 0) {
                                 item.listings.push({
                                     marketplace: 'Amazon',
                                     marketplaceId: item.advanced1,
@@ -126,10 +109,18 @@ function itemController() {
                                     buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount,
                                     offers: amazonListing.Summary.TotalOfferCount
                                 });
-                                console.log(amazonListing.Offers.Offer);
                             }
 
-                            resolve(item);
+                            // Amazon throwing an error when I try to run concurrent amazon-mws requests, so I have to nest
+                            mws.getMyPriceByASIN(item.advanced1).then(response => {
+                                item.ourAmazonPrice = response && response.Product && response.Product.Offers && response.Product.Offers.Offer && response.Product.Offers.Offer.BuyingPrice && response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount ? response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount : null;
+                                resolve(item);
+                            }).catch(err => {
+                                console.log(err);
+                                resolve(item);   
+                            });
+
+                            
                         })
                     } catch(e) {
                         console.log(e);
@@ -137,22 +128,6 @@ function itemController() {
                         resolve(item);
                     } 
                 })();
-
-                // if(item.bheight != 0 && item.unitweight !=0 && item.blength != 0 && item.bwidth != 0) {
-                //     Promise.all([getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength}, 'ups'), getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength}, 'stamps_com')])
-                //     .then(([upsRates, uspsRates]) => {
-                //         item.rates = [...upsRates, ...uspsRates];
-                //         resolve(item);
-                //     }).catch(err => {
-                //         item.rates = [];
-                //         item.shippingError = 'Reached API limit. Please try again in one minute.';
-                //         resolve(item);
-                //     });
-                // } else {
-                //     item.rates = [];
-                //     item.shippingError = 'Not enough dimensions to pull estimated shipping';
-                //     resolve(item);
-                // }
             })
         })
     }

@@ -3,10 +3,13 @@ const amazon = require('amazon-mws')(process.env.MWS_ACCESS_KEY_ID,process.env.M
 const sellerID = process.env.MWS_MERCHANT_ID;
 const marketplaceID = process.env.MARKETPLACE_ID;
 
+const asinPattern = /^B........./;
+
 function mws() {
     function getLowestPriceByASIN(asin) {
         return new Promise((resolve, reject) => { 
-            if(asin.trim()) {
+            asin = typeof(asin)=='string' ? asin.trim() : null;
+            if(asinPattern.test(asin)) {
                 amazon.products.searchFor({
                     'Version': '2011-10-01',
                     'Action': 'GetLowestPricedOffersForASIN',
@@ -17,6 +20,7 @@ function mws() {
                 }).then(response => {
                     resolve(response);
                 }).catch(err => {
+                    console.log(err);
                     resolve(null);
                 });
             } else {
@@ -25,8 +29,33 @@ function mws() {
         })
     }
 
+    function getMyPriceByASIN(asin) {
+        return new Promise((resolve, reject) => {
+            asin = typeof(asin)=='string' ? asin.trim() : null;
+            if(asinPattern.test(asin)) {
+                console.log('sending ' + asin)
+                amazon.products.searchFor({
+                    'Version': '2011-10-01',
+                    'Action': 'GetMyPriceForASIN',
+                    'SellerId': sellerID,
+                    'MarketplaceId': marketplaceID,
+                    'ASINList.ASIN.1': asin,
+                }, (err, response) => {
+                    if(err) {
+                        console.log(err);
+                        return resolve(null);
+                    }
+                    return resolve(response);
+                });
+            } else {
+                resolve(null);
+            }
+        });
+    }
+
     return {
-        getLowestPriceByASIN
+        getLowestPriceByASIN,
+        getMyPriceByASIN
     }
 }
 

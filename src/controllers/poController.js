@@ -64,6 +64,10 @@ function poController() {
                     }
                 )
             } else {
+                po.totalExt = 0;
+                poItems.forEach(item => {
+                    po.totalExt += item.it_unlist * item.quantity;
+                })
                 res.render(
                     'po',
                     {

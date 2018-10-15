@@ -53,20 +53,21 @@
                     </tr>
                   <% }); %>
                   <tr>
-                    <td class="text-right" colspan="4"><b>Subtotal</b></td>
-                    <td colspan="2">$<%=po.mer_total.toFixed(2) %></td>
+                    <td class="text-right" colspan="3"><b>Subtotal</b></td>
+                    <td colspan="3">$<%=po.mer_total.toFixed(2) %></td>
                   </tr>
                   <tr class="no-top">
-                    <td class="text-right" colspan="4"><b>Tax</b></td>
-                    <td colspan="2">$<%=po.tax.toFixed(2) %></td>
+                    <td class="text-right" colspan="3"><b>Tax</b></td>
+                    <td colspan="3">$<%=po.tax.toFixed(2) %></td>
                   </tr>
                   <tr class="no-top">
-                    <td class="text-right" colspan="4"><b>Shipping</b></td>
-                    <td colspan="2">$<%=po.shipping.toFixed(2) %></td>
+                    <td class="text-right" colspan="3"><b>Shipping</b></td>
+                    <td colspan="3">$<%=po.shipping.toFixed(2) %></td>
                   </tr>
                   <tr class="no-top">
-                    <td class="text-right" colspan="4"><b>Total</b></td>
-                    <td colspan="2">$<%=po.ord_total.toFixed(2) %></td>
+                    <td class="text-right" colspan="3"><b>Total</b></td>
+                    <td colspan="1">$<%=po.ord_total.toFixed(2) %></td>
+                    <td colspan="2">$<%=po.totalExt.toFixed(2) %></td>
                   </tr>
                 </tbody>
               </table>

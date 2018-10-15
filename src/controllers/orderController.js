@@ -159,7 +159,7 @@ function orderController() {
                 // Calculate total merchandise cost and list
                 let totalCost = 0; let totalList = 0;
                 itemsInfo.forEach(item => {
-                    if(item.item_state != 'SV' && item.item_state != 'RT') {
+                    if(item.item_state != 'SV') {
                         totalCost += item.it_uncost.toFixed(2)*item.quanto;
                     }  
                     totalList += item.it_unlist.toFixed(2)*item.quanto; 
