@@ -1,92 +1,7 @@
 const sql = require('mssql');
 require("msnodesqlv8");
-const shipstation = require('../modules/shipstation');
-const request = require('request');
 
 function reportModel() {
-    function getShippingCosts(startDate, endDate, page = 1) {
-        return new Promise((resolve, reject) => {
-            const sDate = `20${startDate.substring(0,2)}-${startDate.substring(2,4)}-${startDate.substring(4,6)} 00:00:00`;
-            const eDate = `20${endDate.substring(0,2)}-${endDate.substring(2,4)}-${endDate.substring(4,6)} 00:00:00`;
-            request({
-                method: 'GET',
-                url: `https://ssapi.shipstation.com/shipments?createDateStart=${sDate}&createDateEnd=${eDate}&pageSize=500&page=${page}`,
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Basic ${shipstation}`
-                },
-            }, (err, response, body) => {
-                if(err) {
-                    return reject(err);
-                }
-
-                (async () => {
-                    body = JSON.parse(body);
-
-                    console.log(`On page ${body.page} out of ${body.pages}`)
-
-                    let orderShippingCosts = {}
-                    
-                    body.shipments.forEach(shipment => {
-                        if(!shipment.voided) {
-                            if(orderShippingCosts[shipment.orderNumber]) {
-                                orderShippingCosts[shipment.orderNumber] += shipment.shipmentCost + shipment.insuranceCost;
-                            } else {
-                                orderShippingCosts[shipment.orderNumber] = shipment.shipmentCost + shipment.insuranceCost;
-                            }
-                        }
-                    });
-
-                    if(body.page < body.pages) {
-                        await getShippingCosts(startDate, endDate, body.page + 1).then(shippingCosts => {
-                            // merge tables
-                            for(order in shippingCosts) {
-                                if(orderShippingCosts[order]) {
-                                    orderShippingCosts[order] += shippingCosts[order];
-                                } else {
-                                    orderShippingCosts[order] = shippingCosts[order];
-                                }
-                            }
-                        })
-                    }
-
-                    console.log('sending page '+body.page);
-
-                    resolve(orderShippingCosts);
-                })();   
-            })
-        })
-    }
-
-    function getShippingCost(orderID) {
-        return new Promise((resolve, reject) => {
-            request({
-                method: 'GET',
-                url: `https://ssapi.shipstation.com/shipments?orderNumber=${orderID}`,
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Basic ${shipstation}`
-                },
-            }, (err, response, body) => {
-                if(err || body=='Too Many Request') {
-                    return reject(err);
-                }
-
-                body = JSON.parse(body);
-                if(body.total==0) {
-                    resolve(0);
-                };
-
-                let totalCost = 0;
-                body.shipments.forEach(shipment => {
-                    totalCost += shipment.shipmentCost;
-                });
-
-                resolve(totalCost);
-            })
-        })
-    }
-
     function getProfitPOs(startDate, endDate, bottomDollar = 10, bottomPercent = 10) {
         return new Promise((resolve, reject) => {
             console.log(`Retrieving Profitability for POs between ${startDate} and ${endDate}`);
@@ -327,8 +242,7 @@ function reportModel() {
         getProfitOrders,
         getProfitPOs,
         getRTSProfitOrders,
-        getShippedProfitOrders,
-        getShippingCosts
+        getShippedProfitOrders
     }
 }
 

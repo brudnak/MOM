@@ -1,63 +1,14 @@
 const sql = require('mssql');
 require("msnodesqlv8");
 const shipstation = require('../modules/shipstation');
-const request = require('request');
 const mws = require('../modules/amazonmws')();
 
 function itemModel() {
-    function getShippingRates(dimensions, carrier) {
-        return new Promise((resolve, reject) => {
-            const { weight, height, width, length } = dimensions;
-            request({
-                    method: 'POST',
-                    url: 'https://ssapi.shipstation.com/shipments/getrates',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${shipstation}`
-                    },
-                    body: `{  
-                        "carrierCode": '${carrier}',  
-                        "serviceCode": null,  
-                        "packageCode": null,  
-                        "fromPostalCode": "85282",  
-                        "toState": "ME",  
-                        "toCountry": "US",  
-                        "toPostalCode": "03904",  
-                        "toCity": "Washington",  
-                        "weight": {      
-                            "value": ${weight},    
-                            "units": "pounds"  
-                        },  
-                        "dimensions": {    
-                            "units": "inches",    
-                            "length": ${length},    
-                            "width": ${width},   
-                            "height": ${height}  
-                        },  
-                        "confirmation": "delivery",  
-                        "residential": true
-                    }"`
-                }, function (err, response, body) {
-                    if(err || body=='Too Many Request') {
-                        return reject(err);
-                    }
-    
-                    body = JSON.parse(body);
-
-                    if(Array.isArray(body)) {
-                        resolve(body);
-                    } else { // cannot ship that carrier
-                        resolve([]);
-                    }
-            });
-        })
-    }
-
     function getUpsUspsRates(dimensions) {
         return new Promise((resolve, reject) => {
             let rates = [];
             if(dimensions.height != 0 && dimensions.weight !=0 && dimensions.length != 0 && dimensions.width != 0) {
-                Promise.all([getShippingRates(dimensions, 'ups'), getShippingRates(dimensions, 'stamps_com')])
+                Promise.all([shipstation.getShippingRates(dimensions, 'ups'), shipstation.getShippingRates(dimensions, 'stamps_com')])
                     .then(([upsRates, uspsRates]) => {
                         rates = [...upsRates, ...uspsRates];
                         resolve({ rates });

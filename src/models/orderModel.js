@@ -1,35 +1,8 @@
 const sql = require('mssql');
 require("msnodesqlv8");
 const shipstation = require('../modules/shipstation');
-const request = require('request');
 
 function orderModel() {
-    function getShippingCost(orderID) {
-        return new Promise((resolve, reject) => {
-            request({
-                method: 'GET',
-                url: `https://ssapi.shipstation.com/shipments?orderNumber=${orderID}`,
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Basic ${shipstation}`
-                },
-            }, (err, response, body) => {
-                if(err || body=='Too Many Request') {
-                    return reject(err);
-                }
-
-                body = JSON.parse(body);
-                if(body.total==0) {
-                    resolve([]);
-                };
-
-                let shipments = body.shipments.filter(shipment => !shipment.voided);
-
-                resolve(shipments);
-            })
-        })
-    }
-
     function getOrder(orderID) {
         return new Promise(function(resolve,reject) {
             console.log(`Retrieving Order ${orderID}`);
@@ -50,7 +23,7 @@ function orderModel() {
 
                 let order = recordset.recordset[0];
 
-                getShippingCost(order.alt_order.trim().length==19 ? order.alt_order : orderID).then(boxes => {
+                shipstation.getShippingCost(order.alt_order.trim().length==19 ? order.alt_order : orderID).then(boxes => {
                     order.boxes = boxes;
                     resolve(order);
                 }).catch(err=> {

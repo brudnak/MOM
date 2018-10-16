@@ -1,5 +1,6 @@
 const sendMail = require('../modules/nodemailer');
 const reportModel = require('../models/reportModel');
+const shipstation = require('../modules/shipstation');
 
 function reportController() {
     function displayProfitPOs(req, res) {
@@ -90,7 +91,7 @@ function reportController() {
     function displayShippedProfitOrders(req, res) {
         const { startDate, endDate, recipients, salesperson, bottomDollar, bottomPercent } = req.query;
         const keys = eval(req.query.keys);
-        Promise.all([reportModel.getShippedProfitOrders(startDate, endDate, keys, salesperson), reportModel.getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
+        Promise.all([reportModel.getShippedProfitOrders(startDate, endDate, keys, salesperson), shipstation.getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
             let stats = {
                 totalGross: 0,
                 totalNet: 0,
