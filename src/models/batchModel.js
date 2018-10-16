@@ -6,7 +6,7 @@ function batchModel() {
         return new Promise((resolve, reject) => {
             console.log('Getting Stage 1');
             const request = new sql.Request();
-            const sqlQuery = `SELECT cms.odr_date, cms.orderno, cms.sales_id, cms.cl_key FROM cms
+            const sqlQuery = `SELECT cms.odr_date, cms.orderno, cms.sales_id, cms.cl_key, cms.alt_order FROM cms
                 WHERE order_st2 = 'PI'
                 ORDER BY cms.odr_date`;
 
@@ -24,7 +24,7 @@ function batchModel() {
         return new Promise((resolve, reject) => {
             console.log('Getting Stage 2');
             const request = new sql.Request();
-            const sqlQuery = `SELECT cms.odr_date, cms.orderno, cms.sales_id, cms.cl_key FROM cms
+            const sqlQuery = `SELECT cms.odr_date, cms.orderno, cms.sales_id, cms.cl_key, cms.alt_order FROM cms
             WHERE order_st2 = 'IN'
             ORDER BY cms.odr_date`;
 

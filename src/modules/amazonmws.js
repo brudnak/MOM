@@ -20,7 +20,7 @@ function mws() {
                 }).then(response => {
                     resolve(response);
                 }).catch(err => {
-                    reject(err);
+                    reject('ASIN not found');
                 });
             } else {
                 reject('Not an ASIN');
@@ -28,14 +28,13 @@ function mws() {
         }).catch(err => {
             console.log(err);
             return err;
-        })
+        });
     }
 
     function getMyPriceByASIN(asin) {
         return new Promise((resolve, reject) => {
             asin = typeof(asin)=='string' ? asin.trim() : null;
             if(asinPattern.test(asin)) {
-                console.log('sending ' + asin)
                 amazon.products.searchFor({
                     'Version': '2011-10-01',
                     'Action': 'GetMyPriceForASIN',
@@ -44,14 +43,16 @@ function mws() {
                     'ASINList.ASIN.1': asin,
                 }, (err, response) => {
                     if(err) {
-                        console.log(err);
-                        return resolve(null);
+                        return reject('ASIN not found');
                     }
-                    return resolve(response);
+                    resolve(response);
                 });
             } else {
-                resolve(null);
+                reject('Not an ASIN');
             }
+        }).catch(err => {
+            console.log(err);
+            return err;
         });
     }
 

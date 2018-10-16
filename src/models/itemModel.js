@@ -13,11 +13,13 @@ function itemModel() {
                         rates = [...upsRates, ...uspsRates];
                         resolve({ rates });
                     }).catch(err => {
-                        resolve({ rates, err: 'Reached API limit. Please try again in one minute.' });
+                        reject('Reached API limit. Please try again in one minute.');
                     });
             } else {
-                resolve({ rates, err: 'Not enough dimensions to pull estimated shipping.' })
+                reject('Not enough dimensions to pull estimated shipping.')
             }
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -44,43 +46,34 @@ function itemModel() {
                 item.rates = [];
                 item.listings = [];
 
-                (async () => {
-                    try {
-                        Promise.all([mws.getLowestPriceByASIN(item.advanced1), getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength})]).then(([amazonListing, shipRates]) => {
-                            if(shipRates.err) {
-                                item.shippingError = shipRates.err;
-                            }
-                            item.rates = shipRates.rates;
-                            
-                            if(amazonListing && amazonListing.Summary && amazonListing.Summary.TotalOfferCount > 0) {
-                                item.listings.push({
-                                    marketplace: 'Amazon',
-                                    marketplaceId: item.advanced1,
-                                    lowestPrices: amazonListing.Summary.LowestPrices.LowestPrice, 
-                                    buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount,
-                                    offers: amazonListing.Summary.TotalOfferCount
-                                });
-                            }
+                Promise.all([mws.getLowestPriceByASIN(item.advanced1), getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength})]).then(([amazonListing, shipRates]) => {
+                    if(typeof(shipRates)==='string') {
+                        item.shippingError = shipRates;
+                    } else {
+                        item.rates = shipRates.rates;
+                    }
 
-                            // Amazon throwing an error when I try to run concurrent amazon-mws requests, so I have to nest
-                            mws.getMyPriceByASIN(item.advanced1).then(response => {
-                                item.ourAmazonPrice = response && response.Product && response.Product.Offers && response.Product.Offers.Offer && response.Product.Offers.Offer.BuyingPrice && response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount ? response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount : null;
-                                resolve(item);
-                            }).catch(err => {
-                                console.log(err);
-                                resolve(item);   
-                            });
+                    if(amazonListing && amazonListing.Summary && amazonListing.Summary.TotalOfferCount > 0) {
+                        item.listings.push({
+                            marketplace: 'Amazon',
+                            marketplaceId: item.advanced1,
+                            lowestPrices: amazonListing.Summary.LowestPrices.LowestPrice, 
+                            buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount,
+                            offers: amazonListing.Summary.TotalOfferCount
+                        });
+                    }
 
-                            
-                        })
-                    } catch(e) {
-                        console.log(e);
-                        item.shippingError = e;
+                    // Amazon throwing an error when I try to run concurrent amazon-mws requests, so I have to nest
+                    mws.getMyPriceByASIN(item.advanced1).then(response => {
+                        item.ourAmazonPrice = response && response.Product && response.Product.Offers && response.Product.Offers.Offer && response.Product.Offers.Offer.BuyingPrice && response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount ? response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount : null;
                         resolve(item);
-                    } 
-                })();
-            })
-        })
+                    }).catch(err => {
+                        console.log(err);
+                        resolve(item);   
+                    });                           
+                });
+            });
+        });
     }
 
     function getOpenPOs(sku) {

@@ -24,6 +24,7 @@
                       <th>Order Date</th>
                       <th>Salesperson</th>
                       <th>Order</th>
+                      <th>Alt Order #</th>
                       <th>CL Key</th>
                     </tr>
                   </thead>
@@ -33,6 +34,7 @@
                         <td><%=order.odr_date.toString().substring(4,15) %></td>
                         <td><%=order.sales_id %></td>
                         <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
+                        <td><%=order.alt_order %></td>
                         <td><%=order.cl_key %></td>
                       </tr>
                     <% }) %>
@@ -53,6 +55,7 @@
                       <th>Order Date</th>
                       <th>Salesperson</th>
                       <th>Order</th>
+                      <th>Alt Order #</th>
                       <th>CL Key</th>
                     </tr>
                   </thead>
@@ -62,6 +65,7 @@
                         <td><%=order.odr_date.toString().substring(4,15) %></td>
                         <td><%=order.sales_id %></td>
                         <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
+                        <td><%=order.alt_order %></td>
                         <td><%=order.cl_key %></td>
                       </tr>
                     <% }) %>
