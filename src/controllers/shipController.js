@@ -1,7 +1,6 @@
 const sql = require('mssql');
 require("msnodesqlv8");
 const shipstation = require('../modules/shipstation');
-const request = require('request');
 
 function shipController() {
     function getOrders() {
@@ -134,38 +133,16 @@ function shipController() {
         })
     }
 
-    function exportOrders() {
-        return new Promise((resolve, reject) => {
-            getOrders().then(orders => {
-                console.log(`Exporting orders to ShipStation`);
-                request({
-                    method: 'POST',
-                    url: `https://ssapi.shipstation.com/orders/createorders`,
-                    headers: {
-                        "Content-Type": "application/json",
-                        'Authorization': `Basic ${shipstation}`
-                    },
-                    body: JSON.stringify(orders)
-                }, (err, response, body) => {
-                    if(err) {
-                        return reject(err);
-                    }
-
-                    body = JSON.parse(body);
-                    resolve(body.results);
-                });
-            });
-        });
-    }
-
     function displayExportOrders(req, res) {
-        exportOrders().then(results => {
-            res.render(
-                'shippingExport',
-                {
-                    results
-                }
-            )
+        getOrders().then(orders => {
+            shipstation.exportOrders(orders).then(results => {
+                res.render(
+                    'shippingExport',
+                    {
+                        results
+                    }
+                )
+            })
         })
     }
 

@@ -6,6 +6,28 @@ const ssSecret = process.env.SS_SECRET;
 const encoded = btoa(`${ssKey}:${ssSecret}`);
 
 function shipStation() {
+    function exportOrders(orders) {
+        return new Promise((resolve, reject) => {
+            console.log(`Exporting orders to ShipStation`);
+            request({
+                method: 'POST',
+                url: `https://ssapi.shipstation.com/orders/createorders`,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Basic ${encoded}`
+                },
+                body: JSON.stringify(orders)
+            }, (err, response, body) => {
+                if(err) {
+                    return reject(err);
+                }
+
+                body = JSON.parse(body);
+                resolve(body.results);
+            });
+        });
+    }
+
     function getShippingCost(orderID) {
         return new Promise((resolve, reject) => {
             request({
@@ -137,7 +159,8 @@ function shipStation() {
     return {
         getShippingCost,
         getShippingCosts,
-        getShippingRates
+        getShippingRates,
+        exportOrders
     }
 
 }

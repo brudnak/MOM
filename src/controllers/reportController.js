@@ -143,7 +143,7 @@ function reportController() {
     function displayRTSProfitOrders(req, res) {
         const { startDate, endDate, recipients } = req.query;
         const keys = eval(req.query.keys);
-        Promise.all([reportModel.getRTSProfitOrders(startDate, endDate, keys), reportModel.getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
+        Promise.all([reportModel.getRTSProfitOrders(startDate, endDate, keys), shipstation.getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
 
             orders.forEach(order => {
                 order.odr_date = order.odr_date.toString().substring(4,16);

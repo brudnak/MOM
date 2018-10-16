@@ -31,7 +31,6 @@ function reportModel() {
 
     function getProfitLineItems(startDate, endDate, bottomDollar = 1, bottomPercent = 10, clKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE']) {
         return new Promise((resolve, reject) => {
-
             console.log(`Retrieving Profitability for line items between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT items.orderno, item, it_uncost, it_unlist, quanto, item_state, cms.odr_date,

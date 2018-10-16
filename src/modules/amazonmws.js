@@ -20,12 +20,14 @@ function mws() {
                 }).then(response => {
                     resolve(response);
                 }).catch(err => {
-                    console.log(err);
-                    resolve(null);
+                    reject(err);
                 });
             } else {
-                resolve(null);
+                reject('Not an ASIN');
             }
+        }).catch(err => {
+            console.log(err);
+            return err;
         })
     }
 
