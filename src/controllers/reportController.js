@@ -65,7 +65,7 @@ function reportController() {
             var link = (req.protocol + '://' + req.get('host') + req.originalUrl).replace('recipients','');
 
             if(recipients && recipients !== '') {
-                sendMail(orders, recipients, 'Low Profitability Report - Orders', {startDate, endDate, bottomDollar, bottomPercent, includeFBA, includeShipped, includeQuotes, keys, link}).then(response => {
+                sendMail(orders, recipients, 'Low Profitability Before Shipping - Orders', {startDate, endDate, bottomDollar, bottomPercent, includeFBA, includeShipped, includeQuotes, keys, link}).then(response => {
                     global.io.emit('emailSuccess', { recipients });
                 }).catch(err => {
                     global.io.emit('emailFailure', { recipients });  
@@ -89,7 +89,7 @@ function reportController() {
     }
 
     function displayShippedProfitOrders(req, res) {
-        const { startDate, endDate, recipients, salesperson, bottomDollar, bottomPercent } = req.query;
+        const { startDate, endDate, recipients, salesperson } = req.query;
         const keys = eval(req.query.keys);
         Promise.all([reportModel.getShippedProfitOrders(startDate, endDate, keys, salesperson), shipstation.getShippingCosts(startDate, endDate)]).then(([orders, shippingCosts]) => {
             let stats = {

@@ -27,7 +27,9 @@
                     <tr>
                       <th>SKU</th>
                       <th>Desc</th>
-                      <th>Units</th>
+                      <th>In Stock</th>
+                      <th>FBA Units</th>
+                      <th>On Order</th>
                       <th>Unit Cost</th>
                       <th>Sales Price</th>
                     </tr>
@@ -35,9 +37,11 @@
                   <tbody> 
                     <% items.forEach((item,index) =>  { %>
                       <tr>
-                        <td><a href="/items/<%=item.number %>"><%=item.number %></a></td>
+                        <td><a href="/items/<%=item.number %>"><%=item.number %></a><%- item.break_out ? '<span class="badge badge-secondary">SV</span"' : '' %></td>
                         <td><%=item.desc1 + ' ' + item.desc2 %></td>
-                        <td><%=item.units %></td>
+                        <td><%=item.units-item.fbaunits %></td>
+                        <td><%=item.fbaunits %></td>
+                        <td><%=item.onorder %></td>
                         <td>$<%=item.uncost.toFixed(2) %></td>
                         <td>$<%=item.price1.toFixed(2) %></td>
                       </tr>

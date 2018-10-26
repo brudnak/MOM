@@ -111,7 +111,7 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header no-border"><h4>Marketplace Listings</h4></div>
+              <div class="card-header"><h4>Marketplace Listings</h4></div>
               <table class="table">
                 <thead>
                   <tr>
@@ -136,7 +136,14 @@
                       
                       </td>
                       <td>$<%=listing.buyBoxPrice %></td>
-                      <td>$<%=itemInfo.ourAmazonPrice %></td>
+                      <td>
+                        <% if(itemInfo.ourAmazonPrices) { %>
+                          <% itemInfo.ourAmazonPrices.forEach(offer => { %>
+                            <%= `Fulfilled by ${offer.FulfillmentChannel}: $${offer.BuyingPrice.LandedPrice.Amount}` %>
+                            <br />
+                          <% }) %>
+                        <% } %>
+                      </td>
                     </tr>
                   <% }) %>
                 </tbody>

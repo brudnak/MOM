@@ -13,6 +13,7 @@ const itemRouter = require('./src/routers/itemRouter');
 const custRouter = require('./src/routers/custRouter');
 const batchRouter = require('./src/routers/batchRouter');
 const shipRouter = require('./src/routers/shipRouter');
+const pricerRouter = require('./src/routers/pricerRouter');
 
 const server = require('http').Server(app);
 global.io = require('socket.io')(server);
@@ -46,7 +47,6 @@ let getData = (req, res, next) => {
 		request.query(sqlQuery, (err, recordset) => {
 			if(err) {
 				console.log(err);
-				res.send(err);
 				return;
 			}
 			resolve(recordset.recordset);
@@ -59,7 +59,6 @@ let getData = (req, res, next) => {
 		request.query(sqlQuery, (err, recordset) => {
 			if(err) {
 				console.log(err);
-				res.send(err);
 				return;
 			}
 			resolve(recordset.recordset);
@@ -117,6 +116,7 @@ app.use('/items', itemRouter);
 app.use('/cust', custRouter);
 app.use('/batch', batchRouter);
 app.use('/shipping', shipRouter);
+app.use('/pricer', pricerRouter);
 
 // INDEX
 app.get('/', (req, res) => {

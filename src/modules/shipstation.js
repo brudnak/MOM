@@ -1,5 +1,6 @@
 const btoa = require("btoa");
-const request = require('request');
+const limit = require('simple-rate-limiter');
+const request = limit(require('request')).to(40).per(60000);
 
 const ssKey = process.env.SS_KEY;
 const ssSecret = process.env.SS_SECRET;
@@ -126,7 +127,7 @@ function shipStation() {
                         "toState": "ME",  
                         "toCountry": "US",  
                         "toPostalCode": "03904",  
-                        "toCity": "Washington",  
+                        "toCity": "Kittery",  
                         "weight": {      
                             "value": ${weight},    
                             "units": "pounds"  
@@ -136,8 +137,7 @@ function shipStation() {
                             "length": ${length},    
                             "width": ${width},   
                             "height": ${height}  
-                        },  
-                        "confirmation": "delivery",  
+                        },   
                         "residential": true
                     }"`
                 }, function (err, response, body) {

@@ -16,6 +16,7 @@ header nav.navbar {background: #e74c3c; color: #fff; padding: 15px 20px;}
     .card-header {background: transparent; border-bottom: 2px solid #e74c3c;}
     .card-header.no-border {border: none;}
     .card-header select {margin-top: 5px;}
+.card > table {margin-bottom: 0px;}
 
 /* FORMS */
 .form-row {border-bottom: 1px solid #ddd; margin-bottom: 25px; padding-bottom: 15px;}

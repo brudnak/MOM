@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Pricer</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak="" class="datepickerdemoCalendar card">
+					<div class="card-header">
+						<h2>Amazon Pricer</h2>
+					</div>
+					<div class="card-body">
+            <form ng-submit="ctrl.goto('/pricer/amazon?sku='+ctrl.sku+'&supplier='+ctrl.supplier+'&fba='+ctrl.fba+'&page=1')">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label>SKU</label>
+                  <input type="text" class="form-control" placeholder="SKU" ng-model="ctrl.sku" autofocus>
+                </div>
+                <div class="form-group col-6">
+                  <label>Supplier Code</label>
+                  <select ng-model="ctrl.supplier" class="form-control">
+                    <% suppliers.forEach((item) => { %>
+                      <option value="<%=item.code%>"><%=`${item.code}, ${item.name}` %></option>
+                    <% }); %>
+                  </select>
+                </div>
+                <!--div class="form-group col-6">
+                  <label>Marketplace</label>
+                  <select ng-model="ctrl.marketplace" class="form-control">
+                      <option selected value="amazon">Amazon</option>
+                  </select>
+                </div-->
+                <div class="form-group col-12">
+                  <label>FBA</label>
+                  <input type="checkbox" ng-model="ctrl.fba">
+                </div>
+                
+              </div>
+              <div class="form-row">
+                <div class="col-12">
+                  <input type="submit" style="display: none" />
+                  <a id="submit" class="btn btn-block btn-primary" ng-class="" ng-href="/pricer/amazon?sku={{ctrl.sku}}&supplier={{ctrl.supplier}}&fba={{ctrl.fba}}&page=1">Price Items</a>
+                </div>
+              </div>
+            </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+ 
+	</body>
+</html>

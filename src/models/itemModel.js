@@ -65,12 +65,18 @@ function itemModel() {
 
                     // Amazon throwing an error when I try to run concurrent amazon-mws requests, so I have to nest
                     mws.getMyPriceByASIN(item.advanced1).then(response => {
-                        item.ourAmazonPrice = response && response.Product && response.Product.Offers && response.Product.Offers.Offer && response.Product.Offers.Offer.BuyingPrice && response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount ? response.Product.Offers.Offer.BuyingPrice.LandedPrice.Amount : null;
+                        if(response && response.Product && response.Product.Offers && response.Product.Offers.Offer && Array.isArray(response.Product.Offers.Offer)) {
+                            item.ourAmazonPrices = [];
+                            response.Product.Offers.Offer.forEach(offer => {
+                                item.ourAmazonPrices.push(offer);
+                            });
+                        }
+                        
                         resolve(item);
                     }).catch(err => {
                         console.log(err);
                         resolve(item);   
-                    });                           
+                    });     
                 });
             });
         });
@@ -204,17 +210,40 @@ function itemModel() {
         })
     }
 
-    function searchItems(sku, desc, supplier) {
+    function searchItems(sku, desc, supplier, page, stp) {
         return new Promise((resolve, reject) => {
             console.log(`Retrieving item search for: ${sku}, ${desc}, ${supplier}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT stock.number, desc1, desc2, units, uncost, price1
-            FROM stock
-            ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
-            WHERE 1=1
-            ${sku ? `AND stock.number like '%${sku}%'` : ''}
-            ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
-            ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, uncost, price1` : ''}`;
+            let sqlQuery = ``
+            if(page) {
+                const step = stp || 50;
+                const start = ((page * step) - step) + 1;
+                const end = page * step;
+                sqlQuery = `SELECT *
+                FROM ( 
+                        SELECT ROW_NUMBER() OVER (ORDER BY stock.number) AS RowNum, stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                        advanced1, advanced2, advanced3, advanced4, break_out
+                        FROM stock
+                        ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
+                        WHERE 1=1
+                        ${sku ? `AND stock.number like '%${sku}%'` : ''}
+                        ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
+                        ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                        advanced1, advanced2, advanced3, advanced4, break_out` : ''}
+                    ) AS paginatedResults
+                WHERE RowNum >= ${start} AND RowNum <= ${end}
+                ORDER BY RowNum`;
+            } else {
+                sqlQuery = `SELECT stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                advanced1, advanced2, advanced3, advanced4, break_out
+                FROM stock
+                ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
+                WHERE 1=1
+                ${sku ? `AND stock.number like '%${sku}%'` : ''}
+                ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
+                ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                advanced1, advanced2, advanced3, advanced4, break_out` : ''}`;
+            }
 
             request.query(sqlQuery, (err, recordset) => {
                 if(err) {

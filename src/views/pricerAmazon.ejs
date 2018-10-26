@@ -1,0 +1,99 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Amazon Pricer</title>		
+    <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+
+			<div class="container">
+        <div ng-controller="AppCtrl as ctrl" ng-cloak>
+          <div class="row">
+            <div class="col-12">
+              <nav aria-label="Page navigation example" ng-show="<%=query.page %>">
+                <ul class="pagination justify-content-end">
+                  <li class="page-item" ng-class="{'disabled': <%=query.page==1 %>}">
+                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)-1%>" tabindex="-1">Previous</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)+1%>">Next</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Amazon Pricer</h4>
+                  <% for (var parameter in query) { %>
+                      <span class="label"><%=`${parameter}: ${query[parameter]}`%></span>
+                  <% } %>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>ASIN</th>
+                      <th>Unit Cost</th>
+                      <th>Shipping Cost</th>
+                      <th>Est. Fees</th>
+                      <th>Buy Box</th>
+                      <th>Min Price</th>
+                      <th>Our Price</th>
+                      <th>Est. Profit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% allItems.forEach(item => { %>
+                      <tr>
+                        <td><a href="/items/<%=item.number %>"><%=item.number %></a><%- item.break_out ? '<span class="badge badge-secondary">SV</span"' : '' %></td>
+                        <td><a target="_blank" href="https://www.amazon.com/dp/<%=item.advanced1 %>"><%= item.advanced1 %></a></td>
+                        <td>$<%= item.uncost ? item.uncost.toFixed(2) : '--' %></td>
+                        <td>$<%= item.recommendedPricing && item.recommendedPricing.shipping ? item.recommendedPricing.shipping.toFixed(2) : '--' %></td>
+                        <td>$<%= item.recommendedPricing && item.recommendedPricing.commission ? item.recommendedPricing.commission.toFixed(2) : '--' %></td>
+                        <td>$<%= item.buyBoxPrice %></td>
+                        <td style="text-align: center; border-left: 1px solid #ddd; border-right: 1px solid #ddd;" class="<%= !isNaN(item.buyBoxPrice) && item.recommendedPricing && item.buyBoxPrice < item.recommendedPricing.pricing ? 'text-warning' : 'text-success' %>">$<%= item.recommendedPricing && item.recommendedPricing.pricing ? item.recommendedPricing.pricing.toFixed(2) : '--' %></td>
+                        <td>
+                          <% item.ourAmazonPrices.forEach(price => { %>
+                            <span class="<%= item.recommendedPricing && item.recommendedPricing.pricing > price.BuyingPrice.LandedPrice.Amount ? 'text-danger' : 'text-success' %>">$<%=price.BuyingPrice.LandedPrice.Amount %></span>
+                          <% }) %>
+                        </td>
+                        <td>$<%= item.recommendedPricing && item.recommendedPricing.profit ? item.recommendedPricing.profit.toFixed(2) : '--' %></td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <nav aria-label="Page navigation example" ng-show="<%=query.page %>">
+                <ul class="pagination justify-content-end">
+                  <li class="page-item" ng-class="{'disabled': <%=query.page==1 %>}">
+                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)-1%>" tabindex="-1">Previous</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)+1%>">Next</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>
