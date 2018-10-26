@@ -130,12 +130,17 @@
                       <td>
                         <% if(Array.isArray(listing.lowestPrices)) { %>
                           <% listing.lowestPrices.forEach(price => { %>
-                          <div><%=`Fulfilled by ${price.fulfillmentChannel}: $${price.LandedPrice.Amount}` %></div>
-                        <% }) %>
-                      <% } %>
-                      
+                            <div><%=`Fulfilled by ${price.fulfillmentChannel}: $${price.LandedPrice.Amount}` %></div>
+                          <% }) %>
+                        <% } %>
                       </td>
-                      <td>$<%=listing.buyBoxPrice %></td>
+                      <td>
+                        <% if(Array.isArray(listing.buyBoxPrice)) { %>
+                          <% listing.buyBoxPrice.forEach(price => { %>
+                            <div><%=`${price.condition}: $${price.LandedPrice.Amount}` %></div>
+                          <% }) %>
+                        <% } %>
+                      </td>
                       <td>
                         <% if(itemInfo.ourAmazonPrices) { %>
                           <% itemInfo.ourAmazonPrices.forEach(offer => { %>

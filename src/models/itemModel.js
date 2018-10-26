@@ -57,8 +57,8 @@ function itemModel() {
                         item.listings.push({
                             marketplace: 'Amazon',
                             marketplaceId: item.advanced1,
-                            lowestPrices: amazonListing.Summary.LowestPrices.LowestPrice, 
-                            buyBoxPrice: amazonListing.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount,
+                            lowestPrices: Array.isArray(amazonListing.Summary.LowestPrices.LowestPrice) ? amazonListing.Summary.LowestPrices.LowestPrice : [amazonListing.Summary.LowestPrices.LowestPrice], 
+                            buyBoxPrice: Array.isArray(amazonListing.Summary.BuyBoxPrices.BuyBoxPrice) ?  amazonListing.Summary.BuyBoxPrices.BuyBoxPrice : [amazonListing.Summary.BuyBoxPrices.BuyBoxPrice],
                             offers: amazonListing.Summary.TotalOfferCount
                         });
                     }
@@ -217,22 +217,46 @@ function itemModel() {
             let sqlQuery = ``
             if(page) {
                 const step = stp || 50;
-                const start = ((page * step) - step) + 1;
-                const end = page * step;
-                sqlQuery = `SELECT *
-                FROM ( 
-                        SELECT ROW_NUMBER() OVER (ORDER BY stock.number) AS RowNum, stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
-                        advanced1, advanced2, advanced3, advanced4, break_out
-                        FROM stock
-                        ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
-                        WHERE 1=1
-                        ${sku ? `AND stock.number like '%${sku}%'` : ''}
-                        ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
-                        ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
-                        advanced1, advanced2, advanced3, advanced4, break_out` : ''}
-                    ) AS paginatedResults
-                WHERE RowNum >= ${start} AND RowNum <= ${end}
-                ORDER BY RowNum`;
+
+                sqlQuery = `WITH Data_CTE 
+                AS
+                (
+                    SELECT ROW_NUMBER() OVER (ORDER BY stock.number) AS RowNum, stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                    advanced1, advanced2, advanced3, advanced4, break_out
+                    FROM stock
+                    ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
+                    WHERE 1=1
+                    ${sku ? `AND stock.number like '%${sku}%'` : ''}
+                    ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
+                    ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                    advanced1, advanced2, advanced3, advanced4, break_out` : ''}
+                ), 
+                Count_CTE 
+                AS 
+                (
+                    SELECT COUNT(*) AS TotalRows FROM Data_CTE
+                )
+                SELECT *
+                FROM Data_CTE
+                CROSS JOIN Count_CTE
+                ORDER BY number
+                OFFSET (${page} - 1) * ${step} ROWS
+                FETCH NEXT ${step} ROWS ONLY;`
+
+                // sqlQuery = `SELECT *
+                // FROM ( 
+                //         SELECT ROW_NUMBER() OVER (ORDER BY stock.number) AS RowNum, stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                //         advanced1, advanced2, advanced3, advanced4, break_out
+                //         FROM stock
+                //         ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
+                //         WHERE 1=1
+                //         ${sku ? `AND stock.number like '%${sku}%'` : ''}
+                //         ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
+                //         ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
+                //         advanced1, advanced2, advanced3, advanced4, break_out` : ''}
+                //     ) AS paginatedResults
+                // WHERE RowNum >= ${start} AND RowNum <= ${end}
+                // ORDER BY RowNum`;
             } else {
                 sqlQuery = `SELECT stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
                 advanced1, advanced2, advanced3, advanced4, break_out

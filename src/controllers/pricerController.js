@@ -40,7 +40,10 @@ function pricerController() {
             Promise.all([mws.getLowestPriceByASIN(item.advanced1), shippo.getRates(dimensions)]).then(([lowestPrices, rates]) => {
                 (async () => {
                     try {
-                        const buyBoxPrice = lowestPrices.Summary && lowestPrices.Summary.BuyBoxPrices && lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice && lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice ? lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount : '--';
+                        if(lowestPrices.Summary && lowestPrices.Summary.BuyBoxPrices && Array.isArray(lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice)) {
+                            lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice = lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice.filter((item) => item.condition = 'New');
+                        }
+                        const buyBoxPrice = lowestPrices.Summary && lowestPrices.Summary.BuyBoxPrices ? lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice ? lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice.LandedPrice.Amount : lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice[0] ? lowestPrices.Summary.BuyBoxPrices.BuyBoxPrice[0].LandedPrice.Amount : '--' : '--';
                         const marketplace = fba==='true' ? 'Amazon FBA' : 'Amazon FBM';
                         let ourAmazonPrices = [];
 
