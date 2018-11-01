@@ -79,6 +79,8 @@ function itemModel() {
                     });     
                 });
             });
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -98,6 +100,8 @@ function itemModel() {
 
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -116,6 +120,8 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -134,6 +140,8 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -152,6 +160,8 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -169,6 +179,8 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -189,6 +201,8 @@ function itemModel() {
 
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -207,6 +221,8 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -275,6 +291,8 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
@@ -291,4 +309,4 @@ function itemModel() {
     }
 }
 
-module.exports = itemModel();
+module.exports = itemModel();  

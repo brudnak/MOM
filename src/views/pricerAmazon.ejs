@@ -16,12 +16,11 @@
             <div class="col-12">
               <nav aria-label="Page navigation example" ng-show="<%=query.page %>">
                 <ul class="pagination justify-content-end">
-                  <li class="page-item" ng-class="{'disabled': <%=query.page==1 %>}">
-                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)-1%>" tabindex="-1">Previous</a>
+                <% for(var i = 1; (i - 1) * resultsStep < resultsNum; i++) { %>
+                  <li class="page-item" ng-class="{'active': <%=query.page==i %>}">
+                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=i%>"><%=i%></a>
                   </li>
-                  <li class="page-item">
-                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)+1%>">Next</a>
-                  </li>
+                <% } %>
                 </ul>
               </nav>
             </div>
@@ -76,12 +75,11 @@
             <div class="col-12">
               <nav aria-label="Page navigation example" ng-show="<%=query.page %>">
                 <ul class="pagination justify-content-end">
-                  <li class="page-item" ng-class="{'disabled': <%=query.page==1 %>}">
-                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)-1%>" tabindex="-1">Previous</a>
+                <% for(var i = 1; (i - 1) * resultsStep < resultsNum; i++) { %>
+                  <li class="page-item" ng-class="{'active': <%=query.page==i %>}">
+                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=i%>"><%=i%></a>
                   </li>
-                  <li class="page-item">
-                    <a class="page-link" href="/pricer/amazon?sku=<%=query.sku%>&supplier=<%=query.supplier%>&fba=<%=query.fba%>&page=<%=Number(query.page)+1%>">Next</a>
-                  </li>
+                <% } %>
                 </ul>
               </nav>
             </div>

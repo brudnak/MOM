@@ -137,7 +137,7 @@ function reportModel() {
                     GROUP BY orderno ) agg
                 INNER JOIN cms ON cms.orderno = agg.orderno
                 LEFT JOIN ( SELECT orderno, COUNT(*) as 'pocount' FROM purchase GROUP BY orderno ) p ON cms.orderno = p.orderno
-                WHERE cms.order_st2 = 'PS' AND pocount IS NULL AND cms.ordertype <> 'FBA' AND cms.cl_key <> 'AMZPRIME'
+                WHERE cms.order_st2 = 'PS' AND pocount IS NULL AND cms.ordertype <> 'FBA'
                 AND cms.odr_date BETWEEN '${startDate}' AND '${endDate}'
                 ${clKeys[0] == undefined ? '' : `AND cl_key IN (${clKeys.map((key) => `'${key}'`).join(', ')})`}
                 AND ord_total <> 0

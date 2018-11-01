@@ -32,11 +32,12 @@ const config = {
 	driver: 'msnodesqlv8',
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASSWORD,
+	connectionTimeout: 60000,
 	options: {
 		encrypt: false
 	}
 };
-sql.connect(config).catch(err => console.log(err));
+sql.connect(config).then('connected!').catch(err => console.log(err));
 
 
 // SET LOCAL VIEW VARIABLES

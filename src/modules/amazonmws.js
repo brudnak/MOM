@@ -23,7 +23,7 @@ function mws() {
                     }).then(response => {
                         resolve(response);
                     }).catch(err => {
-                        reject('ASIN not found');
+                        reject('ASIN not found'); 
                     });
                 });
             } else {

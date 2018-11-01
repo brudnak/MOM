@@ -33,6 +33,8 @@ function orderModel() {
                     resolve(order);
                 });
             }); 
+        }).catch(err => {
+            console.log(err);
         });
     }
 
@@ -48,6 +50,8 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            console.log(err);
         });
     }
 
@@ -63,6 +67,8 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            console.log(err);
         });
     }
 
@@ -78,6 +84,8 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            console.log(err);
         });
     }
 
@@ -95,7 +103,9 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             })
-        })
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     function getOrderAttachments(orderID) {
@@ -113,7 +123,9 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             })
-        })
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     function searchOrders(startdate, enddate, altorderno, clkey, status, salesperson, ordertotal, sku, includefba) {
@@ -140,7 +152,9 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             })
-        })
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     return {

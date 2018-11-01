@@ -6,19 +6,23 @@ const shippo = require('../modules/shippo');
 function pricerController() {
     function displayAmazonPricer(req, res) {
         const { sku, desc, supplier, fba, page } = req.query;
+        const step = 50;
         
-        itemModel.searchItems(sku, desc, supplier, page, 50).then(items => {
+        itemModel.searchItems(sku, desc, supplier, page, step).then(items => {
             //filter out items that don't have advanced1, bheight, bwidth, blength, and unitweight
             items = items.filter(item => item.bheight && item.bwidth && item.blength && item.unitweight);
             noDimensions = items.filter(item => !item.bheight || !item.bwidth || !item.blength || !item.unitweight);
 
             Promise.all(items.map(item=>getCompetitivePrice(item,fba))).then(results => {
                 const allItems = [...results, ...noDimensions];
+                const resultsNum = results[0].TotalRows;
                 console.log('Done getting all items!');
                 res.render(
                     'pricerAmazon',
                     {
                         allItems,
+                        resultsNum,
+                        resultsStep: step,
                         query: req.query
                     }
                 )

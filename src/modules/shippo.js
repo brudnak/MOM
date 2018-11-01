@@ -26,7 +26,7 @@ function Shippo() {
                 "country": "US",
                 "phone": "+1 800 480 1277",
                 "email": "shandra@cpr-savers.com",
-                "is_residential": true
+                "is_residential": residential
             };
             
             response.from = addressFrom;
