@@ -1,10 +1,11 @@
+const debug = require('debug')('MOM:model:report')
 const sql = require('mssql');
 require("msnodesqlv8");
 
 function reportModel() {
     function getProfitPOs(startDate, endDate, bottomDollar = 10, bottomPercent = 10) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Profitability for POs between ${startDate} and ${endDate}`);
+            debug(`Retrieving Profitability for POs between ${startDate} and ${endDate}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT items.ponumber,items.orderno,items.ship_from,items.item,items.item_state,puritem.quantity,
 			items.it_unlist*puritem.quantity as 'Total Extended',puritem.total as 'Total Cost',
@@ -31,7 +32,7 @@ function reportModel() {
 
     function getProfitLineItems(startDate, endDate, bottomDollar = 1, bottomPercent = 10, clKeys = ['AMAZON','AMZPRIME','AMZVC','BID','EBAY','EBAYCPR','EMAIL','FAI','GRANT','GROUPON','GS','PAYPAL','PHONE','PO','TRN','WAL','WEBSALE']) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Profitability for line items between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
+            debug(`Retrieving Profitability for line items between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT items.orderno, item, it_uncost, it_unlist, quanto, item_state, cms.odr_date,
             CAST(( (items.it_unlist*quanto) - (items.it_uncost*quanto) ) AS DECIMAL(16,2)) AS 'Profit',
@@ -58,7 +59,7 @@ function reportModel() {
 
     function getProfitOrders(startDate, endDate, bottomDollar = 10, bottomPercent = 10, clKeys = [], includeFBA = 'false', includeShipped = 'false', includeQuotes = 'false') {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
+            debug(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, odr_date, cl_key, order_st2, cost, ord_total-tax AS 'merchTotal', pocount, 
             CAST(( ord_total - tax - cost - ( CASE
@@ -103,7 +104,7 @@ function reportModel() {
 
     function getShippedProfitOrders(startDate, endDate, clKeys = [], salesperson) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
+            debug(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
@@ -129,7 +130,7 @@ function reportModel() {
 
     function getRTSProfitOrders(startDate, endDate, clKeys = []) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
+            debug(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
@@ -154,7 +155,7 @@ function reportModel() {
 
     function getBackorder() {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving report of backorder items`)
+            debug(`Retrieving report of backorder items`)
             const request = new sql.Request();
             const sqlQuery = `SELECT items.item, SUM(quantb) as 'BO', po.onorder, items.nonproduct, items.item_state, stock.units - stock.fbaunits as inhouse, stock.commited
                 FROM items
@@ -179,7 +180,7 @@ function reportModel() {
 
     function getBackorderOrders(SKU) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving BO orders for SKU ${SKU}`);
+            debug(`Retrieving BO orders for SKU ${SKU}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT item, items.orderno, quantb, odr_date
             FROM items
@@ -197,7 +198,7 @@ function reportModel() {
 
     function getCommittedOrders(SKU) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving BO orders for SKU ${SKU}`);
+            debug(`Retrieving BO orders for SKU ${SKU}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT item, items.orderno, quantf, odr_date
             FROM items
@@ -215,7 +216,7 @@ function reportModel() {
 
     function getBackorderPOs(SKU) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving stock POs for SKU ${SKU}`);
+            debug(`Retrieving stock POs for SKU ${SKU}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT puritem.ponumber, quantity, delivered, odr_date
             FROM puritem

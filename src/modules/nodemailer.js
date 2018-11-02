@@ -1,3 +1,4 @@
+const debug = require('debug')('MOM:module:nodemailer');
 const nodemailer = require('nodemailer');
 const EventEmitter = require('events').EventEmitter;
 const emitter = new EventEmitter();

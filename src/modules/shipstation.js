@@ -1,3 +1,4 @@
+const debug = require('debug')('MOM:module:shipstation');
 const btoa = require("btoa");
 const limit = require('simple-rate-limiter');
 const request = limit(require('request')).to(40).per(60000);
@@ -9,7 +10,7 @@ const encoded = btoa(`${ssKey}:${ssSecret}`);
 function shipStation() {
     function exportOrders(orders) {
         return new Promise((resolve, reject) => {
-            console.log(`Exporting orders to ShipStation`);
+            debug(`Exporting orders to ShipStation`);
             request({
                 method: 'POST',
                 url: `https://ssapi.shipstation.com/orders/createorders`,
@@ -26,6 +27,8 @@ function shipStation() {
                 body = JSON.parse(body);
                 resolve(body.results);
             });
+        }).catch(err => {
+          debug(err);  
         });
     }
 
@@ -51,8 +54,12 @@ function shipStation() {
                 let shipments = body.shipments.filter(shipment => !shipment.voided);
     
                 resolve(shipments);
-            })
-        })
+            }).on('error', err => {
+                return reject(err);
+            });
+        }).catch(err => {
+            debug(err);  
+        });
     }
 
     function getShippingCosts(startDate, endDate, page = 1) {
@@ -74,7 +81,7 @@ function shipStation() {
                 (async () => {
                     body = JSON.parse(body);
 
-                    console.log(`On page ${body.page} out of ${body.pages}`)
+                    debug(`On page ${body.page} out of ${body.pages}`)
 
                     let orderShippingCosts = {}
                     
@@ -101,12 +108,16 @@ function shipStation() {
                         })
                     }
 
-                    console.log('sending page '+body.page);
+                    debug('sending page '+body.page);
 
                     resolve(orderShippingCosts);
                 })();   
-            })
-        })
+            }).on('error', err => {
+                return reject(err);
+            });
+        }).catch(err => {
+            debug(err);  
+        });
     }
 
     function getShippingRates(dimensions, carrier) {
@@ -131,7 +142,7 @@ function shipStation() {
                         "weight": {      
                             "value": ${weight},    
                             "units": "pounds"  
-                        },  
+                        },    
                         "dimensions": {    
                             "units": "inches",    
                             "length": ${length},    
@@ -152,10 +163,14 @@ function shipStation() {
                     } else { // cannot ship that carrier
                         resolve([]);
                     }
+            }).on('error', err => {
+                return reject(err);
             });
-        })
+        }).catch(err => {
+            debug(err);  
+        });
     }
-
+ 
     return {
         getShippingCost,
         getShippingCosts,

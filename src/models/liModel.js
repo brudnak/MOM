@@ -1,10 +1,11 @@
+const debug = require('debug')('MOM:model:li');
 const sql = require('mssql');
 require("msnodesqlv8");
 
 function liModel() {
     function getLineItems(itemStatus = [], SKUs = []) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving line items for ${SKUs.toString()} with status in ${itemStatus.toString()}`);
+            debug(`Retreiving line items for ${SKUs.toString()} with status in ${itemStatus.toString()}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT items.orderno, item, quanto, quantb, quants, it_uncost, it_unlist, item_state, ship_from, items.ponumber, cms.odr_date
             FROM items

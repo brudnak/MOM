@@ -1,3 +1,4 @@
+const debug = require('debug')('MOM:module:amazonmws');
 const throttle = require('promise-ratelimit')(100);
 const getLowestPriceByASINThrottle = require('promise-ratelimit')(2000);
 const amazon = require('amazon-mws')(process.env.MWS_ACCESS_KEY_ID,process.env.MWS_SECRET_ACCESS_KEY);

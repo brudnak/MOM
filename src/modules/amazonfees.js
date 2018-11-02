@@ -1,3 +1,4 @@
+const debug = require('debug')('MOM:module:amazonfees');
 
 function amazonFees() {
 

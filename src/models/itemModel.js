@@ -1,3 +1,4 @@
+const debug = require('debug')('MOM:model:item');
 const sql = require('mssql');
 require("msnodesqlv8");
 const shipstation = require('../modules/shipstation');
@@ -25,7 +26,7 @@ function itemModel() {
 
     function getItem(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Item Info for ${sku}`)
+            debug(`Retrieving Item Info for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT desc1, desc2, units, fbaunits, low, uncost, price1, bounits, onorder, commited, break_out, notation, 
             nonproduct, serial, discont, upccode, blength, bwidth, bheight, unitweight, min_price, lu_by, lu_on,
@@ -74,7 +75,7 @@ function itemModel() {
                         
                         resolve(item);
                     }).catch(err => {
-                        console.log(err);
+                        debug(err);
                         resolve(item);   
                     });     
                 });
@@ -86,7 +87,7 @@ function itemModel() {
 
     function getOpenPOs(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retreiving open POs for ${sku}`);
+            debug(`Retreiving open POs for ${sku}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT purchase.ponumber,quantity, delivered,unit_cost,orderno,reference,odr_date FROM puritem
                 INNER JOIN purchase ON puritem.ponumber = purchase.ponumber
@@ -107,7 +108,7 @@ function itemModel() {
 
     function getItemBins(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Item Bins for ${sku}`)
+            debug(`Retrieving Item Bins for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT warehouse, bindesc, units, commited, rcommit, picked, dropship 
             FROM bin
@@ -127,7 +128,7 @@ function itemModel() {
 
     function getItemPrices(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Item Prices for ${sku}`)
+            debug(`Retrieving Item Prices for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT supplier, quantity, buydesc, unit_price, dropship, lead_avg
             FROM buyprice
@@ -147,7 +148,7 @@ function itemModel() {
 
     function getItemTransactions(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Item Transactions for ${sku}`)
+            debug(`Retrieving Item Transactions for ${sku}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT trans_date, transtype, quantity, unit_cost, userid, notation
             FROM invtrans
@@ -167,7 +168,7 @@ function itemModel() {
 
     function getItemAudits(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Order Audits for item ${sku}`);
+            debug(`Retrieving Order Audits for item ${sku}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT auditon, userid, auditdate, beforevalue, aftervalue FROM useractivity
             WHERE audittype = 'P' AND auditkey = '${sku}'
@@ -186,7 +187,7 @@ function itemModel() {
 
     function getItemSales(sku, days) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving sales for ${sku} for past ${days} days.`)
+            debug(`Retrieving sales for ${sku} for past ${days} days.`)
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.cl_key, SUM(items.quanto) as sales
             FROM items
@@ -208,7 +209,7 @@ function itemModel() {
 
     function getBreakout(sku) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving Breakout Items for ${sku}`);
+            debug(`Retrieving Breakout Items for ${sku}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT breakout.inv, breakout.q, breakout.price, stock.uncost
             FROM breakout
@@ -228,7 +229,7 @@ function itemModel() {
 
     function searchItems(sku, desc, supplier, page, stp) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving item search for: ${sku}, ${desc}, ${supplier}`);
+            debug(`Retrieving item search for: ${sku}, ${desc}, ${supplier}`);
             const request = new sql.Request();
             let sqlQuery = ``
             if(page) {

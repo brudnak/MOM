@@ -1,10 +1,11 @@
+const debug = require('debug')('MOM:model:ap');
 const sql = require('mssql');
 require("msnodesqlv8");
 
 function apModel() {
     function searchAps(invoicenumber, ponumber, supplier, payment) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving APs: ${invoicenumber}, ${ponumber}, ${supplier}, ${payment}`)
+            debug(`Retrieving APs: ${invoicenumber}, ${ponumber}, ${supplier}, ${payment}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT invoice, paydate, ponumber, supplier, userid, payment, check_no
             FROM appaymnt

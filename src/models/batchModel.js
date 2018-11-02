@@ -1,10 +1,11 @@
+const debug = require('debug')('MOM:model:batch');
 const sql = require('mssql');
 require('msnodesqlv8');
 
 function batchModel() {
     function getStage1() {
         return new Promise((resolve, reject) => {
-            console.log('Getting Stage 1');
+            debug('Getting Stage 1');
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.odr_date, cms.orderno, cms.sales_id, cms.cl_key, cms.alt_order FROM cms
                 WHERE order_st2 = 'PI'
@@ -22,7 +23,7 @@ function batchModel() {
 
     function getStage2() {
         return new Promise((resolve, reject) => {
-            console.log('Getting Stage 2');
+            debug('Getting Stage 2');
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.odr_date, cms.orderno, cms.sales_id, cms.cl_key, cms.alt_order FROM cms
             WHERE order_st2 = 'IN'
@@ -40,7 +41,7 @@ function batchModel() {
 
     function getStage89() {
         return new Promise((resolve, reject) => {
-            console.log('Getting Stage 8-9');
+            debug('Getting Stage 8-9');
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.odr_date, items.orderno, item, quantb, it_uncost*quantb as 'totalEstCost', ship_from, cms.sales_id FROM items
                 INNER JOIN cms on cms.orderno = items.orderno

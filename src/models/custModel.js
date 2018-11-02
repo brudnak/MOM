@@ -1,10 +1,11 @@
+const debug = require('debug')('MOM:model:cust');
 const sql = require('mssql');
 require("msnodesqlv8");
 
 function custModel() {
     function getCustSearch(firstname, lastname, company, zipcode, phone, email) {
         return new Promise((resolve, reject) => {
-            console.log(`Searching cust`)
+            debug(`Searching cust`)
             const request = new sql.Request();
             const sqlQuery = `SELECT custnum, firstname, lastname, company, city, state, zipcode, phone, email
             FROM cust
@@ -28,7 +29,7 @@ function custModel() {
 
     function getCustOrders(custnum) {
         return new Promise((resolve, reject) => {
-            console.log(`Getting orders for cust ${custnum}`)
+            debug(`Getting orders for cust ${custnum}`)
             const request = new sql.Request();
             const sqlQuery = `SELECT orderno, cl_key, odr_date, ship_date, checkamoun, ord_total, order_st2, next_pay, ordertype
             FROM cms
@@ -45,7 +46,7 @@ function custModel() {
 
     function getCustInfo(custnum) {
         return new Promise((resolve, reject) => {
-            console.log(`Getting cust ${custnum}`);
+            debug(`Getting cust ${custnum}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT lastname, firstname, company, addr, addr2, city, county, state, zipcode, country, phone, phone2, ar_balance, comment, net, gross, email, 
             tax_id 

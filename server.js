@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const debug = require('debug')('MOM:server');
 const sql = require('mssql');
 require("msnodesqlv8");
 
@@ -21,7 +22,7 @@ global.io = require('socket.io')(server);
 global.io.on('connection', function (socket) {
 	// socket.emit('news', { hello: 'world' });
 	// socket.on('my other event', function (data) {
-	//   console.log(data);
+	//   debug(data);
 	// });
 });
 
@@ -37,9 +38,11 @@ const config = {
 		encrypt: false
 	}
 };
-sql.connect(config).then('connected!').catch(err => console.log(err));
-
-
+sql.connect(config).then('connected!').catch(err => debug(err));
+sql.on('error', err => {
+	res.send(err);
+})
+ 
 // SET LOCAL VIEW VARIABLES
 let getData = (req, res, next) => {
 	const getSuppliers = new Promise((resolve, reject) => {
@@ -47,7 +50,7 @@ let getData = (req, res, next) => {
 		const sqlQuery = `SELECT code, name FROM supplier ORDER BY code`;
 		request.query(sqlQuery, (err, recordset) => {
 			if(err) {
-				console.log(err);
+				debug(err);
 				return;
 			}
 			resolve(recordset.recordset);
@@ -59,7 +62,7 @@ let getData = (req, res, next) => {
 		const sqlQuery = `SELECT code, name FROM momuser ORDER BY code`;
 		request.query(sqlQuery, (err, recordset) => {
 			if(err) {
-				console.log(err);
+				debug(err);
 				return;
 			}
 			resolve(recordset.recordset);
@@ -95,7 +98,7 @@ let getData = (req, res, next) => {
 
 		next();
 	}).catch(err => {
-		console.log(err);
+		debug(err);
 		res.send(err);
 	});
 }
@@ -126,5 +129,5 @@ app.get('/', (req, res) => {
 
 // PUSH TO PORT
 server.listen(1111, () => {
-	console.log('listening on port 1111');
+	debug('listening on port 1111');
 })

@@ -1,3 +1,4 @@
+const debug = require('debug')('MOM:module:shippo');
 const throttle = require('promise-ratelimit')(200);
 const shippoKey = process.env.SHIPPO_API_KEY;
 const shippo = require('shippo')(shippoKey);
@@ -66,7 +67,7 @@ function Shippo() {
 
                     resolve(response);
                 }).catch(err => {
-                    console.log(err);
+                    debug(err);
                     reject(err);  
                 });
             });

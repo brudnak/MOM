@@ -1,10 +1,11 @@
+const debug = require('debug')('MOM:model:po');
 const sql = require('mssql');
 require("msnodesqlv8");
 
 function poModel() {
     function getPO(ponumber) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving PO ${ponumber}`);
+            debug(`Retrieving PO ${ponumber}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT ponumber, supplier, odr_date, ord_total, reference, orderno, mer_total, shipping, tax
             FROM purchase
@@ -21,7 +22,7 @@ function poModel() {
 
     function getPOitems(ponumber) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving items for PO ${ponumber}`);
+            debug(`Retrieving items for PO ${ponumber}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT puritem.number, puritem.quantity, puritem.delivered, puritem.unit_cost, items.it_unlist
             FROM puritem
@@ -39,7 +40,7 @@ function poModel() {
 
     function getPOaps(ponumber) {
         return new Promise((resolve, reject) => {
-            console.log(`Retrieving APs for po ${ponumber}`);
+            debug(`Retrieving APs for po ${ponumber}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT invoice, paydate, userid, payment, check_no FROM appaymnt WHERE ponumber = ${ponumber}`;
 
@@ -55,7 +56,7 @@ function poModel() {
     function searchPOs(supplier, pototal, sku) {
         return new Promise((resolve, reject) => {
             sku = sku.toUpperCase();
-            console.log(`Retrieving POs ${supplier}, ${pototal}, ${sku}`);
+            debug(`Retrieving POs ${supplier}, ${pototal}, ${sku}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT purchase.ponumber, supplier, odr_date, ord_total FROM purchase 
             ${sku ? `INNER JOIN puritem ON purchase.ponumber = puritem.ponumber` : ''}
