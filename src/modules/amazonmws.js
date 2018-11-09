@@ -51,6 +51,8 @@ function mws() {
                             return reject('ASIN not found');
                         }
                         resolve(response);
+                    }).catch(err => {
+                        return reject('Amazon MWS unresponsive.')  
                     });
                 });
             } else {
@@ -87,6 +89,8 @@ function mws() {
                             return reject('ASIN not found');
                         }
                         resolve(response);
+                    }).catch(err => {
+                        return reject('Amazon MWS unresponsive.')  
                     });
                 });
             } else {
@@ -97,10 +101,71 @@ function mws() {
         });
     }
 
+    function getUnshippedPrimeOrders() {
+        return new Promise((resolve, reject) => {
+            throttle().then(() => {
+                amazon.orders.search({
+                    'Version': '2013-09-01',
+                    'Action': 'ListOrders',
+                    'SellerId': sellerID,
+                    'MarketplaceId.Id.1': marketplaceID,
+                    'LastUpdatedAfter': new Date(2018,1,1),
+                    'OrderStatus.Status.1': 'Unshipped',
+                    'OrderStatus.Status.2': 'PartiallyShipped',
+                    'FulfillmentChannel.Channel.1': 'MFN',
+                }, (err, response) => {
+                    if(err) {
+                        return reject(err);
+                    }
+
+                    primeOrders = response.Orders.Order.filter(order => order.FulfillmentChannel == 'MFN' && order.IsPrime == 'true');
+
+                    Promise.all(primeOrders.map(getOrderItems)).then(results => {
+                        //console.log(results);
+                    });
+                    resolve(primeOrders);
+                }).catch(err => {
+                    return reject('Amazon MWS unresponsive.')  
+                });
+            });
+        }).catch(err => {
+            return err;
+        });
+    }
+
+    function getOrderItems(order) {
+        return new Promise((resolve, reject) => {
+            const orderno = typeof(order)=='object' ? order.AmazonOrderId : order;
+            throttle().then(() => {
+                amazon.orders.search({
+                    'Version': '2013-09-01',
+                    'Action': 'ListOrderItems',
+                    'SellerId': sellerID,
+                    'AmazonOrderId': orderno
+                }, (err, response) => {
+                    if(err) {
+                        return reject(err);
+                    }
+
+                    if(typeof(order)=='object') {
+                        resolve({...order, items: response.OrderItems});
+                        return;
+                    }
+                    resolve(response);
+                }).catch(err => {
+                    return reject('Amazon MWS unresponsive.')  
+                });
+            });
+        }).catch(err => {
+            return err;
+        });
+    }
+
     return {
         getLowestPriceByASIN,
         getMyPriceByASIN,
-        getEstAmazonFees
+        getEstAmazonFees,
+        getUnshippedPrimeOrders
     }
 }
 

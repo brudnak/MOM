@@ -1,4 +1,5 @@
 const orderModel = require('../models/orderModel');
+const mws = require('../modules/amazonmws')();
 
 function orderController() {
     function displayOrder(req, res) {
@@ -101,9 +102,24 @@ function orderController() {
         });
     }
 
+    function displayPrime(req, res) {
+        mws.getUnshippedPrimeOrders().then(orders => {
+            console.log(orders);
+            res.render(
+                'ordersPrime',
+                {
+                    orders
+                }
+            )
+        }).catch(err => {
+            res.send(err);
+        })
+    }
+
     return {
         displayOrder,
-        displayOrderSearch
+        displayOrderSearch,
+        displayPrime
     };
 }
 

@@ -22,6 +22,7 @@ function custModel() {
                 if(err) {
                     return reject(err);
                 }
+
                 resolve(recordset.recordset);
             })
         })

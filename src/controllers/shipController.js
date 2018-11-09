@@ -1,11 +1,12 @@
 const sql = require('mssql');
 require("msnodesqlv8");
 const shipstation = require('../modules/shipstation');
+const debug = require('debug')('MOM:controller:ship');
 
 function shipController() {
     function getOrders() {
         return new Promise((resolve, reject) => {
-            console.log('Retrieving orders to export to ShipStation');
+            debug('Retrieving orders to export to ShipStation');
             const request = new sql.Request();
             const sqlQuery = `SELECT cms.orderno, cms.odr_date, cms.sales_id, tpshiptype, tpshipwhat, tpshipacct, tpshipcc, tpshipexp, cms.custnum, shipnum, cms.cl_key, cms.shiplist,
             billto.lastname as 'billLastName', billto.firstname AS 'billFirstName', billto.company AS 'billCompany', billto.addr AS 'billAddress1', billto.addr2 AS 'billAddress2', billto.city AS 'billCity', 
@@ -37,6 +38,7 @@ function shipController() {
                     'FEH': 'fedex_ground',
                     'FEP': 'fedex_ground',
                     'FES': 'fedex_ground',
+                    'F2D': 'fedex_2nd_day',
                     'UP2': 'ups_2nd_day_air',
                     'UP3': 'ups_3_day_select',
                     'UPA': 'ups_ground',
@@ -106,7 +108,7 @@ function shipController() {
                     }
                     
                     if(order.tpshiptype==2) {
-                        processedOrder.carriercode = ['FEG','FEH','FEP','FES','STF'].includes(order.shiplist) ? 'fedex' : 'ups';
+                        processedOrder.carriercode = ['FEG','FEH','FEP','FES','STF','F2D','F3D'].includes(order.shiplist) ? 'fedex' : 'ups';
                         processedOrder.servicecode = tpcodes[order.shiplist] ? tpcodes[order.shiplist] : null; 
                         processedOrder.advancedOptions.billToParty = 'third_party';
                         processedOrder.advancedOptions.billToAccount = order.tpshipacct;

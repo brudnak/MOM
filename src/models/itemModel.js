@@ -72,7 +72,6 @@ function itemModel() {
                                 item.ourAmazonPrices.push(offer);
                             });
                         }
-                        
                         resolve(item);
                     }).catch(err => {
                         debug(err);
@@ -259,21 +258,6 @@ function itemModel() {
                 ORDER BY number
                 OFFSET (${page} - 1) * ${step} ROWS
                 FETCH NEXT ${step} ROWS ONLY;`
-
-                // sqlQuery = `SELECT *
-                // FROM ( 
-                //         SELECT ROW_NUMBER() OVER (ORDER BY stock.number) AS RowNum, stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
-                //         advanced1, advanced2, advanced3, advanced4, break_out
-                //         FROM stock
-                //         ${supplier ? `INNER JOIN buyprice ON stock.number = buyprice.number` : ''}
-                //         WHERE 1=1
-                //         ${sku ? `AND stock.number like '%${sku}%'` : ''}
-                //         ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
-                //         ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
-                //         advanced1, advanced2, advanced3, advanced4, break_out` : ''}
-                //     ) AS paginatedResults
-                // WHERE RowNum >= ${start} AND RowNum <= ${end}
-                // ORDER BY RowNum`;
             } else {
                 sqlQuery = `SELECT stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
                 advanced1, advanced2, advanced3, advanced4, break_out

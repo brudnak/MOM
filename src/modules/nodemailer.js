@@ -65,11 +65,11 @@ function sendMail(content, recipients, title = 'Automated Report', query = {}) {
         };
 
         transporter.sendMail(mailOptions).then(response => {
-            console.log('Email sent successfully');
+            debug('Email sent successfully');
             emitter.emit("emailSuccess");
             return resolve(response);
         }).catch(err => {
-            console.log(err);
+            debug(err);
             return reject(err);
         });
     })  
