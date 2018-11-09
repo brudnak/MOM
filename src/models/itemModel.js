@@ -191,7 +191,7 @@ function itemModel() {
             const sqlQuery = `SELECT cms.cl_key, SUM(items.quanto) as sales
             FROM items
             INNER JOIN cms ON items.orderno = cms.orderno
-            WHERE item = '${sku}' AND cms.odr_date > DATEADD(DAY, -${days}, GETDATE()) AND item_state <> 'QO'
+            WHERE item = '${sku}' AND cms.odr_date > DATEADD(DAY, -${days}, GETDATE()) AND item_state NOT IN ('QO','RT')
             GROUP BY cms.cl_key`;
 
             request.query(sqlQuery, (err, recordset) => {

@@ -61,11 +61,11 @@ function Shippo() {
                 }).then(shipment => {		
                     shipment.rates_list.forEach(rate => {
                         //add residential fee because Shippo is stupid
-                        //rate.amount = (Number(rate.amount) + (rate.provider=='UPS' ? 3.35 : 0)).toFixed(2);
+                        rate.amount = (Number(rate.amount) + (rate.provider=='UPS' ? 3.35 : 0)).toFixed(2);
                         response.rates.push(rate)
                     })
 
-                    //console.log(shipment);
+                    //debug(shipment);
 
                     resolve(response);
                 }).catch(err => {
