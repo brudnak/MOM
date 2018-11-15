@@ -1,0 +1,60 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Serial Lookup</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+		<div ng-app="MyApp">
+			<%- include partials/header.ejs %>
+			
+      <div ng-controller="AppCtrl as ctrl" class="container">
+				<div class="row">
+					<div class="col-12">
+            <div class="card">
+							<div class="card-header"><h2>Search Serial Numbers</h2></div>
+							<div class="card-body">
+								<form action=''>
+                  <div class="form-row">
+                    <div class="form-group col-6">
+											<label>Serial Number (partial)</label>
+											<input type="text" class="form-control" placeholder="Serial Number" ng-model="ctrl.serial">
+										</div>
+										<div class="form-group col-6">
+											<label>SKU</label>
+											<input type="text" class="form-control" placeholder="SKU" ng-model="ctrl.sku">
+                    </div>
+                    <div class="form-group col-6">
+											<label>Order Number</label>
+											<input type="text" class="form-control" placeholder="Order Number" ng-model="ctrl.orderno">
+										</div>
+										<div class="form-group col-6">
+											<label>Status</label>
+											<select ng-model="ctrl.status" class="form-control">
+                        <option value="A">Available</option>
+                        <option value="T">Taken</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="col-12">
+											<a id="submit" class="btn btn-block btn-primary" ng-class="" ng-href="/serial/search?status={{ctrl.status}}&orderno={{ctrl.orderno}}&sku={{ctrl.sku}}&serial={{ctrl.serial}}">Search Serial Numbers</a>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+          </div>
+        </div>
+      </div> 
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+
+		<script src="/js/app.js"></script>
+	</body>
+</html>

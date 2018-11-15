@@ -1,0 +1,60 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Serial Search Results</title>		
+      <%- include partials/meta.ejs %>
+  </head>
+	
+	<body>
+    <div ng-app="MyApp">
+        <%- include partials/header.ejs %>
+
+			<div class="container" ng-controller="AppCtrl as ctrl" ng-cloak>
+        <div class="row">
+          <div class="col-12 local-nav">
+            <a class="btn btn-outline-primary btn-large mx-4" href="/serial">New Serial Search</a>
+          </div>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Serial Search Results</h2>
+                <h6>SKU: <%=params.sku %></h6>
+                <h6>Serial: <%=params.serial %></h6>
+                <h6>Order: <%=params.orderno %></h6>
+                <h6>Status: <%=params.status %></h6>
+              </div>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Status</th>
+                    <th>Serial Number</th>
+                    <th>Order Number</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <% serialResults.forEach((item,index) =>  { %>
+                    <tr>
+                      <td><%=item.item %></td>
+                      <td><%=item.status %></td>
+                      <td><%=item.serial %></td>
+                      <td><%- item.orderno !== 0 ? `<a href="/orders/${item.orderno}">${item.orderno}</a>` : item.orderno %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>
+		  
+		<script src="/js/app.js"></script>
+	</body>
+</html>

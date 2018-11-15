@@ -53,13 +53,15 @@ function itemModel() {
                     } else {
                         item.rates = shipRates.rates;
                     }
+                    
+                    debug(amazonListing.Summary);
 
                     if(amazonListing && amazonListing.Summary && amazonListing.Summary.TotalOfferCount > 0) {
                         item.listings.push({
                             marketplace: 'Amazon',
                             marketplaceId: item.advanced1,
-                            lowestPrices: Array.isArray(amazonListing.Summary.LowestPrices.LowestPrice) ? amazonListing.Summary.LowestPrices.LowestPrice : [amazonListing.Summary.LowestPrices.LowestPrice], 
-                            buyBoxPrice: Array.isArray(amazonListing.Summary.BuyBoxPrices.BuyBoxPrice) ?  amazonListing.Summary.BuyBoxPrices.BuyBoxPrice : [amazonListing.Summary.BuyBoxPrices.BuyBoxPrice],
+                            lowestPrices: amazonListing.Summary.LowestPrices ? Array.isArray(amazonListing.Summary.LowestPrices.LowestPrice) ? amazonListing.Summary.LowestPrices.LowestPrice : [amazonListing.Summary.LowestPrices.LowestPrice]: '--', 
+                            buyBoxPrice: amazonListing.Summary.BuyBoxPrices ? Array.isArray(amazonListing.Summary.BuyBoxPrices.BuyBoxPrice) ?  amazonListing.Summary.BuyBoxPrices.BuyBoxPrice : [amazonListing.Summary.BuyBoxPrices.BuyBoxPrice]: '--',
                             offers: amazonListing.Summary.TotalOfferCount
                         });
                     }
@@ -203,8 +205,27 @@ function itemModel() {
             })
         }).catch(err => {
             return err;
-        })
+        }); 
     }
+
+    // function weeklyStockCoverage(sku) {
+    //     return new Promise((resolve, reject) => {
+    //         debug(`Retrieving weekly stock coverage for ${sku}`);
+            
+    //         Promise.all([getItemSales(sku, 7), getItemSales(sku, 30), getItemSales(sku, 90)]).then(([sales7, sales30, sales90]) => {
+    //             const weeklyAvg = ((sales7 * 3) + (sales30 / 3 * 2) + (sales90 / 12))/6;
+
+    //             //get stock
+
+    //             //resolve stock / weeklyAvg
+
+    //         }).catch(err => {
+    //             reject(err);
+    //         })
+    //     }).catch(err => {
+    //         return err;
+    //     })
+    // }
 
     function getBreakout(sku) {
         return new Promise((resolve, reject) => {

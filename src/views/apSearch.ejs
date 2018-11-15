@@ -32,16 +32,21 @@
                       <option value="<%=item.code%>"><%=`${item.code}, ${item.name}` %></option>
                     <% }); %>
                   </select>
-                    
                 </div>
                 <div class="form-group col-md-6">
-                  <label>Payment Amount (exact)</label>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Exact Payment Amount</label>
                   <input type="text" class="form-control" ng-model="ctrl.payment">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Minimum Payment Amount</label>
+                  <input type="text" class="form-control" ng-model="ctrl.paymentMin">
                 </div>
               </div>
               <div class="form-row"> 
                 <div class="col-12"> 
-                  <a class="btn btn-block btn-primary" ng-href="/ap/search?invoicenumber={{ctrl.invoicenumber}}&ponumber={{ctrl.ponumber}}&supplier={{ctrl.supplier}}&payment={{ctrl.payment}}">Submit</a>
+                  <a class="btn btn-block btn-primary" ng-href="/ap/search?invoicenumber={{ctrl.invoicenumber}}&ponumber={{ctrl.ponumber}}&supplier={{ctrl.supplier}}&payment={{ctrl.payment}}&paymentMin={{ctrl.paymentMin}}">Submit</a>
                 </div>
               </div>
             </form>

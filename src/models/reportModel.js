@@ -1,4 +1,4 @@
-const debug = require('debug')('MOM:model:report')
+const debug = require('debug')('MOM:model:report');
 const sql = require('mssql');
 require("msnodesqlv8");
 
@@ -27,6 +27,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -54,6 +56,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -99,6 +103,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -125,6 +131,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             }); 
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -150,6 +158,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             }); 
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -175,6 +185,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -193,6 +205,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -211,6 +225,8 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
+        }).catch(err => {
+            return err;
         });
     }
 
@@ -230,10 +246,70 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
+        });
+    }
+
+    function getAllItemSales(days) {
+        return new Promise((resolve, reject) => {
+            debug(`Retrieving sales for past ${days} days.`)
+            const request = new sql.Request();
+            const sqlQuery = `SELECT item, SUM(quanto) FROM items
+            INNER JOIN cms ON cms.orderno = items.orderno
+            WHERE item_state NOT IN ('QO','RT') AND cms.odr_date > DATEADD(DAY, -${days}, GETDATE())
+            GROUP BY item`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
+                }
+
+                resolve(recordset.recordset);
+            })
+        }).catch(err => {
+            return err;
+        });
+    }
+
+    function getAllItemStock() {
+        return new Promise((resolve, reject) => {
+            debug(`Retrieving all items stock`)
+            const request = new sql.Request();
+            const sqlQuery = `SELECT number, units, onorder, bounits, fbaunits FROM stock`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
+                }
+
+                resolve(recordset.recordset);
+            })
+        }).catch(err => {
+            return err;
+        });
+    }
+
+    function getWeeklyStockCoverage() {
+        return new Promise((resolve, reject) => {
+            Promise.all([getAllItemsStock(),getAllItemSales(7), getAllItemSales(30), getAllItemSales(90)]).then(([stock,sales7, sales30, sales90]) => {
+                let items = []
+                stock.forEach(item => {
+                    const sku = item.number;
+                    const inhouse = item.units;
+                    const onorder = item.onorder;
+                    const bounits = item.bounits;
+                    const fbaunits = item.fbaunits;
+                })
+            }).catch(err => {
+                reject(err);
+            })
+        }).catch(err => {
+            return err;
         })
     }
 
-    return {
+    return { 
         getBackorder,
         getBackorderOrders,
         getBackorderPOs,

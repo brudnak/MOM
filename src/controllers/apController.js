@@ -2,8 +2,7 @@ const apModel = require('../models/apModel');
 
 function apController() {
     function displayApsSearch(req, res) {
-        const { invoicenumber, ponumber, supplier, payment } = req.query;
-        apModel.searchAps(invoicenumber, ponumber, supplier, payment).then((APs) => {
+        apModel.searchAps(req.query).then((APs) => {
             res.render(
                 'apResults',
                 {

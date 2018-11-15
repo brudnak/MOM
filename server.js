@@ -15,6 +15,7 @@ const custRouter = require('./src/routers/custRouter');
 const batchRouter = require('./src/routers/batchRouter');
 const shipRouter = require('./src/routers/shipRouter');
 const pricerRouter = require('./src/routers/pricerRouter');
+const serialRouter = require('./src/routers/serialRouter');
 
 const server = require('http').Server(app);
 global.io = require('socket.io')(server);
@@ -121,6 +122,7 @@ app.use('/cust', custRouter);
 app.use('/batch', batchRouter);
 app.use('/shipping', shipRouter);
 app.use('/pricer', pricerRouter);
+app.use('/serial', serialRouter);
 
 // INDEX
 app.get('/', (req, res) => {
