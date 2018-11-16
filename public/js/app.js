@@ -28,7 +28,8 @@ app.filter('orderStatus', () => {
             EP: 'No Status',
             CN: 'Canceled',
             IN: 'Ready to Pack',
-            NW: 'Need Weighing'
+            NW: 'Need Weighing',
+            BI: 'Ready to Invoice'
         }
         console.log('hi')
         return ordstatus[x] || x;
