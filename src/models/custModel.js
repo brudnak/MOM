@@ -10,13 +10,14 @@ function custModel() {
             const sqlQuery = `SELECT custnum, firstname, lastname, company, city, state, zipcode, phone, email
             FROM cust
             WHERE 1=1
-            ${firstname ? `AND firstname like '%${firstname}%'` : ``}
-            ${lastname ? `AND lastname like '%${lastname}%'` : ``}
-            ${company ? `AND company like '%${company}%'` : ``}
-            ${zipcode ? `AND zipcode = '${zipcode}'` : ``}
-            ${phone ? `AND phone = '${phone}'` : ``}
-            ${email ? `AND email like '%${email}%'` : ``}
+            ${firstname ? `AND firstname like '%${firstname}%'` : ''}
+            ${lastname ? `AND lastname like '%${lastname}%'` : ''}
+            ${company ? `AND company like '%${company}%'` : ''}
+            ${zipcode ? `AND zipcode = '${zipcode}'` : ''}
+            ${email ? `AND email like '%${email}%'` : ''}
             ORDER BY lastname, firstname`;
+
+            debug(sqlQuery);
 
             request.query(sqlQuery, (err, recordset) => {
                 if(err) {
@@ -25,6 +26,8 @@ function custModel() {
 
                 resolve(recordset.recordset);
             })
+        }).catch(err => {
+            return err;
         })
     }
 
