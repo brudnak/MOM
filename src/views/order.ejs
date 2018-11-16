@@ -13,8 +13,8 @@
 			<div ng-controller="AppCtrl as ctrl" class="container">
 				<div class="row">
           <div class="col-8">
-            <h2>Order <%=orderno %></h5>
-            <span class="label bg-danger" ng-show="<%=orderInfo.tpshiptype==2 %>">Third Party Shipping Acct. <%=orderInfo.tpshipacct %></span>
+            <h2>Order <%=orderno %> <small><span class="ng-cloak label <%=orderInfo.order_st2%>">{{'<%=orderInfo.order_st2 %>' | orderStatus}}</span></small></h5>
+            <span class="label bg-danger ng-cloak" ng-show="<%=orderInfo.tpshiptype==2 %>">Third Party Shipping Acct. <%=orderInfo.tpshipacct %></span>
             <h5><%=orderInfo.odr_date.toString().substring(4,16) %></h5>
           </div>
           <div class="col-4 text-right">
@@ -162,7 +162,7 @@
                 <tbody>
                   <tr>
                     <td class="px-3">Order Status</td>
-                    <td><span class="orderInfo.order_st2"><%=orderInfo.order_st2 %></span></td>
+                    <td><%=orderInfo.order_st2 %> | {{'<%=orderInfo.order_st2 %>' | orderStatus}}</td>
                   </tr>
                   <tr>
                     <td class="px-3">Sales ID</td>

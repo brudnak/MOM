@@ -48,7 +48,7 @@
                         <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
                         <td><%=order.odr_date %></td>
                         <td><%=order.cl_key %></td>
-                        <td><span class="label <%=order.order_st2 %>"><%=order.order_st2 %></span></td>
+                        <td><span class="label <%=order.order_st2 %> ng-cloak">{{ '<%=order.order_st2 %>' | orderStatus }}</span></td>
                         <td>$<%=order.cost %></td>
                         <td>$<%=order.shipping %></td> 
                         <td>$<%=order.totalAfterTax %></td>

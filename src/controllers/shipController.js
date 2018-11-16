@@ -74,9 +74,9 @@ function shipController() {
                         //internalNotes: order.desc1.trim() + ' ' + order.desc2.trim() + ' ' + order.desc3.trim() + ' ' + order.desc4.trim() + ' ' + order.desc5.trim() + ' ' + order.desc6.trim(),
                         requestedShippingService: (order.fulfill ? order.fulfill.trim() : '') + ' -- ' + (order.shiplist ? (order.shiplist!='UPC' && order.shiplist!='FC' && order.shiplist!='PM' && order.shiplist!='UPS' && order.shiplist!='STA' && order.shiplist!='STU' ? order.shiplist : '') : ''),
                         advancedOptions: {
-                            customField1: 'notes1',
-                            customField2: 'notes2',
-                            customField3: 'notes3',
+                            customField1: order.desc1 + ' ' + order.desc2,
+                            customField2: order.desc3 + ' ' + order.desc4,
+                            customField3: order.desc5 + ' ' + order.desc6,
                             source: order['cl_key'].trim()
                         }	
                     }	

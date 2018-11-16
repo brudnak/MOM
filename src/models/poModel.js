@@ -58,13 +58,13 @@ function poModel() {
             sku = sku.toUpperCase();
             debug(`Retrieving POs ${supplier}, ${pototal}, ${sku}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT purchase.ponumber, supplier, odr_date, ord_total FROM purchase 
+            const sqlQuery = `SELECT purchase.ponumber, supplier, odr_date, ord_total, reference ${sku && ', quantity'} FROM purchase 
             ${sku ? `INNER JOIN puritem ON purchase.ponumber = puritem.ponumber` : ''}
             WHERE 1=1
-            ${sku ? `AND number = '${sku}'` : ''}
-            ${supplier ? `AND supplier = '${supplier}'` : ''}
-            ${pototal ? `AND ord_total = ${pototal}` : ''}
-            ${sku ? `GROUP BY purchase.ponumber, supplier, odr_date, ord_total` : ''}
+            ${sku && `AND number = '${sku}'`}
+            ${supplier && `AND supplier = '${supplier}'`}
+            ${pototal && `AND ord_total = ${pototal}`}
+            ${sku && `GROUP BY purchase.ponumber, supplier, odr_date, ord_total, reference, quantity`}
             ORDER BY odr_date DESC`;
 
             request.query(sqlQuery, (err, recordset) => {

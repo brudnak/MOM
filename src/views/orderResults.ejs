@@ -46,7 +46,7 @@
                       <td><a href="/orders/<%=item.orderno %>"><%=item.orderno %></a></td>
                       <td><%=item.odr_date.toString().substring(4,16) %></td>
                       <td><%=item.alt_order %></td>
-                      <td><span class="label <%=item.order_st2 %>"><%=item.order_st2 %></span></td>
+                      <td><span class="label <%=item.order_st2 %> ng-cloak">{{ '<%=item.order_st2 %>' | orderStatus }}</span></td>
                       <td><%=item.sales_id %></td>
                       <td><%=item.ordertype %></td>
                       <td><%=item.cl_key %></td>

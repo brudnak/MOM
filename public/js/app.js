@@ -12,6 +12,29 @@ app.filter('dateFromSQL', () => {
     }
 })
 
+app.filter('orderStatus', () => {
+    return function(x) {
+        const ordstatus = {
+            QO: 'Quote',
+            CM: 'Committed',
+            PI: 'Ready to Pick',
+            PS: 'Ready to Ship',
+            SH: 'Shipped',
+            ND: 'Dropship',
+            OR: 'On Review',
+            BO: 'Back Order',
+            UO: 'User Hold',
+            PE: 'Permanent Hold',
+            EP: 'No Status',
+            CN: 'Canceled',
+            IN: 'Ready to Pack',
+            NW: 'Need Weighing'
+        }
+        console.log('hi')
+        return ordstatus[x] || x;
+    }
+})
+
 app.directive('dateNow', ['$filter', function($filter) {
     return {
         link: function( $scope, $element, $attrs) {
