@@ -88,6 +88,7 @@ function reportModel() {
             ${includeFBA=='false' ? `AND cms.ordertype <> 'FBA'` : ''}
             ${includeShipped=='false' ? `AND cms.order_st2 <> 'SH'` : ''}
             ${includeQuotes=='false' ? `AND cms.order_st2 <> 'QO'` : ''}
+            AND cms.order_st2 <> 'EP' 
             AND (CAST(( (ord_total-tax) - cost - ( CASE
                 WHEN cl_key IN ('AMAZON','AMZPRIME','WAL') THEN (ord_total-tax)*.15
                 WHEN cl_key = 'EBAY' OR cl_key = 'EBAYCPR' THEN (ord_total-tax)*.10

@@ -11,7 +11,7 @@ app.filter('dateFromSQL', () => {
         return x.substring(2,4) + '/' + x.substring(4,6) + '/' + x.substring(0,2);
     }
 })
-
+ 
 app.filter('orderStatus', () => {
     return function(x) {
         const ordstatus = {

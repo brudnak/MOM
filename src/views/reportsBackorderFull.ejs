@@ -30,7 +30,7 @@
 							<% items.forEach((item, index) => { %>
 								<tr>
                                     <td>
-                                        <a href="/items/<%=item.item %>"><%=item.item %></a>
+                                        <a href="/reports/backorder/<%=item.item %>"><%=item.item %></a>
                                         <% if(item.nonproduct) { %>
                                             <span class="badge badge-secondary"><%=item.item_state=='HS' ? 'Disc.' : 'SV' %></span>
                                         <% } %>
