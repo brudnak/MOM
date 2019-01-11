@@ -21,14 +21,42 @@ function Shippo() {
             let response = [];
             response.rates = [];
 
+            //residential
             response.to = {
                 "name": "Test",
+                "street1": "11 Hartley Farm Ln",
+                "city": "Kittery",
+                "state": "ME",
                 "zip": zip,
                 "country": "US",
                 "phone": "+1 800 480 1277",
                 "email": "shandra@cpr-savers.com",
-                "is_residential": residential
+                "is_residential": true
             };
+
+            // commercial
+            // response.to = {
+            //     "name": "Test",
+            //     "street1": "326 Route 1",
+            //     "city": "Kittery",
+            //     "state": "ME",
+            //     "zip": zip,
+            //     "country": "US",
+            //     "phone": "+1 800 480 1277",
+            //     "email": "shandra@cpr-savers.com",
+            //     "is_residential": false
+            // };
+
+            // response.to = {
+            //     "name": "Test",
+            //     "city": "Kittery",
+            //     "state": "ME",
+            //     "zip": zip,
+            //     "country": "US",
+            //     "phone": "+1 800 480 1277",
+            //     "email": "shandra@cpr-savers.com",
+            //     "is_residential": true
+            // };
             
             response.from = addressFrom;
             		
@@ -59,9 +87,10 @@ function Shippo() {
                     "async": false,
                     "extra": { "insurance": response.insurance }
                 }).then(shipment => {		
-                    shipment.rates_list.forEach(rate => {
+                    shipment.rates_list.filter(rate => ['ups_ground','usps_priority','usps_first','ups_second_day_air','ups_next_day_air_saver','fedex_home_delivery'].includes(rate.servicelevel_token)).forEach(rate => {
+                        debug(['ups_ground','usps_priority','usps_first'].includes(rate.servicelevel_token));
                         //add residential fee because Shippo is stupid
-                        rate.amount = (Number(rate.amount) + (rate.provider=='UPS' ? 3.35 : 0)).toFixed(2);
+                        //rate.amount = (Number(rate.amount) + (rate.provider=='UPS' ? 3.35 : 0)).toFixed(2);
                         response.rates.push(rate)
                     })
 

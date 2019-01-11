@@ -86,7 +86,7 @@ let getData = (req, res, next) => {
 		{statcode: 'CN', statdesc: 'Canceled'},
 		{statcode: 'FH', statdesc: 'Fraud Hold'},
 		{statcode: 'IL', statdesc: 'Invalid Package Label'},
-	];
+	]; 
 	
 
 	Promise.all([getSuppliers, getUsers]).then(([suppliers, users]) => {

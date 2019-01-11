@@ -20,7 +20,7 @@ function amazonFees() {
         
         shippingRates.forEach(rate => {
             //lowestShipping = Math.min(lowestShipping, rate.shipmentCost + rate.otherCost);
-            if(rate.attributes.includes('CHEAPEST')) { lowestShipping = Number(rate.amount) }
+            if(Number(rate.amount) < lowestShipping) { lowestShipping = Number(rate.amount) }
             if(rate.servicelevel_token=='ups_second_day_air') { ups2dayShipping = Number(rate.amount) }
         })
 

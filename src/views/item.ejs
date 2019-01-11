@@ -252,7 +252,7 @@
                 <div class="card-header">
                   <h4>Breakout Items for <%=sku %></h4>
                 </div>
-                <table class="table table-sm">
+                <table class="table">
                   <thead>
                     <tr>
                       <th>SKU</th>
@@ -296,7 +296,7 @@
                 <tbody>
                   <% openPOs.forEach((PO) => { %>
                     <tr>
-                      <td><%=PO.ponumber %></td>
+                      <td><a href="/pos/<%=PO.ponumber%>"><%=PO.ponumber %></a></td>
                       <td><%=PO.odr_date.toString().substring(4,15) %></td>
                       <td><%=PO.quantity %></td>
                       <td><%=PO.delivered %></td>

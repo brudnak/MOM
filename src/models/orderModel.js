@@ -24,7 +24,11 @@ function orderModel() {
 
                 let order = recordset.recordset[0];
 
-                shipstation.getShippingCost(order.alt_order.trim().length==19 ? order.alt_order : orderID).then(boxes => {
+                if(!order) {
+                    return reject(err);
+                }
+
+                shipstation.getShippingCost(order.alt_order && order.alt_order.trim().length==19 ? order.alt_order : orderID).then(boxes => {
                     order.boxes = boxes;
                     resolve(order);
                 }).catch(err=> {
