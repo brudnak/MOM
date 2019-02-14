@@ -288,7 +288,8 @@ function itemModel() {
                 ${sku ? `AND stock.number like '%${sku}%'` : ''}
                 ${desc ? `AND (desc1 like '%${desc}%' OR desc2 like '%${desc}%')` : ''}
                 ${supplier ? `AND supplier = '${supplier}' GROUP BY stock.number, desc1, desc2, units, fbaunits, onorder, uncost, price1, blength, bwidth, bheight, unitweight,
-                advanced1, advanced2, advanced3, advanced4, break_out` : ''}`;
+                advanced1, advanced2, advanced3, advanced4, break_out` : ''}
+                ORDER BY units-fbaunits DESC`;
             }
 
             request.query(sqlQuery, (err, recordset) => {

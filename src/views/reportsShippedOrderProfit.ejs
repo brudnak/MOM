@@ -37,6 +37,7 @@
                       <th>Status</th>
                       <th>Merch Cost</th>
                       <th>Shipping</th>
+                      <th>Fees</th>
                       <th>Charged</th>
                       <th>Net<br>After Fees</th>
                       <th>Margin</th>
@@ -51,6 +52,7 @@
                         <td><span class="label <%=order.order_st2 %> ng-cloak">{{ '<%=order.order_st2 %>' | orderStatus }}</span></td>
                         <td>$<%=order.cost %></td>
                         <td>$<%=order.shipping %></td> 
+                        <td>$<%=order.fees %></td>
                         <td>$<%=order.totalAfterTax %></td>
                         <td><span class="<%=order.net < 2 ? 'text-danger' : order.net < 3 ? 'text-warning' : ''%>">$<%=order.net %></span></td>
                         <td><span class="<%=order.margin < 3 ? 'text-danger' : order.margin < 5 ? 'text-warning' : ''%>"><%=order.margin %>%</span></td>

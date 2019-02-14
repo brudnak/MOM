@@ -50,10 +50,12 @@ function orderController() {
                   } else if(orderInfo.cl_key.trim()=='AMZVC') {
                     commission = Math.max(1, totalMinusTax*.1);
                   }
+                } else {
+                    commission = totalMinusTax*0.028;
                 }
 
                 const totalShipping = dropshipShipping + shipCost;
-                const commissionPercent = ['AMAZON','WAL','EBAY','EBAYCPR','AMZPRIME','AMZVC'].includes(orderInfo.cl_key.trim()) ? ((commission / totalMinusTax) * 100).toFixed(0) : 0;
+                const commissionPercent = commission > 0 ? ((commission / totalMinusTax) * 100).toFixed(0) : 0;
                 const shippingPercent = ((totalShipping / totalMinusTax) * 100).toFixed(0);
                 const merchPercent = ((totalCost / totalMinusTax) * 100).toFixed(0);
                 const profitPercent = (100-commissionPercent-shippingPercent-merchPercent).toFixed(0);

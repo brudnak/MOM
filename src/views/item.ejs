@@ -18,24 +18,26 @@
             </h2>
             <h5><%=itemInfo.desc1 %></h5>
             <h5><%=itemInfo.desc2 %></h5>
+            <h5><span class="badge badge-success"><%=itemInfo.units - itemInfo.fbaunits %> In House</span>
+            <span class="badge" style="background-color: #fa8231; color: #fff;"><%= itemInfo.fbaunits %> At FBA</span></h5>
             <div class="item-badges">
               <% if(itemInfo.serial == 1) { %>
-                <span class="badge badge-success">Has Serial</span>
+                <span class="badge badge-info">Has Serial</span>
               <% } %>
               <% if(itemInfo.discont == 1) { %>
-                <span class="badge badge-success">Discontinued</span>
+                <span class="badge badge-info">Discontinued</span>
               <% } %>
               <% if(itemInfo.break_out == 1) { %>
-                <span class="badge badge-success">Breakout</span>
+                <span class="badge badge-info">Breakout</span>
               <% } %>
               <% if(itemInfo.nonproduct == 1) { %>
-                <span class="badge badge-success">Service</span>
+                <span class="badge badge-info">Service</span>
               <% } %>
             </div>
           </div>
           <div class="col-12 col-md-4 text-right">
             <h6 class="text-right"><em>Last updated on <%=itemInfo.lu_on.toString().substring(4, 15) %>, by <%=itemInfo.lu_by %></em></h6>
-            <h2>Price <span class="badge badge-primary">$<%=itemInfo.price1.toFixed(2) %></span></h2>
+            <h3>Price <span class="badge badge-primary">$<%=itemInfo.price1.toFixed(2) %></span></h3>
             <h4>Unit Cost <span class="badge badge-secondary">$<%=itemInfo.uncost.toFixed(2) %></span></h4>
             <h5 ng-show="<%=itemInfo.break_out %>">Breakout Cost <span class="badge badge-secondary">$<%=unitCost.toFixed(2) %></span></h5>
           </div>
@@ -44,7 +46,7 @@
           <div class="col-12">
             <h6 class="item-notation"><em><%=itemInfo.notation %></em></h6>
             <div class="card dimensions">
-              <div class="card-header no-border">
+              <div class="card-header">
                 <div class="row">
                   <div class="col-4">
                     <h4>Shipping</h4>
@@ -229,7 +231,7 @@
                     <th>Warehouse</th>
                     <th>Units</th>
                     <th>CM</th>
-                  </tr>
+                  </tr> 
                 </thead>
                 <tbody>
                   <% itemBins.forEach((bin) => { %>
@@ -280,7 +282,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4>Open POs for <%=sku %></h4>
+              <a href="/pos/search?supplier=&pototal=&sku=<%=sku %>" class="btn btn-primary btn-sm float-right">View all POs</a><h4>Open POs for <%=sku %></h4>
               </div>
               <table class="table">
                 <thead>

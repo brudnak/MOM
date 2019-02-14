@@ -47,7 +47,7 @@ tr, td {position: relative;}
 /* SHIPPING RATES */
 .shipping-rates {margin: 0px; margin: -1px;}
     .shipping-rate {color: #fff; text-align: center; padding: 0px;}
-        .shipping-rate.dimensions {background: #555; font-size: 14px; padding: 8px; color: #fff; font-weight: bold;}
+        .shipping-rate.dimensions {border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 14px; padding: 8px; font-weight: bold; color: #777;}
         .shipping-rate.UPS-rate {background: #FCB900}
         .shipping-rate.USP-rate {background: #333366}
     .shipping-rate h5 {background: rgba(0,0,0,0.1); margin-bottom: 0px; padding: 10px 0px;}

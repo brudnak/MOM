@@ -70,13 +70,13 @@ function reportModel() {
                 WHEN cl_key IN ('AMAZON','AMZPRIME','WAL') THEN (ord_total-tax)*.15
                 WHEN cl_key = 'EBAY' OR cl_key = 'EBAYCPR' THEN (ord_total-tax)*.10
                 WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.1
-                ELSE 0 END
+                ELSE (ord_total-tax)*.03 END
             )) AS DECIMAL(16,2)) AS 'profit',
             CAST(ROUND(( ( ord_total - tax - cost - ( CASE
                 WHEN cl_key IN ('AMAZON','AMZPRIME','WAL') THEN (ord_total-tax)*.15
                 WHEN cl_key = 'EBAY' OR cl_key = 'EBAYCPR' THEN (ord_total-tax)*.10
                 WHEN cl_key = 'AMZVC' THEN (ord_total-tax)*.1
-                ELSE 0 END
+                ELSE (ord_total-tax)*.03 END
             ) ) / (ord_total-tax) ) * 100,2) AS DECIMAL(16,2)) AS 'percentProfit'
             FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost',SUM(it_unlist*quanto) as 'price'
                 FROM items WHERE item_state <> 'SV'
@@ -141,7 +141,7 @@ function reportModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving Profitability for orders between ${startDate} and ${endDate} from only keys: ${clKeys.toString()}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', cost
+            const sqlQuery = `SELECT cms.orderno, cms.alt_order, odr_date, cl_key, order_st2, tpshiptype, ord_total-tax AS 'totalAfterTax', ord_total, cost
                 FROM ( SELECT orderno,SUM(it_uncost*quanto) as 'cost'
                     FROM items WHERE item_state <> 'SV'
                     GROUP BY orderno ) agg
@@ -153,7 +153,7 @@ function reportModel() {
                 AND ord_total <> 0
                 ORDER BY odr_date DESC`;
 
-            request.query(sqlQuery, (err, recordset) => {
+            request.query(sqlQuery, (err, recordset) => { 
                 if (err) {
                     return reject(err);
                 }

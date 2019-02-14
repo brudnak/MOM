@@ -103,7 +103,7 @@ function reportController() {
                 order.cost = order.cost.toFixed(2);
                 order.totalAfterTax = order.totalAfterTax.toFixed(2);
                 order.shipping = (shippingCosts[order.alt_order.trim().length==19 ? order.alt_order.trim() : order.orderno] || 0).toFixed(2);
-                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.1 : 0).toFixed(2);
+                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.1 : order.totalAfterTax*.028).toFixed(2);
                 order.net = (order.totalAfterTax - order.cost - order.shipping - order.fees).toFixed(2);
                 order.margin = ((order.net / order.totalAfterTax)*100).toFixed(2);
 
@@ -150,7 +150,7 @@ function reportController() {
                 order.cost = order.cost.toFixed(2);
                 order.totalAfterTax = order.totalAfterTax.toFixed(2);
                 order.shipping = (shippingCosts[order.alt_order.trim().length==19 ? order.alt_order.trim() : order.orderno] || 0).toFixed(2);
-                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.1 : 0).toFixed(2);
+                order.fees = (['AMAZON','AMZPRIME','WAL'].includes(order.cl_key.trim()) ? order.totalAfterTax*.15 : ['EBAY','EBAYCPR'].includes(order.cl_key.trim()) ? order.totalAfterTax*.10 : order.cl_key.trim()=='AMZVC' ? order.totalAfterTax*.1 : order.totalAfterTax*.028).toFixed(2);
                 order.net = (order.totalAfterTax - order.cost - order.shipping - order.fees).toFixed(2);
                 order.margin = ((order.net / order.totalAfterTax)*100).toFixed(2);
             })

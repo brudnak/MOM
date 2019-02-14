@@ -90,12 +90,12 @@ function amazonFees() {
             shipping = lowestShipping;
         }
 
-        const minimumProfit = ['Amazon FBA'].includes(marketplace) ? .5 : 1;
+        const minimumProfit = ['Amazon FBA'].includes(marketplace) ? .5 : 3;
         const minimumCommission = ['Amazon FBM', 'Amazon Prime'].includes(marketplace) ? 1 : 0;
 
         const minimumDollar = Math.max(((overhead+minimumProfit+shipping+item.uncost+fee+addl)/(1-commission)), (overhead+minimumProfit+minimumCommission+shipping+item.uncost+fee+addl));
         const fivePercent = Math.max(((overhead+shipping+item.uncost+fee+addl)/(1-.05-commission)), (overhead+minimumCommission+shipping+item.uncost+fee+addl)/(1-.05));
-        
+         
         recommendedPricing = [];
 
         recommendedPricing.marketplace = marketplace;
