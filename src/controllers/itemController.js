@@ -17,15 +17,15 @@ function itemController() {
                     }
                 )
             } else {
-                var lowestShipping, ups2dayShipping;
+                let lowestShipping, ups2dayShipping;
                 lowestShipping = 999;
                 const recommendedPricing = [{name: 'Amazon FBM'}, {name: 'Amazon Prime'}, {name: 'Amazon FBA'}, {name: 'Vendor Central'}, {name: 'Walmart'}, {name: 'Ebay'}];
                     
-                var unitCost = itemInfo.uncost;
+                itemInfo.breakoutCost = 0;
 
                 if(itemInfo.break_out==1) {
                     itemBreakout.forEach(piece => {
-                        unitCost += piece.uncost * piece.q;
+                        itemInfo.breakoutCost += piece.uncost * piece.q;
                     })
                 }
 
@@ -72,7 +72,6 @@ function itemController() {
                         itemAudits,
                         itemSales,
                         recommendedPricing,
-                        unitCost,
                         openPOs
                     }
                 )

@@ -39,7 +39,7 @@
             <h6 class="text-right"><em>Last updated on <%=itemInfo.lu_on.toString().substring(4, 15) %>, by <%=itemInfo.lu_by %></em></h6>
             <h3>Price <span class="badge badge-primary">$<%=itemInfo.price1.toFixed(2) %></span></h3>
             <h4>Unit Cost <span class="badge badge-secondary">$<%=itemInfo.uncost.toFixed(2) %></span></h4>
-            <h5 ng-show="<%=itemInfo.break_out %>">Breakout Cost <span class="badge badge-secondary">$<%=unitCost.toFixed(2) %></span></h5>
+            <h5 ng-show="<%=itemInfo.break_out %>">Breakout Cost <span class="badge badge-secondary">$<%=itemInfo.breakoutCost.toFixed(2) %></span></h5>
           </div>
         </div>
         <div class="row">

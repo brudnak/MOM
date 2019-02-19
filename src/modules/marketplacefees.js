@@ -3,7 +3,8 @@ const debug = require('debug')('MOM:module:marketplacefees');
 function marketplaceFees() {
 
     function estimateFees(item, shippingRates, marketplace) {
-        //  *** if item.break_out, need to await request of breakout items and calculate new unit cost *** 
+        // if item.break_out, need to use break out cost 
+        let itemCost = item.break_out==1 && item.breakoutCost ? item.breakoutCost : item.uncost;
 
         let lowestShipping = 9999;
         let ups2dayShipping = 9999;
@@ -99,8 +100,8 @@ function marketplaceFees() {
         const minimumCommission = ['Amazon FBM', 'Amazon Prime'].includes(marketplace) ? 1 : 0;
         const minimumPercent = 0.07;
 
-        const minimumDollar = Math.max(((overhead+minimumProfit+shipping+item.uncost+fee+addl)/(1-commission)), (overhead+minimumProfit+minimumCommission+shipping+item.uncost+fee+addl));
-        const minimumMargin = Math.max(((overhead+shipping+item.uncost+fee+addl)/(1-minimumPercent-commission)), (overhead+minimumCommission+shipping+item.uncost+fee+addl)/(1-minimumPercent));
+        const minimumDollar = Math.max(((overhead+minimumProfit+shipping+itemCost+fee+addl)/(1-commission)), (overhead+minimumProfit+minimumCommission+shipping+itemCost+fee+addl));
+        const minimumMargin = Math.max(((overhead+shipping+itemCost+fee+addl)/(1-minimumPercent-commission)), (overhead+minimumCommission+shipping+itemCost+fee+addl)/(1-minimumPercent));
          
         recommendedPricing = [];
 
@@ -108,7 +109,7 @@ function marketplaceFees() {
         recommendedPricing.pricing = Math.max(minimumMargin, minimumDollar);
         recommendedPricing.commission = Math.max(minimumCommission, recommendedPricing.pricing*commission) + fee;
         recommendedPricing.shipping = shipping+addl;
-        recommendedPricing.profit = recommendedPricing.pricing-recommendedPricing.commission-recommendedPricing.shipping-item.uncost-overhead;
+        recommendedPricing.profit = recommendedPricing.pricing-recommendedPricing.commission-recommendedPricing.shipping-itemCost-overhead;
 
         return recommendedPricing;
     }
