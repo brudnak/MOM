@@ -1,28 +1,33 @@
-const debug = require('debug')('MOM:module:amazonfees');
+const debug = require('debug')('MOM:module:marketplacefees');
 
-function amazonFees() {
+function marketplaceFees() {
 
     function estimateFees(item, shippingRates, marketplace) {
         //  *** if item.break_out, need to await request of breakout items and calculate new unit cost *** 
 
         let lowestShipping = 9999;
         let ups2dayShipping = 9999;
-        // const ratesToDisplay = {
-        //     'USPS PRIORITY MAIL - PACKAGE': 'USPS PM',
-        //     'USPS FIRST CLASS MAIL - PACKAGE': 'USPS FC',
-        //     'UPS® GROUND': 'UPS Ground',
-        //     'UPS 2ND DAY AIR®': 'UPS 2nd Day',
-        //     'UPS NEXT DAY AIR SAVER®': 'UPS Next Day Saver'
-        // }
 
-        // shippingRates = shippingRates.filter(rate => ratesToDisplay[rate.serviceName.toUpperCase()])
-        //     .map(rate => { return {...rate, displayName: ratesToDisplay[rate.serviceName.toUpperCase()]}});
-        
-        shippingRates.forEach(rate => {
-            //lowestShipping = Math.min(lowestShipping, rate.shipmentCost + rate.otherCost);
-            if(Number(rate.amount) < lowestShipping) { lowestShipping = Number(rate.amount) }
-            if(rate.servicelevel_token=='ups_second_day_air') { ups2dayShipping = Number(rate.amount) }
-        })
+        if(shippingRates.lowestShipping) {
+            ({ lowestShipping, ups2dayShipping } = shippingRates);
+        } else {
+            // const ratesToDisplay = {
+            //     'USPS PRIORITY MAIL - PACKAGE': 'USPS PM',
+            //     'USPS FIRST CLASS MAIL - PACKAGE': 'USPS FC',
+            //     'UPS® GROUND': 'UPS Ground',
+            //     'UPS 2ND DAY AIR®': 'UPS 2nd Day',
+            //     'UPS NEXT DAY AIR SAVER®': 'UPS Next Day Saver'
+            // }
+
+            // shippingRates = shippingRates.filter(rate => ratesToDisplay[rate.serviceName.toUpperCase()])
+            //     .map(rate => { return {...rate, displayName: ratesToDisplay[rate.serviceName.toUpperCase()]}});
+            
+            shippingRates.forEach(rate => {
+                //lowestShipping = Math.min(lowestShipping, rate.shipmentCost + rate.otherCost);
+                if(Number(rate.amount) < lowestShipping) { lowestShipping = Number(rate.amount) }
+                if(rate.servicelevel_token=='ups_second_day_air') { ups2dayShipping = Number(rate.amount) }
+            })
+        }  
 
         let commission = 0;
         let shipping = 0;
@@ -90,16 +95,17 @@ function amazonFees() {
             shipping = lowestShipping;
         }
 
-        const minimumProfit = ['Amazon FBA'].includes(marketplace) ? .5 : 3;
+        const minimumProfit = ['Amazon FBA'].includes(marketplace) ? 1 : 2;
         const minimumCommission = ['Amazon FBM', 'Amazon Prime'].includes(marketplace) ? 1 : 0;
+        const minimumPercent = 0.07;
 
         const minimumDollar = Math.max(((overhead+minimumProfit+shipping+item.uncost+fee+addl)/(1-commission)), (overhead+minimumProfit+minimumCommission+shipping+item.uncost+fee+addl));
-        const fivePercent = Math.max(((overhead+shipping+item.uncost+fee+addl)/(1-.05-commission)), (overhead+minimumCommission+shipping+item.uncost+fee+addl)/(1-.05));
+        const minimumMargin = Math.max(((overhead+shipping+item.uncost+fee+addl)/(1-minimumPercent-commission)), (overhead+minimumCommission+shipping+item.uncost+fee+addl)/(1-minimumPercent));
          
         recommendedPricing = [];
 
         recommendedPricing.marketplace = marketplace;
-        recommendedPricing.pricing = Math.max(fivePercent, minimumDollar);
+        recommendedPricing.pricing = Math.max(minimumMargin, minimumDollar);
         recommendedPricing.commission = Math.max(minimumCommission, recommendedPricing.pricing*commission) + fee;
         recommendedPricing.shipping = shipping+addl;
         recommendedPricing.profit = recommendedPricing.pricing-recommendedPricing.commission-recommendedPricing.shipping-item.uncost-overhead;
@@ -113,4 +119,4 @@ function amazonFees() {
 }
 
 
-module.exports = amazonFees();
+module.exports = marketplaceFees();

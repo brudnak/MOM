@@ -1,7 +1,7 @@
 const debug = require('debug')('MOM:controller:pricer');
 const itemModel = require('../models/itemModel');
 const mws = require('../modules/amazonmws')();
-const amazonFees = require('../modules/amazonfees');
+const amazonFees = require('../modules/marketplacefees');
 const shippo = require('../modules/shippo');
 
 function pricerController() {

@@ -1,4 +1,5 @@
 const itemModel = require('../models/itemModel');
+const marketplaceFees = require('../modules/marketplacefees');
 
 function itemController() {
     function displayItem(req, res) {
@@ -18,7 +19,7 @@ function itemController() {
             } else {
                 var lowestShipping, ups2dayShipping;
                 lowestShipping = 999;
-                const recommendedPricing = [{marketplace: 'Amazon FBM'}, {marketplace: 'Amazon Prime'}, {marketplace: 'Amazon FBA'}, {marketplace: 'Vendor Central'}, {marketplace: 'Walmart'}, {marketplace: 'Ebay'}];
+                const recommendedPricing = [{name: 'Amazon FBM'}, {name: 'Amazon Prime'}, {name: 'Amazon FBA'}, {name: 'Vendor Central'}, {name: 'Walmart'}, {name: 'Ebay'}];
                     
                 var unitCost = itemInfo.uncost;
 
@@ -53,85 +54,9 @@ function itemController() {
                     if(rate.serviceName.toUpperCase()=='UPS 2ND DAY AIR®') { ups2dayShipping = rate.shipmentCost + rate.otherCost }
                 })
 
-                if(!itemInfo.shippingError) {
+                if(!itemInfo.shippingError) {                   
                     recommendedPricing.forEach((marketplace, index) => {
-                        let commission = 0;
-                        let shipping = 0;
-                        let overhead = 1;
-                        let fee = 0;
-                        let addl = 0;
-                        
-                        if(marketplace.marketplace=='Amazon FBM' || marketplace.marketplace=='Amazon Prime') {
-                            commission = .15;
-                        } else if(marketplace.marketplace=='Ebay') {
-                            commission = .10;
-                        } else if(marketplace.marketplace=='Walmart') {
-                            commission = .15;
-                        } else if(marketplace.marketplace=='Vendor Central') {
-                            commission = .1;
-                        } else if(marketplace.marketplace=='Amazon FBA') {
-                            commission = .15;
-
-                            const dims = [itemInfo.blength, itemInfo.bwidth, itemInfo.bheight].sort((a,b) => a-b);
-                            const length = dims[2];
-                            const width = dims[1];
-                            const height = dims[0];
-                            const unitweight = itemInfo.unitweight
-                            const cubicFeet = (length * width * height) / 1728;
-                            const now = new Date();
-                            const month = now.getMonth();
-
-                            if(unitweight <= .75 && height <= .75 && width <= 12 && length <= 15) {
-                                fee = 2.41;
-                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
-                            } else if(unitweight <= 1 && height <= 8 && width <= 14 && length <= 18) {
-                                fee = 3.19;
-                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
-                            } else if(unitweight <= 2 && height <= 8 && width <= 14 && length <= 18) {
-                                fee = 4.71;
-                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
-                            } else if(unitweight <= 20 && height <= 8 && width <= 14 && length <= 18) {
-                                fee = 4.71 + ((unitweight - 2) * .38);
-                                fee += month > 8 ? cubicFeet * 2.40 : cubicFeet * .69;
-                            } else if(unitweight <= 70 && (height*width+length) <= 108 && width <= 30 && length <= 60) {
-                                fee = 8.13 + ((unitweight - 2) * .38);
-                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
-                            } else if(unitweight <= 150 && (height*width+length) <= 130 && length <= 108) {
-                                fee = 9.44 + ((unitweight - 2) * .38);
-                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
-                            } else if(unitweight <= 150 && (height*width+length) <= 165 && length <= 108) {
-                                fee = 73.18 + ((unitweight - 90) * .79);
-                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
-                            } else {
-                                fee = 137.32 + ((unitweight - 90) * .91);
-                                fee += month > 8 ? cubicFeet * 1.20 : cubicFeet * .48;
-                            }
-                        }
-    
-                        if(marketplace.marketplace=='Amazon Prime') {
-                            shipping = ups2dayShipping;
-                            overhead = 2;
-                        } else if(marketplace.marketplace=='Amazon FBA') {
-                            shipping = 0; 
-                            addl = .45 * Math.max( itemInfo.blength*itemInfo.bwidth*itemInfo.bheight / 166, itemInfo.unitweight);
-                            overhead = .50;
-                        } else if(marketplace.marketplace=='Vendor Central') {
-                            shipping = 0;
-                        } else {
-                            shipping = lowestShipping;
-                        }
-    
-                        const minimumProfit = ['Amazon FBA'].includes(marketplace.marketplace) ? .5 : 1;
-                        const minimumCommission = ['Amazon FBM', 'Amazon Prime'].includes(marketplace.marketplace) ? 1 : 0;
-    
-                        const minimumDollar = Math.max(((overhead+minimumProfit+shipping+unitCost+fee+addl)/(1-commission)), (overhead+minimumProfit+minimumCommission+shipping+unitCost+fee+addl));
-                        const fivePercent = Math.max(((overhead+shipping+unitCost+fee+addl)/(1-.05-commission)), (overhead+minimumCommission+shipping+unitCost+fee+addl)/(1-.05));
-                        
-                        recommendedPricing[index].pricing = Math.max(fivePercent, minimumDollar);
-                        recommendedPricing[index].commission = Math.max(minimumCommission, recommendedPricing[index].pricing*commission) + fee;
-                        recommendedPricing[index].shipping = shipping+addl;
-                        recommendedPricing[index].profit = recommendedPricing[index].pricing-recommendedPricing[index].commission-recommendedPricing[index].shipping-unitCost-overhead;
-                        
+                        recommendedPricing[index] = marketplaceFees.estimateFees(itemInfo, {lowestShipping: lowestShipping, ups2dayShipping: ups2dayShipping}, marketplace.name);
                     }) 
                 }
 
