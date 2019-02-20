@@ -6,8 +6,8 @@ function itemController() {
         let { sku } = req.params;
         sku = sku.toUpperCase();
 
-        Promise.all([itemModel.getItem(sku), itemModel.getItemBins(sku), itemModel.getItemPrices(sku), itemModel.getItemTransactions(sku), itemModel.getBreakout(sku), itemModel.getItemAudits(sku), itemModel.getOpenPOs(sku), itemModel.getItemSales(sku, 30), itemModel.getItemSales(sku, 60), itemModel.getItemSales(sku, 90), itemModel.getItemSales(sku, 160), itemModel.getItemSales(sku, 270), itemModel.getItemSales(sku, 360)])
-        .then(([itemInfo, itemBins, itemPrices, itemTrans, itemBreakout, itemAudits, openPOs, sales30, sales60, sales90, sales180, sales270, sales360]) => {
+        Promise.all([itemModel.getItem(sku), itemModel.getItemBins(sku), itemModel.getItemPrices(sku), itemModel.getItemTransactions(sku), itemModel.getBreakout(sku), itemModel.getParents(sku), itemModel.getItemAudits(sku), itemModel.getOpenPOs(sku), itemModel.getItemSales(sku, 30), itemModel.getItemSales(sku, 60), itemModel.getItemSales(sku, 90), itemModel.getItemSales(sku, 160), itemModel.getItemSales(sku, 270), itemModel.getItemSales(sku, 360)])
+        .then(([itemInfo, itemBins, itemPrices, itemTrans, itemBreakout, itemParents, itemAudits, openPOs, sales30, sales60, sales90, sales180, sales270, sales360]) => {
             if (!itemInfo) {
                 res.render(
                     '404',
@@ -69,6 +69,7 @@ function itemController() {
                         itemPrices,
                         itemTrans,
                         itemBreakout,
+                        itemParents,
                         itemAudits,
                         itemSales,
                         recommendedPricing,

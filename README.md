@@ -25,6 +25,8 @@ The item page displays many of the same information that can be found in MOM, bu
 
 The item page also includes API response of lowest prices and buy box prices based on the ASIN(s) provided in the database, a query of our sales numbers, in total and by order type; a history of inventory changes and transfers; and a history of user changes made to the item.
 
+Additionally, the item page features data that is recorded through the MOM database, but isn't possible to access from MOM's application. For example: the inventory and unit cost of break out pieces; any parent break out items that contain that SKU; open POs, and a link to a historical list of all POs for that item; history of user edits of the item; and a history of stock transactions, which include deliveries, manual edits, and transfers.
+
 ## CUSTOMERS
 In MOM, customers can only be searched by full and complete last name, phone number, and email address. With this interface, they can now be searched by incomplete first name, last name, company name, email address, or complete zip code.
 

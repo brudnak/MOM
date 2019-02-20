@@ -231,10 +231,30 @@ function itemModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving Breakout Items for ${sku}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT breakout.inv, breakout.q, breakout.price, stock.uncost
+            const sqlQuery = `SELECT breakout.inv, breakout.q, breakout.price, stock.uncost, stock.units, stock.fbaunits
             FROM breakout
             INNER JOIN stock ON stock.number = breakout.inv
             WHERE prod = '${sku}'`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(recordset.recordset);
+            })
+        }).catch(err => {
+            return err;
+        })
+    }
+
+    function getParents(sku) {
+        return new Promise((resolve, reject) => {
+            debug(`Retrieving Parent Breakouts for ${sku}`);
+            const request = new sql.Request();
+            const sqlQuery = `SELECT breakout.prod, breakout.q, stock.uncost
+            FROM breakout
+            INNER JOIN stock ON stock.number = breakout.prod
+            WHERE breakout.inv = '${sku}'`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if(err) {
@@ -312,6 +332,7 @@ function itemModel() {
         getItemAudits,
         getItemSales,
         getBreakout,
+        getParents,
         searchItems
     }
 }

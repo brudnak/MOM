@@ -261,6 +261,8 @@
                       <th>Quantity</th>
                       <th>Unit Cost</th>
                       <th>Additional Price</th>
+                      <th>In House</th>
+                      <th>FBA</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -270,6 +272,37 @@
                         <td><%=piece.q %></td>
                         <td>$<%=piece.uncost.toFixed(2) %></td>
                         <td>$<%=piece.price.toFixed(2) %></td>
+                        <td><%=piece.units - piece.fbaunits %></td>
+                        <td><%=piece.fbaunits %></td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <% } %>
+        <% if(itemParents[0]) { %>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Breakout Parents for <%=sku %></h4>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Quantity in Parent</th>
+                      <th>Unit Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% itemParents.forEach((parent) => { %>
+                      <tr>
+                        <td><a href="/items/<%=parent.prod %>"><%=parent.prod %></a></td>
+                        <td><%=parent.q %></td>
+                        <td>$<%=parent.uncost.toFixed(2) %></td>
                       </tr>
                     <% }) %>
                   </tbody>
