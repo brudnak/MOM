@@ -176,7 +176,7 @@ function reportModel() {
                     GROUP BY number ) po ON items.item = po.number
                 INNER JOIN stock ON items.item = stock.number
                 INNER JOIN cms ON cms.orderno = items.orderno
-                WHERE item_state IN ('BO','HS') AND quantb > 0
+                WHERE item_state IN ('BO','HS','PB') AND quantb > 0
                 GROUP BY items.item, po.onorder, items.nonproduct, items.item_state, stock.units - stock.fbaunits, stock.commited
                 ORDER BY item`
 
@@ -198,7 +198,7 @@ function reportModel() {
             const sqlQuery = `SELECT item, items.orderno, quantb, odr_date
             FROM items
             INNER JOIN cms ON items.orderno = cms.orderno
-            WHERE item = '${SKU}' AND item_state IN ('BO','HS')`;
+            WHERE item = '${SKU}' AND item_state IN ('BO','HS','PB')`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if(err) {
