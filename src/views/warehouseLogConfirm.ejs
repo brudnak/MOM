@@ -1,0 +1,86 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Warehouse Log</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+    <%- include partials/header.ejs %>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Warehouse Log Report</h2>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Orders</h3>
+              </div>
+              <table class="table">
+                <tbody> 
+                  <% Object.keys(orders).forEach(key => { %>
+                    <tr>
+                      <td><%=key %></td>
+                      <td><%=orders[key] %></td>                    
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Purchase Orders</h3>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>PO Number</th>
+                    <th>Order Date</th>
+                    <th>Supplier</th>
+                    <th>Reference</th>
+                    <th>Fully Received</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <% poInfo.forEach((po,index) =>  { %>
+                    <tr>
+                      <td><a href="/pos/<%=po['ponumber'] %>"><%=po['ponumber'] %></a></td>
+                      <td><%=po['Order Date'] %></td>
+                      <td><%=po['Supplier'] %></td>
+                      <td><%=po['Reference'] %></td>
+                      <td><%=po['Fully Received'] == 1 ? 'Yes' : 'No' %></td>                     
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Packages</h3>
+              </div>
+              <table class="table">
+                <tbody> 
+                  <% Object.keys(packages).forEach(key => { %>
+                    <tr>
+                      <td><%=key %></td>
+                      <td><%=packages[key] %></td>                    
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>  
+	</body>
+</html>

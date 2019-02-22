@@ -1,0 +1,170 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Warehouse Log</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container">
+				<div ng-controller="AppCtrl as ctrl" ng-cloak="" class="datepickerdemoCalendar card">
+					<div class="card-header">
+						<h2>Warehouse Log</h2>
+						<p></p>
+					</div>
+					<div class="card-body">
+						<form>
+							<div class="form-row">
+								<div class="form-group col-4">
+									<h5>DATE: {{ctrl.date | date:shortDate}}</h5>
+									<md-calendar ng-model="ctrl.date"></md-calendar>
+								</div>
+                </div>
+                <div class="form-row">
+                <div class="col-2">
+                    <br/> Scheduled
+                </div>
+                <div class="form-group col-3">
+                    <label>FBM</label>
+                    <input type="text" class="form-control" ng-model="ctrl.orders['FBM Scheduled']">
+                </div>
+								<div class="form-group col-3">
+									<label>FBA</label>
+									<input type="text" class="form-control" ng-model="ctrl.orders['FBA Scheduled']">
+								</div>
+								<div class="form-group col-3">
+									<label>Other</label>
+									<input type="text" class="form-control" ng-model="ctrl.orders['Other Scheduled']">
+                </div>
+                <div class="col-2">
+                    <br/> Fulfilled
+                </div>
+                <div class="form-group col-3">
+                    <label>FBM</label>
+                    <input type="text" class="form-control" ng-model="ctrl.orders['FBM Fulfilled']">
+                </div>
+								<div class="form-group col-3">
+									<label>FBA</label>
+									<input type="text" class="form-control" ng-model="ctrl.orders['FBA Fulfilled']">
+								</div>
+								<div class="form-group col-3">
+									<label>Other</label>
+									<input type="text" class="form-control" ng-model="ctrl.orders['Other Fulfilled']">
+                    </div>
+                </div>
+                <div class="form-row">
+								<div class="form-group col-12">
+									<label>POs Received, comma separated</label>
+									<input type="text" class="form-control" ng-model="ctrl.pos">
+								</div>
+                </div>
+                <div class="form-row">
+                <div class="col-2">
+                    <br/>UPS
+                </div>
+								<div class="form-group col-5">
+									<label>Domestic</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['UPS Domestic']">
+								</div>
+								<div class="form-group col-5">
+									<label>International</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['UPS International']">
+								</div>
+                <div class="col-2">
+                    <br/>USPS
+                </div>
+								<div class="form-group col-5">
+									<label>Domestic</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['USPS Domestic']">
+								</div>
+								<div class="form-group col-5">
+									<label>International</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['USPS International']">
+								</div>
+                <div class="col-2">
+                    <br/>DHL
+                </div>
+								<div class="form-group col-10">
+									<label>International</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['DHL International']">
+								</div>
+                <div class="col-2">
+                    <br/>LTL
+                </div>
+								<div class="form-group col-5">
+									<label>Domestic</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['LTL Domestic']">
+								</div>
+								<div class="form-group col-5">
+									<label>International</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['LTL International']">
+								</div>
+                <div class="col-2">
+                    <br/>FedEx
+                </div>
+								<div class="form-group col-3">
+									<label>Ground Domestic</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['FedEx Ground Domestic']">
+                </div>
+                <div class="form-group col-3">
+									<label>Express Domestic</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['FedEx Express Domestic']">
+								</div>
+								<div class="form-group col-3">
+									<label>Express International</label>
+									<input type="text" class="form-control" ng-model="ctrl.packages['FedEx Express International']">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-12">
+                  <label>Email Recipients</label>&nbsp;
+                  <input type="text" class="form-control" ng-model="ctrl.recipients">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="col-12">  
+									<a class="btn btn-block btn-primary" ng-href="/warehouse/sendLog?date={{ctrl.date | date:'yyMMdd'}}&orders={{ctrl.orders}}&pos={{ctrl.pos}}&packages={{ctrl.packages}}&recipients={{ctrl.recipients}}">Submit</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+    <%- include partials/javascripts.ejs %>  
+		<script>
+      var app = angular.module('MyApp', ['ngMaterial', 'ngMessages']);
+      app.controller('AppCtrl', function() {
+        this.date = new Date();
+        this.orders = {
+          'FBM Scheduled': 0, 
+          'FBM Fulfilled': 0, 
+          'FBA Scheduled': 0,
+          'FBA Fulfilled': 0, 
+          'Other Scheduled': 0,
+          'Other Fulfilled': 0
+        };
+        this.packages = {
+          'UPS Domestic': 0,
+          'UPS International': 0,
+          'USPS Domestic': 0,
+          'USPS International': 0,
+          'DHL International': 0,
+          'LTL Domestic': 0,
+          'LTL International': 0,
+          'FedEx Ground Domestic': 0,
+          'FedEx Express Domestic': 0,
+          'FedEx Express International': 0
+        }
+        this.recipients = 'brandon@cpr-savers.com, csm@cpr-savers.com, mgr@cpr-savers.com, manager@cpr-savers.com, warehouse@cpr-savers.com, training@cpr-savers.com, darryl@cpr-savers.com, nick@cpr-savers.com, leah@cpr-savers.com, alexis@cpr-savers.com'
+      });
+		</script>
+	</body>
+</html>

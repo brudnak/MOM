@@ -33,6 +33,8 @@
                     <th>PO Number</th>
                     <th>Order Date</th>
                     <th>Supplier</th>
+                    <th>Printed</th>
+                    <th>Received</th>
                     <th>Reference</th>
                     <th>Order Total</th>
                   </tr>
@@ -46,6 +48,8 @@
                       <td><a href="/pos/<%=item.ponumber %>"><%=item.ponumber %></a></td>
                       <td><%=item.odr_date.toString().substring(4,16) %></td>
                       <td><%=item.supplier %></td>
+                      <td><%=item.printed == 1 ? 'Yes' : 'No' %></td>
+                      <td><%=item.completed == 1 ? 'Yes' : 'No' %></td>
                       <td><%=item.reference %></td>
                       <td>$<%=item.ord_total.toFixed(2) %></td>
                     </tr>

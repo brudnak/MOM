@@ -7,7 +7,7 @@ function poModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving PO ${ponumber}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT ponumber, supplier, odr_date, ord_total, reference, orderno, mer_total, shipping, tax
+            const sqlQuery = `SELECT ponumber, supplier, odr_date, ord_total, reference, orderno, mer_total, shipping, tax, completed, printed
             FROM purchase
             WHERE ponumber = ${ponumber}`;
 
@@ -58,7 +58,7 @@ function poModel() {
             sku = sku.toUpperCase();
             debug(`Retrieving POs ${supplier}, ${pototal}, ${sku}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT purchase.ponumber, supplier, odr_date, ord_total, reference ${sku && ', quantity'} FROM purchase 
+            const sqlQuery = `SELECT purchase.ponumber, supplier, odr_date, ord_total, purchase.completed, purchase.printed, reference ${sku && ', quantity'} FROM purchase 
             ${sku ? `INNER JOIN puritem ON purchase.ponumber = puritem.ponumber` : ''}
             WHERE 1=1
             ${sku && `AND number = '${sku}'`}
