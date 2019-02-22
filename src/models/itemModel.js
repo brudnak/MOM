@@ -251,7 +251,7 @@ function itemModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving Parent Breakouts for ${sku}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT breakout.prod, breakout.q, stock.uncost
+            const sqlQuery = `SELECT breakout.prod, breakout.q, stock.price1
             FROM breakout
             INNER JOIN stock ON stock.number = breakout.prod
             WHERE breakout.inv = '${sku}'`;

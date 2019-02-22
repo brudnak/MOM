@@ -294,7 +294,7 @@
                     <tr>
                       <th>SKU</th>
                       <th>Quantity in Parent</th>
-                      <th>Unit Cost</th>
+                      <th>Extended Price</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -302,7 +302,7 @@
                       <tr>
                         <td><a href="/items/<%=parent.prod %>"><%=parent.prod %></a></td>
                         <td><%=parent.q %></td>
-                        <td>$<%=parent.uncost.toFixed(2) %></td>
+                        <td>$<%=parent.price1.toFixed(2) %></td>
                       </tr>
                     <% }) %>
                   </tbody>
