@@ -64,7 +64,7 @@ function poModel() {
             ${sku && `AND number = '${sku}'`}
             ${supplier && `AND supplier = '${supplier}'`}
             ${pototal && `AND ord_total = ${pototal}`}
-            ${sku && `GROUP BY purchase.ponumber, supplier, odr_date, ord_total, reference, quantity`}
+            ${sku && `GROUP BY purchase.ponumber, supplier, odr_date, ord_total, reference, quantity, purchase.completed, purchase.printed`}
             ORDER BY odr_date DESC`;
 
             request.query(sqlQuery, (err, recordset) => {
