@@ -20,7 +20,7 @@ function shipController() {
             LEFT JOIN country AS billcountry ON billto.country = billcountry.COUNTRY_ID
             LEFT JOIN country AS shipcountry ON shipto.country = shipcountry.COUNTRY_ID
             LEFT JOIN ordmemo AS notes ON cms.orderno = notes.orderno
-            WHERE cms.order_st2='IN' AND cl_key NOT IN ('AMAZON','AMZPRIME')`;
+            WHERE cms.order_st2='IN' AND cl_key NOT IN ('AMAZON','AMZPRIME') AND cms.shiplist <> 'PUP'`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if(err) {
