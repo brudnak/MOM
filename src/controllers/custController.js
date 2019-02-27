@@ -13,6 +13,10 @@ function custController() {
                     custOrders
                 }
             )
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });
     }
 
@@ -27,7 +31,11 @@ function custController() {
                     customers
                 }
             )
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     return {

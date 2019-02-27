@@ -85,7 +85,9 @@ function orderController() {
                 )   
             };
         }).catch(err => {
-            res.send(err)
+            res.render('error', {
+                err
+            });  
         });
     }
 
@@ -99,8 +101,10 @@ function orderController() {
                     orders,
                 }
             )
-        }).catch((err) => {
-            res.send(err);
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });
     }
 
@@ -114,8 +118,10 @@ function orderController() {
                 }
             )
         }).catch(err => {
-            res.send(err);
-        })
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     return {

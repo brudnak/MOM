@@ -10,7 +10,11 @@ function serialController() {
                     params: req.query
                 }
             )
-        });
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });;
     }
 
     return {

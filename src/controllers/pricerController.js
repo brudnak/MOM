@@ -28,7 +28,9 @@ function pricerController() {
                     }
                 )
             }).catch(err => {
-                res.send(err);   
+                res.render('error', {
+                    err
+                });  
             });          
         });
     }
@@ -79,15 +81,15 @@ function pricerController() {
         
                         resolve(results);
                     } catch(err) {
-                        console.log(err);
+                        debug(err);
                     }
                 })();
             }).catch(err => {
-                console.log(err);
+                debug(err);
                 reject(err);
             }); 
         }).catch(err => {
-            console.log(err);
+            debug(err);
             return(err);
         });
     }

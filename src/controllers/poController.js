@@ -26,6 +26,10 @@ function poController() {
                     }
                 )
             };
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });
     }
 
@@ -39,7 +43,11 @@ function poController() {
                     params: req.query
                 }
             )
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     return {

@@ -78,8 +78,10 @@ function itemController() {
                 )
             }
         }).catch(err => {
-            res.render(err);
-        })
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     function displayItemSearch(req, res) {
@@ -92,7 +94,11 @@ function itemController() {
                     items
                 }
             )
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     return {

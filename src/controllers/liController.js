@@ -14,6 +14,10 @@ function liController() {
                     lineItems
                 }
             )
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });
     }
 

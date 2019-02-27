@@ -35,6 +35,10 @@ function warehouseController() {
                 packages,
                 date
             });
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });        
     }
 

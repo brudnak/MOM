@@ -30,7 +30,11 @@ function reportController() {
                     endDate
                 }
             )
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     function displayProfitLineItems(req, res) {
@@ -48,6 +52,10 @@ function reportController() {
                     keys
                 }
             )
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });
     }
 
@@ -84,8 +92,10 @@ function reportController() {
                 }
             )
         }).catch(err => {
-            res.send(err);
-        })
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     function displayShippedProfitOrders(req, res) {
@@ -136,8 +146,10 @@ function reportController() {
                 }
             )
         }).catch(err => {
-            res.send(err);
-        })
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     function displayRTSProfitOrders(req, res) {
@@ -176,8 +188,10 @@ function reportController() {
                 }
             )
         }).catch(err => {
-            res.send(err);
-        })
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     function displayBackorder(req, res) {
@@ -203,7 +217,11 @@ function reportController() {
                         ordersByItem
                     }
                 )
-            })
+            }).catch(err => {
+                res.render('error', {
+                    err
+                });  
+            });
         })
     }
 
@@ -219,7 +237,11 @@ function reportController() {
                     pos
                 }
             )
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     return {

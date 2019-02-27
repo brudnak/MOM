@@ -33,6 +33,10 @@ function batchController() {
                     stage89orders
                 }
             )
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
         });
     }
 

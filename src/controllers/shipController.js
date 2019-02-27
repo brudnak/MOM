@@ -132,7 +132,11 @@ function shipController() {
                     orders
                 }
             )
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     function displayExportOrders(req, res) {
@@ -145,7 +149,11 @@ function shipController() {
                     }
                 )
             })
-        })
+        }).catch(err => {
+            res.render('error', {
+                err
+            });  
+        });
     }
 
     return {
