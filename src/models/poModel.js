@@ -6,18 +6,23 @@ function poModel() {
     function getPO(ponumber) {
         return new Promise((resolve, reject) => {
             debug(`Retrieving PO ${ponumber}`);
-            if(!Number.isNaN(ponumber)) {
+            ponumber = parseInt(ponumber);
+            if(typeof ponumber !== 'number') {
                 debug('Not a number');
                 return reject(`${ponumber} is an invalid PO number.`);
             }
             const request = new sql.Request();
-            const sqlQuery = `SELECT ponumber, supplier, odr_date, ord_total, reference, orderno, mer_total, shipping, tax, completed, printed
+            const sqlQuery = `SELECT ponumber, supplier.code, supplier.name, odr_date, ord_total, reference, orderno, mer_total, shipping, tax, completed, printed
             FROM purchase
+            INNER JOIN supplier ON purchase.supplier = supplier.code
             WHERE ponumber = ${ponumber}`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if (err) {
                     return reject(err);
+                }
+                if (!recordset.recordset[0]) {
+                    return reject(`PO ${ponumber} was not found in the database.`);
                 }
                 resolve(recordset.recordset[0]);
             })

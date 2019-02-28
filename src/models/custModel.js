@@ -61,6 +61,9 @@ function custModel() {
                 if(err) {
                     return reject(err);
                 }
+                if(!recordset.recordset[0]) {
+                    return reject(`Customer ${custnum} was not found.`);
+                }
                 resolve(recordset.recordset[0]);
             })
         })

@@ -17,8 +17,9 @@ function warehouseController() {
         })
         
         Promise.all(poPromises).then(poResponse => {
+            debug(poResponse);
             poInfo = poResponse.map(po => {
-                return {'ponumber': po.ponumber, 'Supplier': po.supplier, 'Order Date': po.odr_date.toString().substr(4,11), 'Reference': po.reference, 'Fully Received': po.completed == 1 ? 'Yes' : 'No'};
+                return {'ponumber': po.ponumber, 'Supplier': po.name, 'Order Date': po.odr_date.toString().substr(4,11), 'Reference': po.reference, 'Fully Received': po.completed == 1 ? 'Yes' : 'No'};
             });
 
             if(recipients && recipients !== '') {
