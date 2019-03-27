@@ -1,0 +1,49 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>FBA to Send Report</title>		
+		<%- include partials/meta.ejs %>
+	</head>
+	
+	<body>
+    <div ng-app="MyApp">
+      <%- include partials/header.ejs %>
+      
+			<div class="container" ng-cloak="">
+				<div class="card">
+					<div class="card-header">
+                        <h2>FBA to Send Report</h2>
+                        <p>This report lists all SKUs on purchase orders since 2018 that reference "FBA" or "Amazon", and has units in house, but no units at FBA. 
+                        Click on the SKU to view more information on the product, or click on the units ordered for Amazon to view a complete PO history for the item.</p>
+                    </div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>SKU</th>
+                                <th>Units in Stock</th>
+                                <th>Units Ordered for Amazon</th>
+								<th>Non-FBA Sales since 2018</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% skus.forEach((item, index) => { %>
+								<tr>
+                                    <td><a href="/items/<%=item.number%>"><%=item.number %></a></td>
+                                    <td><%=item.units %></td>
+                                    <td><a href="http://cprs-d0051-0218:1111/pos/search?supplier=&pototal=&sku=<%=item.number%>"><%=item.ordered %></a></td>
+									<td><%=item.nonfbasales %></td>
+                                </tr>
+							<% }) %> 
+						</tbody>
+                    </table>
+				</div>
+			</div>
+		</div>
+		
+		<%- include partials/footer.ejs %>
+    
+        <%- include partials/javascripts.ejs %>
+		  
+	</body>
+</html>

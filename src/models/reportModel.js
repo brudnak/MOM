@@ -310,6 +310,37 @@ function reportModel() {
         })
     }
 
+    function getFBAtoSend() {
+        return new Promise((resolve, reject) => {
+            debug(`Retrieving FBA skus to send`);
+            const request = new sql.Request();
+            const sqlQuery = `SELECT puritem.number,stock.units,stock.fbaunits, nonfbasales, sum(puritem.delivered) as 'ordered' FROM puritem
+            INNER JOIN purchase ON puritem.ponumber = purchase.ponumber
+            INNER JOIN stock ON puritem.number = stock.number
+            LEFT JOIN (
+                SELECT item, SUM(quanto) as 'nonfbasales' FROM items
+                INNER JOIN cms ON items.orderno = cms.orderno
+                WHERE cms.odr_date BETWEEN '1/1/2018' AND '12/31/2019' AND order_st2 <> 'QO' AND items.item_state = 'RT' AND cms.ordertype <> 'FBA'
+                GROUP BY item) sales ON sales.item = puritem.number
+            WHERE puritem.delivered > 0
+            AND purchase.odr_date BETWEEN '1/1/2018' AND '12/31/2019'
+            AND ( purchase.reference COLLATE Latin1_General_CI_AS LIKE '%FBA%' OR purchase.reference COLLATE Latin1_General_CI_AS LIKE '%AMAZON%' )
+            AND fbaunits = 0 AND stock.units > 0
+            GROUP BY puritem.number,stock.units,stock.fbaunits, nonfbasales
+            ORDER BY puritem.number`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
+                };
+
+                resolve(recordset.recordset);
+            })
+        }).catch(err => {
+            return err;
+        });
+    }
+
     return { 
         getBackorder,
         getBackorderOrders,
@@ -319,7 +350,8 @@ function reportModel() {
         getProfitOrders,
         getProfitPOs,
         getRTSProfitOrders,
-        getShippedProfitOrders
+        getShippedProfitOrders,
+        getFBAtoSend
     }
 }
 

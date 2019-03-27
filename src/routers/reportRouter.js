@@ -1,7 +1,6 @@
 const express = require('express');
 const reportRouter = express.Router();
-const reportController = require('../controllers/reportController');
-const { displayProfitPOs, displayProfitLineItems, displayProfitOrders, displayBackorder, displayBackorderSKU, displayShippedProfitOrders, displayRTSProfitOrders } = reportController();
+const reportController = require('../controllers/reportController')();
 
 reportRouter.route('/')
     .get((req, res) => {
@@ -13,39 +12,42 @@ reportRouter.route('/po')
         res.render('reportsDropshipForm');
     });
 reportRouter.route('/po/report')
-    .get(displayProfitPOs);
+    .get(reportController.displayProfitPOs);
 
 reportRouter.route('/li')
     .get((req, res) => {
         res.render('reportsLIProfitForm');
     });
 reportRouter.route('/li/:startDate-:endDate/:keys/:bottomDollar/:bottomPercent')
-    .get(displayProfitLineItems);
+    .get(reportController.displayProfitLineItems);
 
 reportRouter.route('/order')
     .get((req, res) => {
         res.render('reportsOrderProfitForm');
     })
 reportRouter.route('/order/report') 
-    .get(displayProfitOrders);
+    .get(reportController.displayProfitOrders);
 
 reportRouter.route('/shippedOrder')
     .get((req, res) => {
         res.render('reportsShippedOrderProfitForm');
     })
 reportRouter.route('/shippedOrder/report') 
-    .get(displayShippedProfitOrders);
+    .get(reportController.displayShippedProfitOrders);
 
 reportRouter.route('/RTSOrder')
     .get((req, res) => {
         res.render('reportsRTSOrderProfitForm');
     })
 reportRouter.route('/RTSOrder/report') 
-    .get(displayRTSProfitOrders);
+    .get(reportController.displayRTSProfitOrders);
 
 reportRouter.route('/backorder')
-    .get(displayBackorder);
+    .get(reportController.displayBackorder);
 reportRouter.route('/backorder/:SKU')
-    .get(displayBackorderSKU);
+    .get(reportController.displayBackorderSKU);
+
+reportRouter.route('/fba')
+    .get(reportController.displayFBAtoSend);
 
 module.exports = reportRouter;

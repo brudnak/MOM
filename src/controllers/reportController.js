@@ -244,6 +244,21 @@ function reportController() {
         });
     }
 
+    function displayFBAtoSend(req, res) {
+        reportModel.getFBAtoSend().then(skus => {
+            res.render(
+                'reportsFBAtoSend',
+                {
+                    skus
+                }
+            )
+        }).catch(err => {
+            res.render('error', {
+                err
+            });
+        });
+    }
+
     return {
         displayProfitPOs,
         displayProfitLineItems,
@@ -251,7 +266,8 @@ function reportController() {
         displayBackorder,
         displayBackorderSKU,
         displayShippedProfitOrders,
-        displayRTSProfitOrders
+        displayRTSProfitOrders,
+        displayFBAtoSend
     };
 }
 
