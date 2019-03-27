@@ -322,7 +322,7 @@ function reportModel() {
                 INNER JOIN cms ON items.orderno = cms.orderno
                 WHERE cms.odr_date BETWEEN '1/1/2018' AND '12/31/2019' AND order_st2 <> 'QO' AND items.item_state = 'RT' AND cms.ordertype <> 'FBA'
                 GROUP BY item) sales ON sales.item = puritem.number
-            WHERE puritem.delivered > 0
+            WHERE puritem.delivered > 0 AND stock.nonproduct = 0
             AND purchase.odr_date BETWEEN '1/1/2018' AND '12/31/2019'
             AND ( purchase.reference COLLATE Latin1_General_CI_AS LIKE '%FBA%' OR purchase.reference COLLATE Latin1_General_CI_AS LIKE '%AMAZON%' )
             AND fbaunits = 0 AND stock.units > 0
