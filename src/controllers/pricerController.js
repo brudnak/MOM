@@ -88,10 +88,7 @@ function pricerController() {
                 debug(err);
                 reject(err);
             }); 
-        }).catch(err => {
-            debug(err);
-            return(err);
-        });
+        })
     }
 
     return {

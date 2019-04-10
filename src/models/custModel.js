@@ -26,9 +26,7 @@ function custModel() {
 
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getCustOrders(custnum) {
@@ -45,7 +43,7 @@ function custModel() {
                 }
                 resolve(recordset.recordset);
             })
-        })
+        });
     }
 
     function getCustInfo(custnum) {
@@ -66,7 +64,7 @@ function custModel() {
                 }
                 resolve(recordset.recordset[0]);
             })
-        })
+        });
     }
 
     return {

@@ -19,9 +19,7 @@ function itemModel() {
             } else {
                 reject('Not enough dimensions to pull estimated shipping.')
             }
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getItem(sku) {
@@ -81,8 +79,6 @@ function itemModel() {
                     });     
                 });
             });
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -102,9 +98,7 @@ function itemModel() {
 
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getItemBins(sku) {
@@ -122,9 +116,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getItemPrices(sku) {
@@ -142,9 +134,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getItemTransactions(sku) {
@@ -162,9 +152,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getItemAudits(sku) {
@@ -181,9 +169,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getItemSales(sku, days) {
@@ -203,9 +189,7 @@ function itemModel() {
 
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        }); 
+        });
     }
 
     // function weeklyStockCoverage(sku) {
@@ -222,9 +206,7 @@ function itemModel() {
     //         }).catch(err => {
     //             reject(err);
     //         })
-    //     }).catch(err => {
-    //         return err;
-    //     })
+    //     });
     // }
 
     function getBreakout(sku) {
@@ -242,9 +224,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getParents(sku) {
@@ -262,9 +242,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function searchItems(sku, desc, supplier, page, stp) {
@@ -318,9 +296,7 @@ function itemModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     return {

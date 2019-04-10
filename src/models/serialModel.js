@@ -26,8 +26,6 @@ function serialModel() {
 
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            return err;
         });
     }
     

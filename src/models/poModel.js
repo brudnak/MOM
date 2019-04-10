@@ -26,7 +26,7 @@ function poModel() {
                 }
                 resolve(recordset.recordset[0]);
             })
-        })
+        });
     }
 
     function getPOitems(ponumber) {
@@ -44,7 +44,7 @@ function poModel() {
                 }
                 resolve(recordset.recordset);
             })
-        })
+        });
     }
 
     function getPOaps(ponumber) {
@@ -82,7 +82,7 @@ function poModel() {
                 }
                 resolve(recordset.recordset);
             })
-        })
+        });
     }
 
     return {

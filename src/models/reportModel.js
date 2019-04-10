@@ -27,8 +27,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -56,8 +54,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -104,8 +100,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -132,8 +126,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             }); 
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -159,8 +151,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             }); 
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -186,8 +176,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -206,8 +194,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -226,8 +212,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -247,8 +231,6 @@ function reportModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -268,8 +250,6 @@ function reportModel() {
 
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -286,8 +266,6 @@ function reportModel() {
 
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
         });
     }
 
@@ -305,9 +283,7 @@ function reportModel() {
             }).catch(err => {
                 reject(err);
             })
-        }).catch(err => {
-            return err;
-        })
+        });
     }
 
     function getFBAtoSend() {
@@ -336,8 +312,6 @@ function reportModel() {
 
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            return err;
         });
     }
 

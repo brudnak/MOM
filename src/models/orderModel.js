@@ -38,8 +38,6 @@ function orderModel() {
                     resolve(order);
                 });
             }); 
-        }).catch(err => {
-            debug(err);
         });
     }
 
@@ -55,8 +53,6 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            debug(err);
         });
     }
 
@@ -72,8 +68,6 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            debug(err);
         });
     }
 
@@ -89,8 +83,6 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             });
-        }).catch(err => {
-            debug(err);
         });
     }
 
@@ -108,8 +100,6 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            debug(err);
         });
     }
 
@@ -128,8 +118,6 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            debug(err);
         });
     }
 
@@ -157,8 +145,6 @@ function orderModel() {
                 }
                 resolve(recordset.recordset);
             })
-        }).catch(err => {
-            debug(err);
         });
     }
 
