@@ -262,7 +262,7 @@
                       <th>SKU</th>
                       <th>Quantity</th>
                       <th>Unit Cost</th>
-                      <th>Additional Price</th>
+                      <th>Component Ext. Price</th>
                       <th>In House</th>
                       <th>FBA</th>
                     </tr>
@@ -273,7 +273,7 @@
                         <td><a href="/items/<%=piece.inv %>"><%=piece.inv %></a></td>
                         <td><%=piece.q %></td>
                         <td>$<%=piece.uncost.toFixed(2) %></td>
-                        <td>$<%=piece.price.toFixed(2) %></td>
+                        <td>$<%=piece.price1.toFixed(2) %></td>
                         <td><%=piece.units - piece.fbaunits %></td>
                         <td><%=piece.fbaunits %></td>
                       </tr>

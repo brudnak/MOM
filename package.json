@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "set DEBUG=MOM* && nodemon server.js"
   },
-  "author": "",
+  "author": "Shandra Gordon",
   "license": "ISC",
   "dependencies": {
     "amazon-mws": "0.0.21",

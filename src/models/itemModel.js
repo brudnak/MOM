@@ -231,7 +231,7 @@ function itemModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving Breakout Items for ${sku}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT breakout.inv, breakout.q, breakout.price, stock.uncost, stock.units, stock.fbaunits
+            const sqlQuery = `SELECT breakout.inv, breakout.q, breakout.price, stock.uncost, stock.units, stock.fbaunits, stock.price1
             FROM breakout
             INNER JOIN stock ON stock.number = breakout.inv
             WHERE prod = '${sku}'`;
