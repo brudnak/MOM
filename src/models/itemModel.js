@@ -14,10 +14,10 @@ function itemModel() {
                         rates = [...upsRates, ...uspsRates];
                         resolve({ rates });
                     }).catch(err => {
-                        reject('Reached API limit. Please try again in one minute.');
+                        resolve('Reached API limit. Please try again in one minute.');
                     });
             } else {
-                reject('Not enough dimensions to pull estimated shipping.')
+                resolve('Not enough dimensions to pull estimated shipping.')
             }
         });
     }

@@ -3,11 +3,13 @@ const nodemailer = require('nodemailer');
 const EventEmitter = require('events').EventEmitter;
 const emitter = new EventEmitter();
 
+const { webemail, webpassword, server } = require('./config');
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.WEB_EMAIL,
-        pass: process.env.WEB_PASSWORD
+        user: webemail,
+        pass: webpassword
     }
 });
 
@@ -32,9 +34,9 @@ function arrayToTable(content) {
         html += '<tr>';
         for(k in item) {
             html += !isNaN(item[k]) && item[k] < 0 ? '<td style="padding: 5px; color: #ff0000; border-top: 1px solid #eee;">' : '<td style="padding: 5px; border-top: 1px solid #eee;">';
-            html += (k == 'order' || k == 'orderno') ? `<a href="http://cprs-d0051-0218:1111/orders/${item[k]}" target="_blank">${item[k]}</a>` :  
-                (k == 'purchase' || k == 'ponumber') ? `<a href="http://cprs-d0051-0218:1111/pos/${item[k]}" target="_blank">${item[k]}</a>` : 
-                (k == 'item' || k == 'number' || k == 'sku') ? `<a href="http://cprs-d0051-0218:1111/items/${item[k]}" target="_blank">${item[k]}</a>` : item[k] || '--';
+            html += (k == 'order' || k == 'orderno') ? `<a href="${server}/orders/${item[k]}" target="_blank">${item[k]}</a>` :  
+                (k == 'purchase' || k == 'ponumber') ? `<a href="${server}/pos/${item[k]}" target="_blank">${item[k]}</a>` : 
+                (k == 'item' || k == 'number' || k == 'sku') ? `<a href="${server}/items/${item[k]}" target="_blank">${item[k]}</a>` : item[k] || '--';
             html += '</td>';
         }
         html += '</tr>';
