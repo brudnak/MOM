@@ -60,9 +60,9 @@ function reportController() {
     }
 
     function displayProfitOrders(req, res) {
-        const { startDate, endDate, bottomDollar, bottomPercent, includeFBA, includeShipped, includeQuotes, recipients } = req.query;
+        const { startDate, endDate, bottomDollar, bottomPercent, includeFBA, includeQuotes, recipients } = req.query;
         const keys = eval(req.query.keys);
-        Promise.all([reportModel.getProfitOrders(startDate, endDate, bottomDollar, bottomPercent, keys, includeFBA, includeShipped, includeQuotes)]).then(([orders]) => {
+        Promise.all([reportModel.getProfitOrders(startDate, endDate, bottomDollar, bottomPercent, keys, includeFBA, includeQuotes)]).then(([orders]) => {
             orders.forEach(order => {
                 order.odr_date = order.odr_date.toString().substring(4,16);
                 order.cost = order.cost.toFixed(2);
@@ -73,7 +73,7 @@ function reportController() {
             var link = (req.protocol + '://' + req.get('host') + req.originalUrl).replace('recipients','');
 
             if(recipients && recipients !== '') {
-                sendMail(orders, recipients, 'Low Profitability Before Shipping - Orders', {startDate, endDate, bottomDollar, bottomPercent, includeFBA, includeShipped, includeQuotes, keys, link}).then(response => {
+                sendMail(orders, recipients, 'Low Profitability Before Shipping - Orders', {startDate, endDate, bottomDollar, bottomPercent, includeFBA, includeQuotes, keys, link}).then(response => {
                     global.io.emit('emailSuccess', { recipients });
                 }).catch(err => {
                     global.io.emit('emailFailure', { recipients });  
