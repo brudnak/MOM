@@ -4,7 +4,10 @@ const debug = require('debug')('MOM:server');
 const sql = require('mssql');
 require("msnodesqlv8");
 
+const { port } = require('./src/modules/config');
+
 const app = express();
+
 const orderRouter = require('./src/routers/orderRouter');
 const reportRouter = require('./src/routers/reportRouter');
 const poRouter = require('./src/routers/poRouter');
@@ -132,6 +135,6 @@ app.get('/', (req, res) => {
 });
 
 // PUSH TO PORT
-server.listen(1111, () => {
-	debug('listening on port 1111');
+server.listen(port, () => {
+	debug(`listening on port ${port}`);
 })

@@ -34,9 +34,9 @@ function arrayToTable(content) {
         html += '<tr>';
         for(k in item) {
             html += !isNaN(item[k]) && item[k] < 0 ? '<td style="padding: 5px; color: #ff0000; border-top: 1px solid #eee;">' : '<td style="padding: 5px; border-top: 1px solid #eee;">';
-            html += (k == 'order' || k == 'orderno') ? `<a href="${server}/orders/${item[k]}" target="_blank">${item[k]}</a>` :  
-                (k == 'purchase' || k == 'ponumber') ? `<a href="${server}/pos/${item[k]}" target="_blank">${item[k]}</a>` : 
-                (k == 'item' || k == 'number' || k == 'sku') ? `<a href="${server}/items/${item[k]}" target="_blank">${item[k]}</a>` : item[k] || '--';
+            html += (k == 'order' || k == 'orderno') ? `<a href="${server}:${port}/orders/${item[k]}" target="_blank">${item[k]}</a>` :  
+                (k == 'purchase' || k == 'ponumber') ? `<a href="${server}:${port}/pos/${item[k]}" target="_blank">${item[k]}</a>` : 
+                (k == 'item' || k == 'number' || k == 'sku') ? `<a href="${server}:${port}/items/${item[k]}" target="_blank">${item[k]}</a>` : item[k] || '--';
             html += '</td>';
         }
         html += '</tr>';

@@ -3,5 +3,6 @@ dotenv.config();
 module.exports = {
     webemail: process.env['EMAIL_USER'],
     webpassword: process.env['EMAIL_PASSWORD'],
-    server: process.env['SERVER']
+    server: process.env['SERVER'],
+    port: process.env['PORT']
 };
