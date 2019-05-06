@@ -72,7 +72,7 @@ function shipController() {
                         //want to also add default weigh, dimensions, and insurance, but this could cause an issue when dealing with multiple items
                         //causing null error
                         //internalNotes: order.desc1.trim() + ' ' + order.desc2.trim() + ' ' + order.desc3.trim() + ' ' + order.desc4.trim() + ' ' + order.desc5.trim() + ' ' + order.desc6.trim(),
-                        requestedShippingService: (order.fulfill ? order.fulfill.trim() : '') + ' -- ' + (order.shiplist ? (order.shiplist!='UPC' && order.shiplist!='FC' && order.shiplist!='PM' && order.shiplist!='UPS' && order.shiplist!='STA' && order.shiplist!='STU' ? order.shiplist : '') : ''),
+                        requestedShippingService: order.fulfill ? order.fulfill.trim() : '',
                         advancedOptions: {
                             customField1: order.desc1 + ' ' + order.desc2,
                             customField2: order.desc3 + ' ' + order.desc4,

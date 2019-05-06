@@ -5,13 +5,13 @@ const shipstation = require('../modules/shipstation');
 const mws = require('../modules/amazonmws')();
 
 function itemModel() {
-    function getUpsUspsRates(dimensions) {
+    function getShippingRates(dimensions) {
         return new Promise((resolve, reject) => {
             let rates = [];
             if(dimensions.height != 0 && dimensions.weight !=0 && dimensions.length != 0 && dimensions.width != 0) {
-                Promise.all([shipstation.getShippingRates(dimensions, 'ups'), shipstation.getShippingRates(dimensions, 'stamps_com')])
-                    .then(([upsRates, uspsRates]) => {
-                        rates = [...upsRates, ...uspsRates];
+                Promise.all([shipstation.getShippingRates(dimensions, 'ups'), shipstation.getShippingRates(dimensions, 'stamps_com'), shipstation.getShippingRates(dimensions, 'fedex')])
+                    .then(([upsRates, uspsRates, fedExRates]) => {
+                        rates = [...upsRates, ...uspsRates, ...fedExRates];
                         resolve({ rates });
                     }).catch(err => {
                         resolve('Reached API limit. Please try again in one minute.');
@@ -45,10 +45,11 @@ function itemModel() {
                 item.rates = [];
                 item.listings = [];
 
-                Promise.all([mws.getLowestPriceByASIN(item.advanced1), getUpsUspsRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength})]).then(([amazonListing, shipRates]) => {
+                Promise.all([mws.getLowestPriceByASIN(item.advanced1), getShippingRates({weight: item.unitweight, height: item.bheight, width: item.bwidth, length: item.blength})]).then(([amazonListing, shipRates]) => {
                     if(typeof(shipRates)==='string') {
                         item.shippingError = shipRates;
                     } else {
+                        debug(shipRates.rates);
                         item.rates = shipRates.rates;
                     }
                     

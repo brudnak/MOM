@@ -7,26 +7,16 @@ function marketplaceFees() {
         let itemCost = item.break_out==1 && item.breakoutCost ? item.breakoutCost : item.uncost;
 
         let lowestShipping = 9999;
-        let ups2dayShipping = 9999;
+        let lowest2dayShipping = 9999;
 
         if(shippingRates.lowestShipping) {
-            ({ lowestShipping, ups2dayShipping } = shippingRates);
+            ({ lowestShipping, lowest2dayShipping } = shippingRates);
         } else {
-            // const ratesToDisplay = {
-            //     'USPS PRIORITY MAIL - PACKAGE': 'USPS PM',
-            //     'USPS FIRST CLASS MAIL - PACKAGE': 'USPS FC',
-            //     'UPS® GROUND': 'UPS Ground',
-            //     'UPS 2ND DAY AIR®': 'UPS 2nd Day',
-            //     'UPS NEXT DAY AIR SAVER®': 'UPS Next Day Saver'
-            // }
-
-            // shippingRates = shippingRates.filter(rate => ratesToDisplay[rate.serviceName.toUpperCase()])
-            //     .map(rate => { return {...rate, displayName: ratesToDisplay[rate.serviceName.toUpperCase()]}});
-            
             shippingRates.forEach(rate => {
-                //lowestShipping = Math.min(lowestShipping, rate.shipmentCost + rate.otherCost);
                 if(Number(rate.amount) < lowestShipping) { lowestShipping = Number(rate.amount) }
-                if(rate.servicelevel_token=='ups_second_day_air') { ups2dayShipping = Number(rate.amount) }
+                if(rate.servicelevel_token=='ups_second_day_air' || rate.servicelevel_token=='fedex_2day') { 
+                    lowest2dayShipping = min(lowest2dayShipping, Number(rate.amount));
+                }
             })
         }  
 
@@ -84,7 +74,7 @@ function marketplaceFees() {
         }
 
         if(marketplace=='Amazon Prime') {
-            shipping = ups2dayShipping;
+            shipping = lowest2dayShipping;
             overhead = 2;
         } else if(marketplace=='Amazon FBA') {
             shipping = 0; 
