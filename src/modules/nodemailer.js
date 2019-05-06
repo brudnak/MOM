@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const EventEmitter = require('events').EventEmitter;
 const emitter = new EventEmitter();
 
-const { webemail, webpassword, server } = require('./config');
+const { webemail, webpassword, server, port } = require('./config');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -66,6 +66,7 @@ function objectToTable(content) {
 
 function sendMail(content, recipients, title = 'Automated Report', query = {}) {
     return new Promise((resolve, reject) => {
+        debug(`Creating content for email`);
         let html = '';
 
         //fill query information
@@ -88,8 +89,10 @@ function sendMail(content, recipients, title = 'Automated Report', query = {}) {
                 html += `<h2 style="text-transform: uppercase; margin-bottom: 0px;">${table}</h2>`;
                 debug(content[table]);
                 if(Array.isArray(content[table])) {
+                    debug('array')
                     html += arrayToTable(content[table]);
                 } else {
+                    debug('object')
                     html += objectToTable(content[table]);
                 }
             })
@@ -101,6 +104,8 @@ function sendMail(content, recipients, title = 'Automated Report', query = {}) {
             subject: title,
             html: html
         };
+
+        debug('Sending Email');
 
         transporter.sendMail(mailOptions).then(response => {
             debug('Email sent successfully');
