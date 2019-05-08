@@ -80,6 +80,7 @@ function shipStation() {
         return new Promise((resolve, reject) => {
             let sDate = new Date(startDate.replace(/(\d{2})(\d{2})(\d{2})/,"20$1-$2-$3"));
             let eDate = new Date(endDate.replace(/(\d{2})(\d{2})(\d{2})/,"20$1-$2-$3"));
+            eDate.setDate(eDate.getDate() + 1);
 
             const sDateStr = `${sDate.getFullYear()}-${(sDate.getMonth()+1).toString().padStart(2, '0')}-${(sDate.getDate()).toString().padStart(2, '0')} 00:00:00`;
             const eDateStr = `${eDate.getFullYear()}-${(eDate.getMonth()+1).toString().padStart(2, '0')}-${(eDate.getDate()).toString().padStart(2, '0')} 00:00:00`;
