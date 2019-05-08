@@ -39,7 +39,7 @@ function itemModel() {
                 const item = recordset.recordset[0];
 
                 if(!item) {
-                    return reject(err);
+                    return reject(`No item found with the SKU ${sku}.`);
                 }
 
                 item.rates = [];
