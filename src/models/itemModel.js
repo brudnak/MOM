@@ -49,7 +49,6 @@ function itemModel() {
                     if(typeof(shipRates)==='string') {
                         item.shippingError = shipRates;
                     } else {
-                        debug(shipRates.rates);
                         item.rates = shipRates.rates;
                     }
                     

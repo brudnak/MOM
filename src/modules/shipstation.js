@@ -78,11 +78,14 @@ function shipStation() {
 
     function getShippingCosts(startDate, endDate, page = 1) {
         return new Promise((resolve, reject) => {
-            const sDate = `20${startDate.substring(0,2)}-${startDate.substring(2,4)}-${startDate.substring(4,6)} 00:00:00`;
-            const eDate = `20${endDate.substring(0,2)}-${endDate.substring(2,4)}-${endDate.substring(4,6)} 00:00:00`;
+            let sDate = new Date(startDate.replace(/(\d{2})(\d{2})(\d{2})/,"20$1-$2-$3"));
+            let eDate = new Date(endDate.replace(/(\d{2})(\d{2})(\d{2})/,"20$1-$2-$3"));
+
+            const sDateStr = `${sDate.getFullYear()}-${(sDate.getMonth()+1).toString().padStart(2, '0')}-${(sDate.getDate()).toString().padStart(2, '0')} 00:00:00`;
+            const eDateStr = `${eDate.getFullYear()}-${(eDate.getMonth()+1).toString().padStart(2, '0')}-${(eDate.getDate()).toString().padStart(2, '0')} 00:00:00`;
             request({
                 method: 'GET',
-                url: `https://ssapi.shipstation.com/shipments?createDateStart=${sDate}&createDateEnd=${eDate}&pageSize=500&page=${page}`,
+                url: `https://ssapi.shipstation.com/shipments?createDateStart=${sDateStr}&createDateEnd=${eDateStr}&pageSize=500&page=${page}`,
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Basic ${encoded}`
