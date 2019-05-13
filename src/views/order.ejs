@@ -138,16 +138,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% orderInfo.boxes.forEach(box => { %>
-                    <tr>
-                      <td><%=box.shipDate %></td>
-                      <td><a target="_blank" href="<%=box.carrierCode=='stamps_com' ? `https://tools.usps.com/go/TrackConfirmAction?tLabels=${box.trackingNumber}` : box.carrierCode=='ups' ? `https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=${box.trackingNumber}` : `` %>"><%=box.trackingNumber %></a></td>
-                      <td><%=box.serviceCode %></td>
-                      <td><%=box.weight.units=='ounces' ? `${(box.weight.value/16).toFixed(2)} lb` : `${box.weight.value} lb` %></td>
-                      <td><%=box.dimensions ? `${box.dimensions.length} x ${box.dimensions.width} x ${box.dimensions.height} ${box.dimensions.units}` : '' %>
-                      <td>$<%=box.shipmentCost.toFixed(2) %></td>
-                    </tr>
-                  <% }) %>
+                  <% if(orderInfo.boxes) { %>
+                    <% orderInfo.boxes.forEach(box => { %>
+                      <tr>
+                        <td><%=box.shipDate %></td>
+                        <td><a target="_blank" href="<%=box.carrierCode=='stamps_com' ? `https://tools.usps.com/go/TrackConfirmAction?tLabels=${box.trackingNumber}` : box.carrierCode=='ups' ? `https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=${box.trackingNumber}` : `` %>"><%=box.trackingNumber %></a></td>
+                        <td><%=box.serviceCode %></td>
+                        <td><%=box.weight.units=='ounces' ? `${(box.weight.value/16).toFixed(2)} lb` : `${box.weight.value} lb` %></td>
+                        <td><%=box.dimensions ? `${box.dimensions.length} x ${box.dimensions.width} x ${box.dimensions.height} ${box.dimensions.units}` : '' %>
+                        <td>$<%=box.shipmentCost.toFixed(2) %></td>
+                      </tr>
+                    <% }) %>
+                  <% } %>
                 </tbody>
               </table>
             </div>
