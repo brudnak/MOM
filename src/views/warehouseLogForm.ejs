@@ -23,40 +23,50 @@
 									<h5>DATE: {{ctrl.date | date:shortDate}}</h5>
 									<md-calendar ng-model="ctrl.date"></md-calendar>
 								</div>
-                </div>
-                <div class="form-row">
+              </div>
+              <div class="form-row">
                 <div class="col-2">
                     <br/> Scheduled
                 </div>
-                <div class="form-group col-3">
+                <div class="form-group col-2">
                     <label>FBM</label>
                     <input type="text" class="form-control" ng-model="ctrl.orders['FBM Scheduled']">
                 </div>
-								<div class="form-group col-3">
+								<div class="form-group col-2">
 									<label>FBA</label>
 									<input type="text" class="form-control" ng-model="ctrl.orders['FBA Scheduled']">
 								</div>
-								<div class="form-group col-3">
+								<div class="form-group col-2">
 									<label>C. Service</label>
 									<input type="text" class="form-control" ng-model="ctrl.orders['C. Service Scheduled']">
                 </div>
+								<div class="form-group col-2">
+									<label>Walmart/Ebay</label>
+									<input type="text" class="form-control" ng-model="ctrl.orders['WAL/EBAY Scheduled']">
+                </div>
+							</div>
+							<div class="form-row">
                 <div class="col-2">
                     <br/> Fulfilled
                 </div>
-                <div class="form-group col-3">
+                <div class="form-group col-2">
                     <label>FBM</label>
                     <input type="text" class="form-control" ng-model="ctrl.orders['FBM Fulfilled']">
                 </div>
-								<div class="form-group col-3">
+								<div class="form-group col-2">
 									<label>FBA</label>
 									<input type="text" class="form-control" ng-model="ctrl.orders['FBA Fulfilled']">
 								</div>
-								<div class="form-group col-3">
+								<div class="form-group col-2">
 									<label>C. Service</label>
 									<input type="text" class="form-control" ng-model="ctrl.orders['C. Service Fulfilled']">
-                    </div>
                 </div>
-                <div class="form-row">
+								<div class="form-group col-2">
+									<label>Walmart/Ebay</label>
+									<input type="text" class="form-control" ng-model="ctrl.orders['WAL/EBAY Fulfilled']">
+                </div>
+							</div>
+              <div class="form-row">
 								<div class="form-group col-12">
 									<label>POs Received, comma separated</label>
 									<input type="text" class="form-control" ng-model="ctrl.pos">
@@ -149,7 +159,9 @@
           'FBA Scheduled': 0,
           'FBA Fulfilled': 0, 
           'C. Service Scheduled': 0,
-          'C. Service Fulfilled': 0
+					'C. Service Fulfilled': 0,
+					'WAL/EBAY Scheduled': 0,
+					'WAL/EBAY Fulfilled': 0
         };
         this.packages = {
           'UPS Domestic': 0,
