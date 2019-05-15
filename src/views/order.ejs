@@ -10,7 +10,9 @@
     <div ng-app="MyApp">
       <%- include partials/header.ejs %>
 
-			<div ng-controller="AppCtrl as ctrl" class="container">
+  <div ng-controller="AppCtrl as ctrl" class="container-fluid">
+    <div class="row justify-content-between">
+      <div class="col-12 col-lg-9">
 				<div class="row">
           <div class="col-8">
             <h2>Order <%=orderno %> <small><span class="ng-cloak label <%=orderInfo.order_st2%>">{{'<%=orderInfo.order_st2 %>' | orderStatus}}</span></small></h5>
@@ -40,7 +42,7 @@
                     <th width="10%">PO</th>
                     <th width="15%">SKU</th>
                     <th width="10%">Status</th>
-                    <th width="10%">Ordered</th>
+                    <th width="5%">OR</th>
                     <th width="5%">SH</th>
                     <th width="5%">BO</th>
                     <th width="15%" class="text-right">Unit Cost</th>
@@ -155,9 +157,10 @@
             </div>
           </div>
         </div>
- 
+      </div>
+      <div class="col-12 col-lg-3">
         <div class="row">
-          <div class="col-6">
+          <div class="col-12">
             <div class="card">
               <div class="card-header"><h6>Order Info</h6></div>
               <table class="table table-sm">
@@ -182,7 +185,7 @@
               </table>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-12">
             <div class="card">
               <div class="card-header"><h6>Payment Info</h6></div>
               <table class="table table-sm">
@@ -207,7 +210,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-6">
+          <div class="col-12">
             <div class="card">
               <div class="card-header">
                 <h6>Bill to <span class="float-right"><a href="/cust/<%=orderInfo.billcustnum %>"><%=orderInfo.billcustnum %></a></span></h6>
@@ -226,7 +229,7 @@
               </div>
             </div>
 					</div>
-          <div class="col-6" ng-show="<%=orderInfo.custnum %>">
+          <div class="col-12" ng-show="<%=orderInfo.custnum %>">
             <div class="card">
               <div class="card-header">
                 <h6>Ship to <span class="float-right"><a href="/cust/<%=orderInfo.custnum %>"><%=orderInfo.custnum %></a></span></h6>
@@ -246,6 +249,8 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
         <div class="row">
           <div class="col-12">
             <div class="card">
