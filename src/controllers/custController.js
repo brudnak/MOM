@@ -4,13 +4,14 @@ function custController() {
     function displayCust(req, res) {
         const { custnum } = req.params;
 
-        Promise.all([custModel.getCustInfo(custnum), custModel.getCustOrders(custnum)]).then(([custInfo, custOrders]) => {
+        Promise.all([custModel.getCustInfo(custnum), custModel.getCustOrders(custnum), custModel.getCustShippedToOrders(custnum)]).then(([custInfo, custOrders, custShipOrders]) => {
             res.render(
                 'cust',
                 {
                     custnum,
                     custInfo,
-                    custOrders
+                    custOrders,
+                    custShipOrders
                 }
             )
         }).catch(err => {

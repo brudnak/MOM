@@ -1,5 +1,6 @@
 const orderModel = require('../models/orderModel');
 const mws = require('../modules/amazonmws')();
+const debug = require('debug')('MOM:controller:order');
 
 function orderController() {
     function displayOrder(req, res) {
@@ -14,6 +15,7 @@ function orderController() {
                     }
                 )
             } else {
+                debug(orderMemos);
 
                 // Calculate total merchandise cost and list
                 let totalCost = 0; let totalList = 0;

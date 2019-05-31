@@ -9,7 +9,85 @@
 	<body>
     <div ng-app="MyApp">
       <%- include partials/header.ejs %>
+      <div ng-controller="AppCtrl as ctrl" class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header"><h1>Welcome to MOM Interface</h1></div>
+                    <div class="card-body">
+                      <p>This is an interface developed to help you navigate and search MOM.</p>
 
+                      <a href="http://company-server:9675/portal" target="_blank" class="btn btn-primary">Report a bug or request a new feature</a>
+
+                      <hr>
+                      <h3>Items</h3>
+                      <p>Under the items tab, you can search for items using partial SKU number, supplier code (unlike MOM, this will show all items that can be purchased under 
+                      that supplier, not just by main supplier), and partial description.</p>
+                      <p>On the item page, you can find shipping estimates based on the dimensions in MOM, recommended marketplace pricing, sales data for various periods over 
+                      the past year, stock and bins, breakout components or parents, open POs, suppliers and pricing, audits (changes made by users), and a summary stock 
+                      transaction history.</p>
+
+                      <hr>
+                      <h3>Serial Numbers</h3>
+                      <p>From here, you can search through serialized products to determine the history of a serial number or any serial numbers associated with an order or SKU</p>
+
+                      <hr>
+                      <h3>Pricer</h3>
+                      <p>The pricer is a work-in-progress application to help the web team determine recommended pricing for multiple products</p>
+
+                      <hr>
+                      <h3>Orders</h3>
+                      <p>You can either look up an order directly, or search for orders by date, alternate order number (for Amazon or 3dcart orders), order source, status, salesperson, order total, or line item SKU.</p>
+                      <p>On an order, you can view order information, line items, tracking (as long as it was shipped through ShipStation) and actual shipping costs, profitability estimates, notes, audits (changes made by users), and attachments.</p>
+
+                      <hr>
+                      <h3>Customers</h3>
+                      <p>You can either look up a customer by customer number, or search for a customer by first name, last name, company name, email address, or zip code.</p>
+                      <p>Currently, you can view a customer's address and any orders associated with their account. More to be added.</p>
+
+                      <hr>
+                      <h3>POs</h3>
+                      <p>Here, you can look up a PO by number or search for it by supplier code, PO total, or SKU.</p>
+                      <p>On the PO, you can view the line items, any payments we have made on the PO, and any directly linked orders.</p>
+
+                      <hr>
+                      <h3>Line items</h3>
+                      <p>In this section, you can search through any line items on an order. Unlike the order search, you can also look up the item status of the line item being searched 
+                      (as opposed to order status).</p>
+
+                      <hr>
+                      <h3>AP</h3>
+                      <p>Under the AP tab, you can search for payments by partial invoice number, exact PO number, supplier code, payment amount, and minimum payment amount.</p>
+
+                      <hr>
+                      <h3>Stages</h3>
+                      <p>The stage page will list orders that are currently in stage 1 (ready to pick), stage 2 (ready to pack), and stage 8-9 (ready to create dropship orders).</p>
+
+                      <hr>
+                      <h3>Shipping</h3>
+                      <p>The shipping page is for exporting orders to ShipStation so that warehouse can easily look up the order and make labels. Note that only orders that are in 
+                      "ready to pack" status will be imported into ShipStation.</p>
+
+                      <hr>
+                      <h3>Reports</h3>
+                      <ul>
+                        <li><strong>Low Order Profit Report</strong> Reports new orders (have not been shipped) with low profit predicted.</li>
+                        <li><strong>Ready-to-Ship Profit Report</strong> Reports the profitability on orders that are ready to be shipped (shipping label has been made).</li>
+                        <li><strong>Shipped Order Profit Report</strong> Reports the profitability on shipped orders.</li>
+                        <li><strong>Dropship Profit Report</strong> Reports the profitability on dropshipped line items.</li>
+                        <li><strong>Line Item Profit Report</strong> Reports low profitability on individual line items.</li>
+                        <li><strong>Back Order Report</strong> Reports items on back order, orders for those items, our current stock, and our current units on order.</li>
+                        <li><strong>FBA to Send</strong> Reports items that have been historically ordered for FBA, but are not currently at stock at FBA.</li>
+                      </ul>
+
+                      <hr>
+                      <h3>Warehouse Log</h3>
+                      <p>The warehouse log form produces an email report for warehouse to send at the end of each day.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
     </div>
 
     <%- include partials/footer.ejs %>

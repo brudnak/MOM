@@ -46,6 +46,23 @@ function custModel() {
         });
     }
 
+    function getCustShippedToOrders(custnum) {
+        return new Promise((resolve, reject) => {
+            debug(`Getting orders for cust ${custnum}`)
+            const request = new sql.Request();
+            const sqlQuery = `SELECT orderno, cl_key, odr_date, ship_date, checkamoun, ord_total, order_st2, next_pay, ordertype
+            FROM cms
+            WHERE shipnum = ${custnum}`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(recordset.recordset);
+            })
+        });
+    }
+
     function getCustInfo(custnum) {
         return new Promise((resolve, reject) => {
             debug(`Getting cust ${custnum}`);
@@ -70,6 +87,7 @@ function custModel() {
     return {
         getCustSearch,
         getCustOrders,
+        getCustShippedToOrders,
         getCustInfo
     }
 }

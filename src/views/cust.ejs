@@ -51,7 +51,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4>Orders for <%=`${custInfo.firstname} ${custInfo.lastname}` %></h4>
+                <h4>Billed To Orders for <%=`${custInfo.firstname} ${custInfo.lastname}` %></h4>
               </div>
               <table class="table">
                 <thead>
@@ -68,8 +68,44 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% let totalCost = 0; let totalList = 0; %>
                   <% custOrders.forEach((order,index) => { %>
+                    <tr>
+                      <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
+                      <td><%=order.odr_date.toString().substring(4, 15) %></td>
+                      <td><%=order.ship_date ? order.ship_date.toString().substring(4, 15) : '' %></td>
+                      <td><%=order.cl_key %></td>
+                      <td><%=order.ordertype %></td>
+                      <td><span class="label <%=order.order_st2 %>"><%=order.order_st2 %></span></td>
+                      <td>$<%=order.checkamoun.toFixed(2) %></td>
+                      <td>$<%=order.ord_total.toFixed(2) %></td>
+                      <td>$<%=order.next_pay.toFixed(2) %></td>
+                    </tr>
+                  <% }); %> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Shipped To Orders for <%=`${custInfo.firstname} ${custInfo.lastname}` %></h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Order Date</th>
+                    <th>Ship Date</th>
+                    <th>CL Key</th>
+                    <th>Order Type</th>
+                    <th>Order Status</th>
+                    <th>Paid</th>
+                    <th>Total</th>
+                    <th>Next Pay</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% custShipOrders.forEach((order,index) => { %>
                     <tr>
                       <td><a href="/orders/<%=order.orderno %>"><%=order.orderno %></a></td>
                       <td><%=order.odr_date.toString().substring(4, 15) %></td>

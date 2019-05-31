@@ -181,7 +181,7 @@ function shipStation() {
                         }
         
                         body = JSON.parse(body);
-    
+
                         if(Array.isArray(body)) {
                             resolve(body);
                         } else { // cannot ship that carrier
