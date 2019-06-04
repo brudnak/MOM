@@ -254,19 +254,21 @@
                   <h6>Fulfillment Notes</h6>
                 </div>
                 <div class="card-body">
-                  <%=orderMemos[0].fulfill %>
-                  <br />
-                  <%=orderMemos[0].desc1 %>
-                  <br />
-                  <%=orderMemos[0].desc2 %>
-                  <br />
-                  <%=orderMemos[0].desc3 %>
-                  <br />
-                  <%=orderMemos[0].desc4 %>
-                  <br />
-                  <%=orderMemos[0].desc5 %>
-                  <br />
-                  <%=orderMemos[0].desc6 %>
+                  <% if(orderMemos[0]) { %>
+                    <%=orderMemos[0].fulfill %>
+                    <br />
+                    <%=orderMemos[0].desc1 %>
+                    <br />
+                    <%=orderMemos[0].desc2 %>
+                    <br />
+                    <%=orderMemos[0].desc3 %>
+                    <br />
+                    <%=orderMemos[0].desc4 %>
+                    <br />
+                    <%=orderMemos[0].desc5 %>
+                    <br />
+                    <%=orderMemos[0].desc6 %>
+                  <% } %>
                 </div>
             </div>
           </div>
