@@ -15,8 +15,6 @@ function orderController() {
                     }
                 )
             } else {
-                debug(orderMemos);
-
                 // Calculate total merchandise cost and list
                 let totalCost = 0; let totalList = 0;
                 itemsInfo.forEach(item => {

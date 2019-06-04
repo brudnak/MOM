@@ -148,7 +148,7 @@
                         <td><%=box.serviceCode %></td>
                         <td><%=box.weight.units=='ounces' ? `${(box.weight.value/16).toFixed(2)} lb` : `${box.weight.value} lb` %></td>
                         <td><%=box.dimensions ? `${box.dimensions.length} x ${box.dimensions.width} x ${box.dimensions.height} ${box.dimensions.units}` : '' %>
-                        <td>$<%=box.shipmentCost.toFixed(2) %></td>
+                        <td>$<%=(box.shipmentCost + box.insuranceCost).toFixed(2) %></td>
                       </tr>
                     <% }) %>
                   <% } %>
