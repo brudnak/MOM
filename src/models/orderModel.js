@@ -45,7 +45,7 @@ function orderModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving Line Items for Order ${orderID}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT item, quanto, quantb, quants, it_uncost, it_unlist, dropship, item_state, ponumber FROM items WHERE orderno = '${orderID}'`;
+            const sqlQuery = `SELECT item, quanto, quantb, quants, it_uncost, it_unlist, discount, dropship, item_state, ponumber FROM items WHERE orderno = '${orderID}'`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if (err) {

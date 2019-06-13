@@ -46,8 +46,9 @@
                     <th width="5%">SH</th>
                     <th width="5%">BO</th>
                     <th width="15%" class="text-right">Unit Cost</th>
-                    <th width="15%" class="text-right">Unit Extended</th>
-                    <th width="15%" class="text-right">Profit Margin</th>
+                    <th width="5%" class="text-right">Discount</th>
+                    <th width="10%" class="text-right">Unit Extended</th>
+                    <th width="10%" class="text-right">Profit Margin</th>
                   </tr>
                 </thead>
                 <tbody>                 
@@ -60,31 +61,32 @@
                       <td><%=item.quants %></td>
                       <td><%=item.quantb %></td>
                       <td class="text-right <%=item.item_state=='SV' && 'sv-cost'%>">$<%=item.it_uncost.toFixed(2) %></td>
-                      <td class="text-right">$<%=item.it_unlist.toFixed(2) %></td>
+                      <td class="text-right"><%=item.discount%>%</td>
+                      <td class="text-right">$<%=(item.extended).toFixed(2) %></td>
                       <td class="text-right"><%= item.it_uncost==0 || item.it_unlist==0 ? '--' : Math.round(((item.it_unlist.toFixed(2) - item.it_uncost.toFixed(2)) / item.it_unlist.toFixed(2)) * 10000)/100 %>%</td>
                     </tr>
                   <% }); %> 
                   <tr>
-                    <td colspan="5"></td>
-                    <td></td>
+                    <td colspan="6"></td>
                     <td class="text-right"><b>$<%=totalCost.toFixed(2) %></b></td>
+                    <td></td>
                     <td class="text-right"><b>$<%=totalList.toFixed(2) %></b></td>
                     <td class="text-right"><b><%= Math.round(((totalList - totalCost) / totalList) * 10000)/100 %>%</b></td>
                   </tr>
                   <tr>
-                    <td colspan="6"></td>
+                    <td colspan="7"></td>
                     <td class="text-right">Tax</td>
                     <td class="text-right">$<%=orderInfo.tax.toFixed(2) %></td>
                     <td></td>
                   </tr>
                   <tr class="no-top">
-                    <td colspan="6"></td>
+                    <td colspan="7"></td>
                     <td class="text-right">Shipping</td>
                     <td class="text-right">$<%=orderInfo.shipping.toFixed(2) %></td>
                     <td></td>
                   </tr>
                   <tr class="no-top">
-                    <td colspan="6"></td>
+                    <td colspan="7"></td>
                     <td class="text-right">Total</td>
                     <td class="text-right">$<%=orderInfo.ord_total.toFixed(2) %></td>
                     <td></td>
