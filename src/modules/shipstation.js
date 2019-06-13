@@ -3,8 +3,8 @@ const btoa = require("btoa");
 const limit = require('simple-rate-limiter');
 const request = limit(require('request')).to(40).per(60000);
 
-const ssKey = process.env.SS_KEY;
-const ssSecret = process.env.SS_SECRET;
+const { ssKey, ssSecret } = require('./config');
+
 const encoded = btoa(`${ssKey}:${ssSecret}`);
 
 function shipStation() {

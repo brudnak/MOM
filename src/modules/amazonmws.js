@@ -1,10 +1,10 @@
 const debug = require('debug')('MOM:module:amazonmws');
 const throttle = require('promise-ratelimit')(100);
 const getLowestPriceByASINThrottle = require('promise-ratelimit')(2000);
-const amazon = require('amazon-mws')(process.env.MWS_ACCESS_KEY_ID,process.env.MWS_SECRET_ACCESS_KEY);
 
-const sellerID = process.env.MWS_MERCHANT_ID;
-const marketplaceID = process.env.MARKETPLACE_ID;
+const { mwsID, mwsSecret, sellerID, marketplaceID } = require('./config');
+
+const amazon = require('amazon-mws')(mwsID,mwsSecret);
 
 const asinPattern = /^B........./;
 
