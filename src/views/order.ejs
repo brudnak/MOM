@@ -272,11 +272,48 @@
                     <%=orderMemos[0].desc6 %>
                   <% } %>
                 </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Purchase Orders</h4>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>PO</th>
+                    <th>Supplier</th>
+                    <th>Date</th>
+                    <th>Ordered</th>
+                    <th>Received</th>
+                    <th>Dropship</th>
+                    <th>Merch Total</th>
+                    <th>Shipping</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% POs.forEach(po => { %>
+                    <tr>
+                      <td><a href="/pos/<%=po.ponumber %>"><%=po.ponumber %></a></td>
+                      <td><%=po.supplier %></td>
+                      <td><%=po.odr_date.toString().substring(4,16) %></td>
+                      <td><%=po.printed == 1 ? 'Yes' : 'No' %></td>
+                      <td><%=po.received == 1 ? 'Yes' : 'No' %></td>
+                      <td><%=po.dropship == 1 ? 'Yes' : 'No' %></td>
+                      <td>$<%=po.mer_total.toFixed(2) %></td>
+                      <td>$<%=po.shipping.toFixed(2) %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-12">
             <div class="card">

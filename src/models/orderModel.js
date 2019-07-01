@@ -60,7 +60,7 @@ function orderModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving POs for Order ${orderID}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT ponumber, supplier, odr_date, ord_total, shipping FROM purchase WHERE orderno = '${orderID}'`;
+            const sqlQuery = `SELECT ponumber, supplier, odr_date, mer_total, shipping, received, printed, dropship FROM purchase WHERE orderno = '${orderID}'`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if (err) {
