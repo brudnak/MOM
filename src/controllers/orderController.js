@@ -18,6 +18,11 @@ function orderController() {
                 // Calculate total merchandise cost and list
                 let totalCost = 0; let totalList = 0;
                 itemsInfo.forEach(item => {
+                    // For dropships, replace it_uncost with unit_cost
+                    if(item.ponumber > 0 && item.unit_cost) {
+                        item.it_uncost = item.unit_cost
+                    }
+
                     item.extended = item.it_unlist.toFixed(2)*(1-(item.discount/100))
                     if(item.item_state != 'SV') {
                         totalCost += item.it_uncost.toFixed(2)*item.quanto;

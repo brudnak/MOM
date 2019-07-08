@@ -45,7 +45,10 @@ function orderModel() {
         return new Promise((resolve, reject) => {
             debug(`Retrieving Line Items for Order ${orderID}`);
             const request = new sql.Request();
-            const sqlQuery = `SELECT item, quanto, quantb, quants, it_uncost, it_unlist, discount, dropship, item_state, ponumber FROM items WHERE orderno = '${orderID}'`;
+            const sqlQuery = `SELECT items.item, items.quanto, items.quantb, items.quants, items.it_uncost, items.it_unlist, items.discount, items.dropship, items.item_state, 
+            items.ponumber, puritem.unit_cost
+            FROM items LEFT JOIN puritem ON puritem.item_id = items.item_id
+            WHERE orderno = '${orderID}'`;
 
             request.query(sqlQuery, (err, recordset) => {
                 if (err) {
