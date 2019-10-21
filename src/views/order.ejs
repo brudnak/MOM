@@ -212,6 +212,25 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-12" ng-show="<%=orderInfo.custnum %>">
+            <div class="card">
+              <div class="card-header">
+                <h6>Ship to <span class="float-right"><a href="/cust/<%=orderInfo.custnum %>"><%=orderInfo.custnum %></a></span></h6>
+              </div>
+              <div class="card-body">
+                <%=orderInfo.custnum || '' %>
+                <%=orderInfo.company || '' %>
+                <br>
+                <%=`${orderInfo.firstname || ''} ${orderInfo.lastname || ''}` %>
+                <br>
+                <%=orderInfo.addr || '' %>
+                <br>
+                <%=orderInfo.addr2 || '' %>
+                <br>
+                <%=`${orderInfo.city || ''}, ${orderInfo.state || ''} ${orderInfo.zipcode || ''}` %>
+              </div>
+            </div>
+          </div>
           <div class="col-12">
             <div class="card">
               <div class="card-header">
@@ -231,25 +250,6 @@
               </div>
             </div>
 					</div>
-          <div class="col-12" ng-show="<%=orderInfo.custnum %>">
-            <div class="card">
-              <div class="card-header">
-                <h6>Ship to <span class="float-right"><a href="/cust/<%=orderInfo.custnum %>"><%=orderInfo.custnum %></a></span></h6>
-              </div>
-              <div class="card-body">
-                <%=orderInfo.custnum || '' %>
-                <%=orderInfo.company || '' %>
-                <br>
-                <%=`${orderInfo.firstname || ''} ${orderInfo.lastname || ''}` %>
-                <br>
-                <%=orderInfo.addr || '' %>
-                <br>
-                <%=orderInfo.addr2 || '' %>
-                <br>
-                <%=`${orderInfo.city || ''}, ${orderInfo.state || ''} ${orderInfo.zipcode || ''}` %>
-              </div>
-            </div>
-            </div>
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
