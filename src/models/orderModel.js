@@ -102,7 +102,7 @@ function orderModel() {
                     return reject(err);
                 }
                 resolve(recordset.recordset);
-            })
+            });
         });
     }
 
@@ -120,7 +120,25 @@ function orderModel() {
                     return reject(err);
                 }
                 resolve(recordset.recordset);
-            })
+            });
+        });
+    }
+
+    function getOrderPayments(orderID) {
+        return new Promise((resolve, reject) => {
+            debug(`Retrieiving Order Payments for Order ${orderID}`);
+            const request = new sql.Request();
+            const sqlQuery = `SELECT inpart, acct, paymethod, odr_date, notation, amount, userid
+            FROM journal
+            WHERE orderno = ${orderID}
+            ORDER BY odr_date`;
+
+            request.query(sqlQuery, (err, recordset) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(recordset.recordset);
+            });
         });
     }
 
@@ -158,6 +176,7 @@ function orderModel() {
         getOrderMemo,
         getOrderAudits,
         getOrderAttachments,
+        getOrderPayments,
         searchOrders
     }
 }

@@ -5,7 +5,8 @@ const debug = require('debug')('MOM:controller:order');
 function orderController() {
     function displayOrder(req, res) {
         const { orderno } = req.params;
-        Promise.all([orderModel.getOrder(orderno), orderModel.getLineItems(orderno), orderModel.getOrderMemo(orderno), orderModel.getOrderAudits(orderno), orderModel.getOrderAttachments(orderno), orderModel.getOrderPOs(orderno)]).then(([orderInfo, itemsInfo, orderMemos, orderAudits, orderAttachments, POs]) => {
+        Promise.all([orderModel.getOrder(orderno), orderModel.getLineItems(orderno), orderModel.getOrderMemo(orderno), orderModel.getOrderAudits(orderno), orderModel.getOrderAttachments(orderno), orderModel.getOrderPOs(orderno), orderModel.getOrderPayments(orderno)])
+        .then(([orderInfo, itemsInfo, orderMemos, orderAudits, orderAttachments, POs, orderPayments]) => {
             if(!orderInfo) {
                 res.render(
                     '404',
@@ -75,6 +76,7 @@ function orderController() {
                         orderMemos,
                         orderAudits,
                         orderAttachments,
+                        orderPayments,
                         POs,
                         totalList,
                         totalCost,
