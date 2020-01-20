@@ -378,7 +378,7 @@
                     <tr>
                     <td><%=attachment.entrydate.toString().substring(4, 16) %></td>
                     <td><%=attachment.userid %></td>
-                    <td><%=attachment.filepath.trim() %></td>
+                    <td><a target="_blank" href="<%=`file://cprs-server/Shared/MOMATTACHMENTS/${attachment.filedesc.trim()}` %>"><%=`//cprs-server/Shared/MOMATTACHMENTS/${attachment.filedesc.trim()}` %></td></a>
                     </tr>
                   <% }); %>
                 </tbody>
