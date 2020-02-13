@@ -10,6 +10,11 @@
     <div ng-app="MyApp" ng-cloak>
       <%- include partials/header.ejs %>
 
+      <% let sup = {}; %>
+      <% suppliers.forEach(supplier => { %>
+        <% sup[supplier.code] = supplier.name %>
+      <% }) %>
+
 			<div ng-controller="AppCtrl as ctrl" class="container">
         <div class="row">
           <div class="col-12 col-md-8">
@@ -365,7 +370,7 @@
                 <tbody>
                   <% itemPrices.forEach((price) => { %>
                     <tr>
-                      <td><%=price.supplier %> <%=price.dropship=='1' ? ' Dropship' : '' %></td>
+                      <td><%=sup[price.supplier] %> (<%=price.supplier %>) <%=price.dropship=='1' ? ' Dropship' : '' %></td>
                       <td><%=price.quantity %></td>
                       <td><%=price.buydesc %></td>
                       <td>$<%=price.unit_price.toFixed(2) %></td>

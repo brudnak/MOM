@@ -91,7 +91,7 @@ ul.order-keys {list-style: none; margin: 0px; padding: 0px;}
 .PS {background: #badc58;} /*packed ready to ship*/
 .BI {background: #b2bec3;} /*ready to invoice*/
 .CM {background: #74b9ff;}
-.ND {background: #f9ca24;}
+.ND {background: #f9ca24;} /*scheduled to dropship*/
 .SV {background: #b2bec3;}
 
 .label-AMAZON {background: #fed330;}

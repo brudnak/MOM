@@ -11,5 +11,7 @@ module.exports = {
     sellerID: process.env['MWS_MERCHANT_ID'], 
     marketplaceID: process.env['MWS_MARKETPLACE_ID'],
     ssKey: process.env['SHIPSTATION_KEY'],
-    ssSecret: process.env['SHIPSTATION_SECRET']
+    ssSecret: process.env['SHIPSTATION_SECRET'],
+    sqlUser: process.env['SQL_USER'],
+    sqlPassword: process.env['SQL_PASSWORD']
 };

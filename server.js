@@ -4,7 +4,7 @@ const debug = require('debug')('MOM:server');
 const sql = require('mssql');
 require("msnodesqlv8");
 
-const { port } = require('./src/modules/config');
+const { port, sqlUser, sqlPassword } = require('./src/modules/config');
 
 const app = express();
 
@@ -33,11 +33,11 @@ global.io.on('connection', function (socket) {
 
 // CONNECTION
 const config = {
-	server: "COMPANY-SERVER",
+	server: "CPRS-SERVER",
 	database: "MailOrderManager",
 	driver: 'msnodesqlv8',
-	user: process.env.SQL_USER,
-	password: process.env.SQL_PASSWORD,
+	user: sqlUser,
+	password: sqlPassword,
 	connectionTimeout: 60000,
 	options: {
 		encrypt: false
