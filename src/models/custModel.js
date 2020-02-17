@@ -68,7 +68,7 @@ function custModel() {
             debug(`Getting cust ${custnum}`);
             const request = new sql.Request();
             const sqlQuery = `SELECT lastname, firstname, company, addr, addr2, city, county, state, zipcode, country, phone, phone2, ar_balance, comment, net, gross, email, 
-            tax_id, badcheck, exempt, n_exempt, c_exempt, l_exempt, fraud, cust_terms
+            tax_id, badcheck, exempt, n_exempt, c_exempt, i_exempt, fraud, cust_terms
             FROM cust
             WHERE custnum = ${custnum}`;
 
